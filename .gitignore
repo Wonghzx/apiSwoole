@@ -3,3 +3,4 @@
 *.xml
 *.xml___jb_tmp___
 vendor/
+*.xml___jb_old___

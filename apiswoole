@@ -54,13 +54,49 @@ function commandHandler()
 {
     $comm = commandParser();
     switch ($comm['command']) {
-        case 'start':
+        case 'start': //启动
             startServer();
             break;
+        case 'stop': //停止
+            break;
+        case 'reload': //重装
+            break;
+        case 'update': //升级系统
+            break;
+        case 'version': //版本号
+            echo "";
+            break;
+        case 'help': //帮助
+        default: {
+            help();
+        }
     }
 }
 
 function startServer()
+{
+    echo lconLogo() . "\n";
+
+}
+
+
+function help()
+{
+    echo lconLogo() . "\n\n";
+    echo "\033[36m ApiSwoole \033[0mversion \033[33m" . VERSION . " \033[0m" . date('Y-m-d H:i:s') . "\n\n";
+
+    $helpString = <<<HELPSTRING
+\033[32m start \033[0m          可启动服务
+\033[32m stop \033[0m           可停止服务
+\033[32m update \033[0m         可升级系统
+\033[32m reload \033[0m         可重装服务
+HELPSTRING;
+    echo $helpString . "\n";
+
+
+}
+
+function lconLogo()
 {
     $string = <<<STRING
    ___    _ __    _     ___                          _           
@@ -70,8 +106,8 @@ function startServer()
 _|"""""||"""""||"""""||"""""||"""""||"""""||"""""||"""""||"""""| 
 "`-0-0-'"`-0-0-'"`-0-0-'"`-0-0-'"`-0-0-'"`-0-0-'"`-0-0-'"`-0-0-'"`-0-0-' 
 STRING;
-    echo $string . "\n";
 
+    return $string;
 }
 
 commandHandler();

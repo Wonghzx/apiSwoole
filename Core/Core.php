@@ -8,10 +8,6 @@
  */
 
 namespace Core;
-
-use Conf\Config;
-use Conf\ConstantClass;
-
 class Core
 {
     protected static $instance;
@@ -55,8 +51,11 @@ class Core
             die('您的PHP版本低于5.5 ，该框架需要PHP版本5.5 或 > 5.5^');
 
         defined('ROOT') or define("ROOT", realpath(__DIR__ . '/../'));
-
-        $this->registerAutoLoader(); //自动加载机制
+        $this->registerAutoLoader();
+        Event::getInstance()->initialize();//初始化框架前
+        Event::getInstance()->initializeEd();//初始化框架后
+        $this->registerErrorHandler();//错误处理程序
+        return $this;
     }
 
 
@@ -69,14 +68,26 @@ class Core
     {
         include_once 'DumpAutoload.php';
         $autoload = DumpAutoload::getInstance();
+        /*
+         * PSR-4 自动加载机制
+         */
         $autoload->addNamespace('Http', 'Http');
         $autoload->addNamespace('Core', 'Core');
         $autoload->addNamespace('Conf', 'Conf');
 
-        $conf = Config::getInstance();
-        print_r($conf->getConf('SERVER.LISTEN'));
-
+        return $this;
 
     }
+
+
+    /**
+     * registerErrorHandler  [错误处理程序]
+     * @copyright Copyright (c)
+     * @author Wongzx <842687571@qq.com>
+     */
+    private function registerErrorHandler()
+    {
+    }
+
 
 }

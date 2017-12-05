@@ -30,27 +30,29 @@ class ConstantClass
     private static function initializeConstant()
     {
 
+        defined(' VERSION') or define('VERSION', '1.0.0');
+
         /**
          * new swoole_server 服务类型
          */
-        define('SERVER_TYPE_SERVER', 'SERVER_TYPE_SERVER');
-        define('SERVER_TYPE_WEB', 'SERVER_TYPE_WEB');
-        define('SERVER_TYPE_WEB_SOCKET', 'SERVER_TYPE_WEB_SOCKET');
+        defined('SERVER_TYPE_SERVER') or define('SERVER_TYPE_SERVER', 'SERVER_TYPE_SERVER');
+        defined('SERVER_TYPE_WEB') or define('SERVER_TYPE_WEB', 'SERVER_TYPE_WEB');
+        defined('SERVER_TYPE_WEB_SOCKET') or define('SERVER_TYPE_WEB_SOCKET', 'SERVER_TYPE_WEB_SOCKET');
 
 
-        define('SWOOLE_TCP', 1); //创建tcp socket
-        define('SWOOLE_TCP6', 2); //创建tcp ipv6 socket
-        define('SWOOLE_UDP', 3); //创建udp socket
-        define('SWOOLE_UDP6', 4); //创建udp ipv6 socket
-        define('SWOOLE_UNIX_DGRAM', 5);
-        define('SWOOLE_UNIX_STREAM', 6);
+        defined('SWOOLE_TCP') or define('SWOOLE_TCP', 1); //创建tcp socket
+        defined('SWOOLE_TCP6') or define('SWOOLE_TCP6', 2); //创建tcp ipv6 socket
+        defined('SWOOLE_UDP') or define('SWOOLE_UDP', 3); //创建udp socket
+        defined('SWOOLE_UDP6') or define('SWOOLE_UDP6', 4); //创建udp ipv6 socket
+        defined('SWOOLE_UNIX_DGRAM') or define('SWOOLE_UNIX_DGRAM', 5);
+        defined('SWOOLE_UNIX_STREAM') or define('SWOOLE_UNIX_STREAM', 6);
 
         /**
          * new swoole_server 构造函数参数
          */
-        define('SWOOLE_BASE', 1); //使用Base模式，业务代码在Reactor中直接执行
-        define('SWOOLE_THREAD', 2); //使用线程模式，业务代码在Worker线程中执行
-        define('SWOOLE_PROCESS', 3); //使用进程模式，业务代码在Worker进程中执行
-        define('SWOOLE_PACKET', 0x10);
+        defined('SWOOLE_BASE') or define('SWOOLE_BASE', 1); //使用Base模式，业务代码在Reactor中直接执行
+        defined('SWOOLE_THREAD') or define('SWOOLE_THREAD', 2); //使用线程模式，业务代码在Worker线程中执行
+        defined('SWOOLE_PROCESS') or define('SWOOLE_PROCESS', 3); //使用进程模式，业务代码在Worker进程中执行
+        defined('SWOOLE_PACKET') or define('SWOOLE_PACKET', 0x10);
     }
 }

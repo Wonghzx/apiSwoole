@@ -9,6 +9,7 @@
 
 namespace Core;
 
+use Conf\Config;
 use Conf\ConstantClass;
 
 class Core
@@ -50,9 +51,10 @@ class Core
      */
     public function initialize()
     {
-        if (phpversion() < 5.5) {
+        if (phpversion() < 5.5)
             die('您的PHP版本低于5.5 ，该框架需要PHP版本5.5 或 > 5.5^');
-        }
+
+        defined('ROOT') or define("ROOT", realpath(__DIR__ . '/../'));
 
         $this->registerAutoLoader(); //自动加载机制
     }
@@ -67,12 +69,13 @@ class Core
     {
         include_once 'DumpAutoload.php';
         $autoload = DumpAutoload::getInstance();
-        defined('ROOT') or define("ROOT", realpath(__DIR__ . '/../'));
         $autoload->addNamespace('Http', 'Http');
         $autoload->addNamespace('Core', 'Core');
         $autoload->addNamespace('Conf', 'Conf');
 
-        ConstantClass::getInstance();
+        $conf = Config::getInstance();
+        print_r($conf->getConf('SERVER.LISTEN'));
+
 
     }
 

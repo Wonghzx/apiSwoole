@@ -8,6 +8,12 @@
  */
 
 namespace Core;
+
+use Conf\Config;
+use Core\Component\Di;
+use Core\Component\File;
+use Core\Swoole\Server;
+
 class Core
 {
     protected static $instance;
@@ -37,7 +43,7 @@ class Core
      */
     public function run()
     {
-
+        Server::getInstance()->startServer();
     }
 
     /**
@@ -53,9 +59,42 @@ class Core
         defined('ROOT') or define("ROOT", realpath(__DIR__ . '/../'));
         $this->registerAutoLoader();
         Event::getInstance()->initialize();//初始化框架前
+        $this->sysDirectoryInit();//系统目录初始化
         Event::getInstance()->initializeEd();//初始化框架后
         $this->registerErrorHandler();//错误处理程序
         return $this;
+    }
+
+
+    private function sysDirectoryInit()
+    {
+        //创建Runtime目录
+        $tempDir = Di::getInstance()->get(TEMP_DIRECTORY);
+        if (empty($tempDir)) {
+            $tempDir = ROOT . '/Runtime';
+            Di::getInstance()->set(TEMP_DIRECTORY, $tempDir);
+        }
+
+        if (!File::createDir($tempDir)) {
+            die("create Temp Directory:{$tempDir} fail");
+        } else {
+            //创建默认Session存储目录
+            $path = $tempDir . "/Session";
+            File::createDir($path);
+            Di::getInstance()->set(SESSION_SAVE_PATH, $path);
+        }
+
+        $logDir = Di::getInstance()->get(LOG_DIRECTORY);
+        if (empty($logDir)) {
+            $logDir = $tempDir . "/Log";
+            Di::getInstance()->set(LOG_DIRECTORY, $logDir);
+        }
+        if (!File::createDir($logDir)) {
+            die("create log Directory:{$logDir} fail");
+        }
+        Config::getInstance()->setSysConf('SERVER.CONFIG.log_file', $logDir . '/swoole.log');
+        Config::getInstance()->setSysConf('SERVER.CONFIG.pid_file', $logDir . '/pid.pid');
+
     }
 
 

@@ -54,5 +54,24 @@ class ConstantClass
         defined('SWOOLE_THREAD') or define('SWOOLE_THREAD', 2); //使用线程模式，业务代码在Worker线程中执行
         defined('SWOOLE_PROCESS') or define('SWOOLE_PROCESS', 3); //使用进程模式，业务代码在Worker进程中执行
         defined('SWOOLE_PACKET') or define('SWOOLE_PACKET', 0x10);
+
+
+
+        /**
+         * new swoole_client 构造函数参数
+         */
+        defined('SWOOLE_SOCK_TCP') or define('SWOOLE_SOCK_TCP', 1); //创建tcp socket
+        defined('SWOOLE_SOCK_TCP6') or define('SWOOLE_SOCK_TCP6', 3); //创建tcp ipv6 socket
+        defined('SWOOLE_SOCK_UDP') or define('SWOOLE_SOCK_UDP', 2); //创建udp socket
+        defined('SWOOLE_SOCK_UDP6') or define('SWOOLE_SOCK_UDP6', 4); //创建udp ipv6 socket
+        defined('SWOOLE_SOCK_UNIX_DGRAM') or define('SWOOLE_SOCK_UNIX_DGRAM', 5); //创建udp socket
+        defined('SWOOLE_SOCK_UNIX_STREAM') or define('SWOOLE_SOCK_UNIX_STREAM', 6); //创建udp ipv6 socket
+
+        /**
+         * sysConf
+         */
+        defined('TEMP_DIRECTORY') or define('TEMP_DIRECTORY', 'TEMP_DIRECTORY'); //临时目录 Runtime DI
+        defined('SESSION_SAVE_PATH') or define('SESSION_SAVE_PATH', 'SESSION_SAVE_PATH'); //session 目录 DI
+        defined('LOG_DIRECTORY') or define('LOG_DIRECTORY', 'LOG_DIRECTORY'); //日志目录 DI
     }
 }

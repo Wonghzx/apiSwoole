@@ -21,7 +21,7 @@
 //                           永无BUG                               //
 ////////////////////////////////////////////////////////////////////
 
-$server = include_once 'Core/Core.php';
+include_once 'Core/Core.php';
 $server = \Core\Core::getInstance()->initialize();
 /**
  *[commandParser 解释命令]
@@ -76,7 +76,8 @@ function commandHandler()
 function startServer()
 {
     echo lconLogo() . "\n";
-
+    global $server;
+    $server->run();
 }
 
 
@@ -86,10 +87,10 @@ function help()
     echo "\033[36m ApiSwoole \033[0mversion \033[33m" . VERSION . " \033[0m" . date('Y-m-d H:i:s') . "\n\n";
 
     $helpString = <<<HELPSTRING
-\033[32m start \033[0m          可启动服务
-\033[32m stop \033[0m           可停止服务
-\033[32m update \033[0m         可升级系统
-\033[32m reload \033[0m         可重装服务
+\033[32m start \033[0m           启动服务
+\033[32m stop \033[0m            停止服务
+\033[32m update \033[0m          升级系统
+\033[32m reload \033[0m          重装服务
 HELPSTRING;
     echo $helpString . "\n";
 

@@ -41,7 +41,7 @@ class Config
                 'RUN_MODE' => SWOOLE_PROCESS, //不建议更改此项
                 'SERVER_TYPE' => SERVER_TYPE_WEB,
                 'SOCKET_TYPE' => SWOOLE_TCP,
-                'CONFIG' => [
+                'CONFIG' => [ //设置运行时参数
                     'task_worker_num' => 8, //异步任务进程
                     'task_max_request' => 10,
                     'max_request' => 5000,//强烈建议设置此配置项

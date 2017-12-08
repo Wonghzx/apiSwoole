@@ -16,6 +16,8 @@ class Server
 
     private $serverApi;
 
+    private $conf;
+
     static function getInstance()
     {
         if (!isset(self::$instance)) {
@@ -26,18 +28,19 @@ class Server
 
     function __construct()
     {
-        $conf = Config::getInstance();
-        $serverType = $conf->getServerType();
-        $ip = $conf->getListenIp();  //ip
-        $port = $conf->getListenPort(); //端口
-        $runMode = $conf->getRunMode();
-        $socketType = $conf->getSocketType();
+        $this->conf = Config::getInstance();
+        $serverType = $this->conf->getServerType();
+        $ip = $this->conf->getListenIp();  //ip
+        $port = $this->conf->getListenPort(); //端口
+        $runMode = $this->conf->getRunMode();
+        $socketType = $this->conf->getSocketType();
         switch ($serverType) {
             case SERVER_TYPE_SERVER:
                 $this->serverApi = new \swoole_server($ip, $port, $runMode, $socketType);
                 break;
             case SERVER_TYPE_WEB:
                 $this->serverApi = new \swoole_http_server($ip, $port, $runMode);
+                $this->swooleHttpServer();
                 break;
             case SERVER_TYPE_WEB_SOCKET:
                 $this->serverApi = new \swoole_websocket_server($ip, $port, $runMode);
@@ -47,6 +50,42 @@ class Server
             }
 
         }
+
+    }
+
+
+    /**
+     * swooleServer  [
+     * 创建一个异步服务器程序，支持TCP、UDP、UnixSocket 3种协议，支持IPv4和IPv6，
+     * 支持SSL/TLS单向双向证书的隧道加密。使用者无需关注底层实现细节，仅需要设置网络事件的回调函数即可。
+     * ]
+     * @copyright Copyright (c)
+     * @author Wongzx <842687571@qq.com>
+     */
+    private function swooleServer()
+    {
+
+    }
+
+
+    /**
+     * swooleHttpServer  [swoole-1.7.7增加了内置Http服务器的支持，通过几行代码即可写出一个异步非阻塞多进程的Http服务器。]
+     * @copyright Copyright (c)
+     * @author Wongzx <842687571@qq.com>
+     */
+    public function swooleHttpServer()
+    {
+        \Core\Swoole\HttpServer\Server::getInstance()->serverStart($this->getServerApi(), $this->conf);
+    }
+
+
+    /**
+     * swooleWebSocketServer  [swoole-1.7.9 增加了内置的websocket服务器支持，通过几行PHP代码就可以写出一个异步非阻塞多进程的WebSocket服务器。]
+     * @copyright Copyright (c)
+     * @author Wongzx <842687571@qq.com>
+     */
+    private function swooleWebSocketServer()
+    {
 
     }
 
@@ -61,60 +100,7 @@ class Server
     }
 
 
-    /**
-     * startServer  [开启swoole服务]
-     * @copyright Copyright (c)
-     * @author Wongzx <842687571@qq.com>
-     */
-    public function startServer()
-    {
-        $conf = Config::getInstance();
-        $this->getServerApi()->set($conf->getWorkerSetting()); //设置运行时参数
-        $this->pipeMessage();
-        $this->request();
-        $this->start();//开启
 
-    }
-
-    /**
-     * beforeWorkerStart  [description]
-     * @copyright Copyright (c)
-     * @author Wongzx <842687571@qq.com>
-     */
-    private function beforeWorkerStart()
-    {
-        Event::getInstance()->onSet($this->getServerApi());
-    }
-
-    /**
-     * pipeMessage  [此函数可以向任意worker进程或者task进程发送消息。在非主进程和管理进程中可调用。收到消息的进程会触发onPipeMessage事件。]
-     * @copyright Copyright (c)
-     * @author Wongzx <842687571@qq.com>
-     */
-    private function pipeMessage()
-    {
-        $this->getServerApi()->on('pipeMessage', function ($server, $src_worker_id, $data) {
-            print_r($server);
-        });
-    }
-
-    /**
-     * request  [监听http请求]
-     * @copyright Copyright (c)
-     * @author Wongzx <842687571@qq.com>
-     */
-    private function request()
-    {
-        $this->getServerApi()->on('request', function ($request, $response) {
-            $response->end("<h1>Hello Swoole. #" . rand(1000, 9999) . "</h1>");
-        });
-    }
-
-
-    private function start()
-    {
-        $this->getServerApi()->start();
-    }
 
 
 }

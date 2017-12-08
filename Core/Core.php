@@ -43,7 +43,7 @@ class Core
      */
     public function run()
     {
-        Server::getInstance()->startServer();
+        Server::getInstance();
     }
 
     /**

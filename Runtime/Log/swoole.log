@@ -1,0 +1,25 @@
+[2017-12-08 12:04:20 $2250.0]	WARNING	swManager_check_exit_status: worker#0 abnormal exit, status=255, signal=0
+[2017-12-08 13:52:05 *2430.0]	ERROR	zm_deactivate_swoole (ERROR 503): Fatal error: Uncaught Error: Cannot use object of type swoole_http_response as array in /home/wwwroot/apiSwoole/Core/Swoole/HttpServer/Server.php:58
+Stack trace:
+#0 [internal function]: Core\Swoole\HttpServer\Server->Core\Swoole\HttpServer\{closure}(Object(swoole_http_request), Object(swoole_http_response))
+#1 /home/wwwroot/apiSwoole/Core/Swoole/HttpServer/Server.php(90): swoole_http_server->start()
+#2 /home/wwwroot/apiSwoole/Core/Swoole/HttpServer/Server.php(33): Core\Swo
+[2017-12-08 13:52:05 $2420.0]	WARNING	swManager_check_exit_status: worker#0 abnormal exit, status=255, signal=0
+[2017-12-08 13:52:08 *2438.0]	ERROR	zm_deactivate_swoole (ERROR 503): Fatal error: Uncaught Error: Cannot use object of type swoole_http_response as array in /home/wwwroot/apiSwoole/Core/Swoole/HttpServer/Server.php:58
+Stack trace:
+#0 [internal function]: Core\Swoole\HttpServer\Server->Core\Swoole\HttpServer\{closure}(Object(swoole_http_request), Object(swoole_http_response))
+#1 /home/wwwroot/apiSwoole/Core/Swoole/HttpServer/Server.php(90): swoole_http_server->start()
+#2 /home/wwwroot/apiSwoole/Core/Swoole/HttpServer/Server.php(33): Core\Swo
+[2017-12-08 13:52:08 $2420.0]	WARNING	swManager_check_exit_status: worker#0 abnormal exit, status=255, signal=0
+[2017-12-08 13:53:29 *2470.0]	ERROR	zm_deactivate_swoole (ERROR 503): Fatal error: Uncaught Error: Cannot use object of type swoole_http_response as array in /home/wwwroot/apiSwoole/Core/Swoole/HttpServer/Server.php:57
+Stack trace:
+#0 [internal function]: Core\Swoole\HttpServer\Server->Core\Swoole\HttpServer\{closure}(Object(swoole_http_request), Object(swoole_http_response))
+#1 /home/wwwroot/apiSwoole/Core/Swoole/HttpServer/Server.php(90): swoole_http_server->start()
+#2 /home/wwwroot/apiSwoole/Core/Swoole/HttpServer/Server.php(33): Core\Swo
+[2017-12-08 13:53:29 $2460.0]	WARNING	swManager_check_exit_status: worker#0 abnormal exit, status=255, signal=0
+[2017-12-08 13:54:03 *2491.0]	ERROR	zm_deactivate_swoole (ERROR 503): Fatal error: Uncaught Error: Cannot use object of type swoole_http_response as array in /home/wwwroot/apiSwoole/Core/Swoole/HttpServer/Server.php:57
+Stack trace:
+#0 [internal function]: Core\Swoole\HttpServer\Server->Core\Swoole\HttpServer\{closure}(Object(swoole_http_request), Object(swoole_http_response))
+#1 /home/wwwroot/apiSwoole/Core/Swoole/HttpServer/Server.php(90): swoole_http_server->start()
+#2 /home/wwwroot/apiSwoole/Core/Swoole/HttpServer/Server.php(33): Core\Swo
+[2017-12-08 13:54:03 $2481.0]	WARNING	swManager_check_exit_status: worker#0 abnormal exit, status=255, signal=0

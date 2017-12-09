@@ -60,6 +60,7 @@ class Server
         $this->serverApi->on('request', function (\swoole_http_request $request, \swoole_http_response $response) {
             $requests = Request::getInstance($request);    //请求
             $responses = Response::getInstance($response);  //响应
+            Launcher::getInstance()->dispatch();
         });
 
 

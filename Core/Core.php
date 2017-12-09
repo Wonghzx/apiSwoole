@@ -114,6 +114,12 @@ class Core
         $autoload->addNamespace('Core', 'Core');
         $autoload->addNamespace('Conf', 'Conf');
 
+        /**
+         * 加载第三方依赖组件
+         */
+        $autoload->addNamespace('FastRoute', 'Core/Package/FastRoute');
+
+
         return $this;
 
     }

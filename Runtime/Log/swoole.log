@@ -23,3 +23,7 @@ Stack trace:
 #1 /home/wwwroot/apiSwoole/Core/Swoole/HttpServer/Server.php(90): swoole_http_server->start()
 #2 /home/wwwroot/apiSwoole/Core/Swoole/HttpServer/Server.php(33): Core\Swo
 [2017-12-08 13:54:03 $2481.0]	WARNING	swManager_check_exit_status: worker#0 abnormal exit, status=255, signal=0
+[2017-12-09 12:05:13 *4647.0]	ERROR	zm_deactivate_swoole (ERROR 503): Fatal error: Uncaught TypeError: Argument 4 passed to Core\Swoole\HttpServer\Storage\ServerRequest::__construct() must be an instance of Core\DumpAutoload or null, instance of Core\Swoole\HttpServer\Storage\DataStream given, called in /home/wwwroot/apiSwoole/Core/Swoole/HttpServer/Storage/Request.php on line 49 and defined in /home/wwwroot/apiSwoole/Core/Swoole/HttpServer/Storage/ServerRequest.php:28
+Stack trace:
+#0 /home/wwwroot/apiSwoole/Core/Swoole/HttpServer/Storage/Re
+[2017-12-09 12:05:13 $4637.0]	WARNING	swManager_check_exit_status: worker#0 abnormal exit, status=255, signal=0

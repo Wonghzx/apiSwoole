@@ -12,12 +12,19 @@
     }
   ],
   "require": {
-    "php": ">=5.5.0"
+    "php": ">=5.5.0",
+    "nikic/fast-route": "^1.2"
   },
   "autoload": {
     "psr-4": {
       "Conf\\": "Conf",
       "Http\\": "Http"
+    }
+  },
+  "repositories": {
+    "packagist": {
+      "type": "composer",
+      "url": "https://packagist.phpcomposer.com"
     }
   }
 }

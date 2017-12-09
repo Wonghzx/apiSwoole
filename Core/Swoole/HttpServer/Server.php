@@ -7,6 +7,10 @@
  */
 
 namespace Core\Swoole\HttpServer;
+
+use Core\Swoole\HttpServer\Storage\Request;
+use Core\Swoole\HttpServer\Storage\Response;
+
 class Server
 {
     private $serverApi;
@@ -53,11 +57,14 @@ class Server
      */
     private function requestEvent()
     {
-        $this->serverApi->on('request', function (\swoole_http_request $request,\swoole_http_response $response) {
-            $a = json_encode($response);
-            $a = json_decode($a,true);
-            $response->end("<h1>Hello Swoole. #" . $a['fd'] . "</h1>");
+        $this->serverApi->on('request', function (\swoole_http_request $request, \swoole_http_response $response) {
+            $requests = Request::getInstance($request);    //请求
+            print_r($requests);
+            $responses = Response::getInstance($response);  //响应
         });
+
+
+          
     }
 
 

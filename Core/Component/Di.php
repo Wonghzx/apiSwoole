@@ -21,6 +21,15 @@ class Di
         return self::$instance;
     }
 
+    /**
+     * set  [description]
+     * @param $key
+     * @param $obj
+     * @param array ...$arg
+     * @copyright Copyright (c)
+     * @author Wongzx <842687571@qq.com>
+     * @return $this
+     */
     function set($key, $obj, ...$arg)
     {
         if (count($arg) == 1 && is_array($arg[0])) {
@@ -37,11 +46,22 @@ class Di
         return $this;
     }
 
+    /**
+     * delete  [description]
+     * @param $key
+     * @copyright Copyright (c)
+     * @author Wongzx <842687571@qq.com>
+     */
     function delete($key)
     {
         unset($this->container[$key]);
     }
 
+    /**
+     * clear  [description]
+     * @copyright Copyright (c)
+     * @author Wongzx <842687571@qq.com>
+     */
     function clear()
     {
         $this->container = [];

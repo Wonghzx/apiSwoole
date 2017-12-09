@@ -59,7 +59,6 @@ class Server
     {
         $this->serverApi->on('request', function (\swoole_http_request $request, \swoole_http_response $response) {
             $requests = Request::getInstance($request);    //请求
-            print_r($requests);
             $responses = Response::getInstance($response);  //响应
         });
 

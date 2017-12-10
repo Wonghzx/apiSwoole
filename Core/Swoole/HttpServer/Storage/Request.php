@@ -15,6 +15,16 @@ class Request
 
     private $httpRequest = null;
 
+    private $body;
+
+    private $uri;
+
+    private $files;
+
+    private $method;
+
+    private $protocol;
+
     static function getInstance(\swoole_http_request $request = null)
     {
         if ($request !== null) {
@@ -36,15 +46,15 @@ class Request
          * foo = bor
          */
         $rawContent = $this->httpRequest->rawContent();
-        $body = new DataStream($rawContent);
-        $uri = $this->initUri();
-        $files = $this->initFiles();
+        $this->body = new DataStream($rawContent);
+        $this->uri = $this->initUri();
+        $this->files = $this->initFiles();
 
         /**
          * 请求的方法
          * POST GET
          */
-        $method = $this->httpRequest->server['request_method'];
+        $this->method = $this->httpRequest->server['request_method'];
 
     }
 
@@ -90,6 +100,31 @@ class Request
             return [];
         }
     }
+
+
+    /**
+     *[getUri Uri]
+     * @author  Wongzx <[842687571@qq.com]>
+     * @copyright Copyright (c)
+     * @return    [type]        [description]
+     */
+    public function getUri()
+    {
+        return $this->uri;
+    }
+
+
+    /**
+     *[getMethod mixed]
+     * @author  Wongzx <[842687571@qq.com]>
+     * @copyright Copyright (c)
+     * @return    [type]        [description]
+     */
+    public function getMethod()
+    {
+        return $this->method;
+    }
+
 
     /**
      * initCookie  [HTTP请求携带的COOKIE信息，与PHP的$_COOKIE相同，格式为数组。]

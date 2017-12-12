@@ -31,6 +31,7 @@ class ConstantClass
     {
 
         defined(' VERSION') or define('VERSION', '1.0.0');
+        defined(' CONTROLLER_MAX_DEPTH') or define('CONTROLLER_MAX_DEPTH', 'CONTROLLER_MAX_DEPTH');
 
         /**
          * new swoole_server 服务类型

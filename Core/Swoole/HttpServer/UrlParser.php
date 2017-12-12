@@ -20,15 +20,13 @@ class UrlParser
         }
         $basePath = dirname($path);
         $info = pathInfo($path);
-//        print_r($basePath);
-//        echo "\n";
-//        if ($info['filename'] != 'index') {
-//            if ($basePath == '/') {
-//                $basePath = $basePath . $info['filename'];
-//            } else {
-//                $basePath = $basePath . '/' . $info['filename'];
-//            }
-//        }
-        return "/Index";
+        if ($info['filename'] != 'index') {
+            if ($basePath == '/') {
+                $basePath = $basePath . $info['filename'];
+            } else {
+                $basePath = $basePath . '/' . $info['filename'];
+            }
+        }
+        return $basePath;
     }
 }

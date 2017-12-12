@@ -16,9 +16,10 @@ use FastRoute\RouteCollector;
 class Router extends AbstractRouter
 {
 
-    function register(RouteCollector $routeCollector)
+    public function register(RouteCollector $routeCollector)
     {
         // TODO: Implement register() method.
-        $routeCollector->addRoute(['GET', 'POST'], "/Index", "/Index/index");
+        $routeCollector->addRoute(['GET', 'POST'], "/Index", "index");
     }
+
 }

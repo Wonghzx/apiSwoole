@@ -40,7 +40,6 @@ class Request
 
         //协议 HTTP 1.0 规定浏览器与服务器只保持短暂的连接    1.1 HTTP 1.1支持长连接
         $protocol = str_replace('HTTP/', '', $this->httpRequest->server['server_protocol']);
-
         /*
          * 获取原始的POST包体，用于非application/x-www-form-urlencoded格式的Http POST请求。
          * foo = bor

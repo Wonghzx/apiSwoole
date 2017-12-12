@@ -19,7 +19,38 @@ class Router extends AbstractRouter
     public function register(RouteCollector $routeCollector)
     {
         // TODO: Implement register() method.
-        $routeCollector->addRoute(['GET', 'POST'], "/Index", "index");
+        $router = $this->routerController();
+        foreach ($router AS $value => $item) {
+            $routeCollector->addGroup($item['controller'], function ($routeCollector) use ($item) {
+                foreach ($item['action'] AS &$value) {
+                    $action = explode('@', $value);
+                    $requestMethod = explode(',', $action[0]);
+                    $routeCollector->addRoute($requestMethod, "/{$action[1]}", $action[1]);
+                }
+            });
+        }
     }
+
+
+    private function routerController()
+    {
+        /**
+         * 路由文件
+         * 常用请求方法的Shorcut方法
+         * GET，POST，PUT，PATCH，DELETE，HEAD
+         */
+        return [
+            //默认访问
+            [
+                'controller' => '/Index',
+                'action' => [
+                    "GET,POST@index",
+                    "GET,POST@test",
+                ]
+            ],
+
+        ];
+    }
+
 
 }

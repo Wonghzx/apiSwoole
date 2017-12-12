@@ -15,6 +15,7 @@ use FastRoute\Dispatcher\GroupCountBased;
 use Core\Swoole\HttpServer\Storage\Request;
 use Core\Component\Di;
 
+
 class Launcher
 {
     protected static $instance;
@@ -54,24 +55,16 @@ class Launcher
         if ($routeInfo !== false) {
             switch ($routeInfo[0]) {
                 case \FastRoute\Dispatcher::NOT_FOUND:
-//                    echo "... 404 NdoDispatcherot Found";
+                    echo "... 404 NdoDispatcherot Found";
                     break;
                 case \FastRoute\Dispatcher::METHOD_NOT_ALLOWED:
 //                    Response::getInstance()->withStatus(Status::CODE_METHOD_NOT_ALLOWED);
-//                    echo "405 Method Not Allowed";
+                    echo "405 Method Not Allowed";
                     break;
                 case \FastRoute\Dispatcher::FOUND:
                     $handler = $routeInfo[1];
                     $vars = $routeInfo[2];
                     $this->callHandler($handler, $vars);
-//                    if (is_callable($handler)) {
-//                        call_user_func_array($handler, $vars);
-//                    } else if (is_string($handler)) {
-//                        $data = Request::getInstance()->getRequestParam();
-//                        Request::getInstance()->withQueryParams($vars + $data);
-//                        $pathInfo = UrlParser::pathInfo($handler);
-//                        Request::getInstance()->getUri()->withPath($pathInfo);
-//                    }
                     break;
             }
         }
@@ -90,8 +83,7 @@ class Launcher
     {
         $pathInfo = UrlParser::pathInfo($handler);
         //去除为fastRouter预留的左边斜杠
-        $pathInfo = ltrim($handler, "/");
-//        print_r($pathInfo);
+        $pathInfo = ltrim($pathInfo, "/");
         if (isset($this->controllerMap[$pathInfo])) {
             $finalClass = $this->controllerMap[$pathInfo]['finalClass'];
             $actionName = $this->controllerMap[$pathInfo]['actionName'];
@@ -111,6 +103,7 @@ class Launcher
                 $controlMaxDepth = 3;
             }
             $maxDepth = count($list) < $controlMaxDepth ? count($list) : $controlMaxDepth;
+
             while ($maxDepth > 0) {
                 $className = '';
                 for ($i = 0; $i < $maxDepth; $i++) {
@@ -140,21 +133,21 @@ class Launcher
             }
             $this->controllerMap[$pathInfo]['finalClass'] = $finalClass;
             $this->controllerMap[$pathInfo]['actionName'] = $actionName;
-
-            if (class_exists($finalClass)) {
-                if ($this->useControllerPool) {
-                    if (isset($this->controllerPool[$finalClass])) {
-                        $controller = $this->controllerPool[$finalClass];
-                    } else {
-                        $controller = new $finalClass;
-                        $this->controllerPool[$finalClass] = $controller;
-                        print_r( $this->controllerPool);
-                    }
+        }
+        if (class_exists($finalClass)) {
+            if ($this->useControllerPool) {
+                if (isset($this->controllerPool[$finalClass])) {
+                    $controller = $this->controllerPool[$finalClass];
                 } else {
                     $controller = new $finalClass;
+                    $this->controllerPool[$finalClass] = $controller;
                 }
+            } else {
+                $controller = new $finalClass;
             }
         }
+        $controller = [$finalClass, $actionName];
+        call_user_func($controller, $vars);
     }
 
 
@@ -180,13 +173,14 @@ class Launcher
     /**
      *[doFastRouter array|bool]
      * @author  Wongzx <[842687571@qq.com]>
-     * @param $pathInfo
-     * @param $requestMethod  GET & POSt
+     * @param $pathInfo /Index/index
+     * @param $requestMethod  GET & POST
      * @copyright Copyright (c)
      * @return    [type]        [description]
      */
     private function doFastRouter($pathInfo, $requestMethod)
     {
+
         if (!isset($this->fastRouterDispatcher)) {
             $this->intRouterInstance();
         }

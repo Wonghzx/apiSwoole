@@ -9,6 +9,8 @@
 namespace Core;
 
 use Conf\ConstantClass;
+use Core\Swoole\HttpServer\Storage\Request;
+use Core\Swoole\HttpServer\Storage\Response;
 
 class Event extends \Core\AbstractInterface\AbstractEvent
 {
@@ -425,5 +427,30 @@ class Event extends \Core\AbstractInterface\AbstractEvent
     function onConfirm()
     {
         // TODO: Implement onConfirm() method.
+    }
+
+    function onDispatcher(Request $request, Response $response, $targetControllerClass, $targetAction)
+    {
+        // TODO: Implement onDispatcher() method.
+    }
+
+    function onRequest(Request $request, Response $response)
+    {
+        // TODO: Implement onRequest() method.
+    }
+
+    function onResponse(Request $request, Response $response)
+    {
+        // TODO: Implement onResponse() method.
+    }
+
+    function onWorkerStart(\swoole_server $server, $workerId)
+    {
+        // TODO: Implement onWorkerStart() method.
+    }
+
+    function onWorkerStop(\swoole_server $server, $workerId)
+    {
+        // TODO: Implement onWorkerStop() method.
     }
 }

@@ -8,6 +8,7 @@
 
 namespace Core\Swoole\HttpServer;
 
+use Core\Event;
 use Core\Swoole\HttpServer\Storage\Request;
 use Core\Swoole\HttpServer\Storage\Response;
 
@@ -34,6 +35,8 @@ class Server
         $this->requestEvent();
         $this->onTaskEvent();
         $this->onFinishEvent();
+        $this->workerStartEvent();
+        $this->workerStopEvent();
         $this->startEvent();//开启
     }
 
@@ -60,11 +63,16 @@ class Server
         $this->serverApi->on('request', function (\swoole_http_request $request, \swoole_http_response $response) {
             $requests = Request::getInstance($request);    //请求
             $responses = Response::getInstance($response);  //响应
-            Launcher::getInstance()->dispatch();
+            try {
+                Event::getInstance()->onRequest($requests, $responses);
+                Launcher::getInstance()->dispatch();
+                Event::getInstance()->onResponse($requests, $responses);
+            } catch (\Exception $exception) {
+            }
+            $responses->end(true);
         });
 
 
-          
     }
 
 
@@ -96,5 +104,20 @@ class Server
     private function startEvent()
     {
         $this->serverApi->start();
+    }
+
+
+    private function workerStartEvent()
+    {
+        $this->serverApi->on("workerStart", function (\swoole_server $server, $workerId) {
+            Event::getInstance()->onWorkerStart($server, $workerId);
+        });
+    }
+
+    private function workerStopEvent()
+    {
+        $this->serverApi->on("workerStop", function (\swoole_server $server, $workerId) {
+            Event::getInstance()->onWorkerStop($server, $workerId);
+        });
     }
 }

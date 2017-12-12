@@ -8,6 +8,9 @@
 
 namespace Core\AbstractInterface;
 
+use Core\Swoole\HttpServer\Storage\Response;
+use Core\Swoole\HttpServer\Storage\Request;
+
 abstract class AbstractEvent
 {
     protected static $instance;
@@ -359,4 +362,13 @@ abstract class AbstractEvent
     abstract function onConfirm();
 
 
+    abstract function onDispatcher(Request $request, Response $response, $targetControllerClass, $targetAction);
+
+    abstract function onRequest(Request $request, Response $response);
+
+    abstract function onResponse(Request $request, Response $response);
+
+    abstract function onWorkerStart(\swoole_server $server, $workerId);
+
+    abstract function onWorkerStop(\swoole_server $server, $workerId);
 }

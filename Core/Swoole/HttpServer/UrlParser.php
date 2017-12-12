@@ -20,6 +20,7 @@ class UrlParser
         }
         $basePath = dirname($path);
         $info = pathInfo($path);
+//
         if ($info['filename'] != 'index') {
             if ($basePath == '/') {
                 $basePath = $basePath . $info['filename'];
@@ -27,6 +28,6 @@ class UrlParser
                 $basePath = $basePath . '/' . $info['filename'];
             }
         }
-        return $basePath;
+        return Request::getInstance()->getUri()->getPath();
     }
 }

@@ -15,4 +15,9 @@ class Index
     {
         echo 123;
     }
+
+    public function test()
+    {
+        echo 123;
+    }
 }

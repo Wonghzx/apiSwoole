@@ -8,7 +8,7 @@
 
 namespace Core\Swoole\HttpServer\Storage;
 
-use Core\Component\Cookie;
+use Core\Swoole\Session\Cookie;
 
 
 class Response extends Message
@@ -198,7 +198,7 @@ class Response extends Message
     {
         if (!$this->isEndResponse()) {
             $cookie = new Cookie();
-            $cookie->setName($name);
+            $cookie->setKey($name);
             $cookie->setValue($value);
             $cookie->setExpire($expire);
             $cookie->setPath($path);

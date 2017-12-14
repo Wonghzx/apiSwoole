@@ -13,6 +13,7 @@ use Conf\Config;
 use Core\Component\Di;
 use Core\Component\File;
 use Core\Swoole\Server;
+use Session\SessionInstance;
 
 class Core
 {
@@ -118,7 +119,7 @@ class Core
          * 加载第三方依赖组件
          */
         $autoload->addNamespace('FastRoute', 'Core/Package/FastRoute');
-
+        $autoload->addNamespace('Session', 'Core/Package/Session');
 
         return $this;
 

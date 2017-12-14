@@ -31,7 +31,7 @@ class ConstantClass
     {
 
         defined(' VERSION') or define('VERSION', '1.0.0');
-        defined(' CONTROLLER_MAX_DEPTH') or define('CONTROLLER_MAX_DEPTH', 'CONTROLLER_MAX_DEPTH');
+
 
         /**
          * new swoole_server 服务类型
@@ -57,7 +57,6 @@ class ConstantClass
         defined('SWOOLE_PACKET') or define('SWOOLE_PACKET', 0x10);
 
 
-
         /**
          * new swoole_client 构造函数参数
          */
@@ -72,7 +71,11 @@ class ConstantClass
          * sysConf
          */
         defined('TEMP_DIRECTORY') or define('TEMP_DIRECTORY', 'TEMP_DIRECTORY'); //临时目录 Runtime DI
-        defined('SESSION_SAVE_PATH') or define('SESSION_SAVE_PATH', 'SESSION_SAVE_PATH'); //session 目录 DI
+        defined('SESSION_SAVE_PATH') or define('SESSION_SAVE_PATH', ROOT . '/Runtime/Session'); //session 目录 DI
         defined('LOG_DIRECTORY') or define('LOG_DIRECTORY', 'LOG_DIRECTORY'); //日志目录 DI
+        defined(' CONTROLLER_MAX_DEPTH') or define('CONTROLLER_MAX_DEPTH', 'CONTROLLER_MAX_DEPTH');
+        defined(' SESSION_HANDLER') or define('SESSION_HANDLER', 'SESSION_HANDLER'); //会议处理程序
+        defined(' SESSION_HANDLER') or define('SESSION_NAME', 'ApiSwoole'); //session_name
+        defined('SESSION_GC_PROBABILITY') or define('SESSION_GC_PROBABILITY', 'SESSION_GC_PROBABILITY'); //日志目录 DI
     }
 }

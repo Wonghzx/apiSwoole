@@ -39,7 +39,7 @@ class Request
 
 
         //协议 HTTP 1.0 规定浏览器与服务器只保持短暂的连接    1.1 HTTP 1.1支持长连接
-        $protocol = str_replace('HTTP/', '', $this->httpRequest->server['server_protocol']);
+        $this->protocol = str_replace('HTTP/', '', $this->httpRequest->server['server_protocol']);
         /*
          * 获取原始的POST包体，用于非application/x-www-form-urlencoded格式的Http POST请求。
          * foo = bor
@@ -48,7 +48,6 @@ class Request
         $this->body = new DataStream($rawContent);
         $this->uri = $this->initUri();
         $this->files = $this->initFiles();
-
         /**
          * 请求的方法
          * POST GET
@@ -131,7 +130,7 @@ class Request
      * @author Wongzx <842687571@qq.com>
      * @return array
      */
-    private function initCookie()
+    public function initCookie()
     {
         return isset($this->httpRequest->cookie) ? $this->httpRequest->cookie : [];
     }
@@ -142,7 +141,7 @@ class Request
      * @author Wongzx <842687571@qq.com>
      * @return array
      */
-    private function initPost()
+    public function initPost()
     {
         return isset($this->httpRequest->post) ? $this->httpRequest->post : [];
     }
@@ -153,7 +152,7 @@ class Request
      * @author Wongzx <842687571@qq.com>
      * @return array
      */
-    private function initGet()
+    public function initGet()
     {
         return isset($this->httpRequest->get) ? $this->httpRequest->get : [];
     }

@@ -10,7 +10,11 @@
 namespace Core\Swoole\HttpServer;
 
 use Conf\Config;
+use Core\AbstractInterface\AbstractController;
 use Core\AbstractInterface\AbstractRouter;
+use Core\Event;
+use Core\Swoole\HttpServer\Storage\Response;
+use Core\Swoole\HttpServer\Storage\Status;
 use FastRoute\Dispatcher\GroupCountBased;
 use Core\Swoole\HttpServer\Storage\Request;
 use Core\Component\Di;
@@ -51,15 +55,18 @@ class Launcher
     public function dispatch()
     {
         $pathInfo = UrlParser::pathInfo(); // url = /Index/index
+        if ($pathInfo === '/' || $pathInfo === '/Index') {
+            $pathInfo = '/Index/index';
+        }
         $routeInfo = $this->doFastRouter($pathInfo, Request::getInstance()->getMethod());
         if ($routeInfo !== false) {
             switch ($routeInfo[0]) {
                 case \FastRoute\Dispatcher::NOT_FOUND:
-                    echo "... 404 NdoDispatcherot Found";
+//                    echo "... 404 NdoDispatcherot Found";
                     break;
                 case \FastRoute\Dispatcher::METHOD_NOT_ALLOWED:
 //                    Response::getInstance()->withStatus(Status::CODE_METHOD_NOT_ALLOWED);
-                    echo "405 Method Not Allowed";
+//                    echo "405 Method Not Allowed";
                     break;
                 case \FastRoute\Dispatcher::FOUND:
                     $handler = $routeInfo[1];
@@ -85,8 +92,8 @@ class Launcher
         //去除为fastRouter预留的左边斜杠
         $pathInfo = ltrim($pathInfo, "/");
         if (isset($this->controllerMap[$pathInfo])) {
-            $finalClass = $this->controllerMap[$pathInfo]['finalClass'];
-            $actionName = $this->controllerMap[$pathInfo]['actionName'];
+            $finalClass = $this->controllerMap[$pathInfo]['finalClass']; // 控制器
+            $actionName = $this->controllerMap[$pathInfo]['actionName']; // 方法名称
         } else {
             /*
             * 此处用于防止URL恶意攻击，造成Launcher缓存爆满。
@@ -145,9 +152,18 @@ class Launcher
             } else {
                 $controller = new $finalClass;
             }
+            if ($controller instanceof AbstractController) {
+                Event::getInstance()->onDispatcher(Request::getInstance(), Response::getInstance(), $finalClass, $actionName);
+                //预防在进控制器之前已经被拦截处理
+                if (!Response::getInstance()->isEndResponse()) {
+                    $controller->__call($actionName, null);
+                }
+            } else {
+                Response::getInstance()->withStatus(Status::CODE_NOT_FOUND); //404
+            }
         }
-        $controller = [$finalClass, $actionName];
-        call_user_func($controller, $vars);
+//        $controller = [$finalClass, $actionName];
+//        call_user_func($controller, $vars);
     }
 
 

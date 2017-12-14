@@ -31,6 +31,13 @@ class File
         }
     }
 
+    /**
+     * deleteDir  [删除目录]
+     * @param $dirPath
+     * @copyright Copyright (c)
+     * @author Wongzx <842687571@qq.com>
+     * @return bool
+     */
     static function deleteDir($dirPath)
     {
         if (self::clearDir($dirPath)) {
@@ -45,6 +52,13 @@ class File
     }
 
 
+    /**
+     * clearDir  [清楚目录]
+     * @param $dirPath
+     * @copyright Copyright (c)
+     * @author Wongzx <842687571@qq.com>
+     * @return bool
+     */
     static function clearDir($dirPath)
     {
         if (!is_dir($dirPath)) {
@@ -78,6 +92,15 @@ class File
         }
     }
 
+    /**
+     * copyDir  [cp 目录]
+     * @param $dirPath
+     * @param $targetPath
+     * @param bool $overwrite
+     * @copyright Copyright (c)
+     * @author Wongzx <842687571@qq.com>
+     * @return bool
+     */
     static function copyDir($dirPath, $targetPath, $overwrite = true)
     {
         if (!is_dir($dirPath)) {
@@ -116,6 +139,15 @@ class File
         }
     }
 
+    /**
+     * moveDir  [移动目录]
+     * @param $dirPath
+     * @param $targetPath
+     * @param bool $overwrite
+     * @copyright Copyright (c)
+     * @author Wongzx <842687571@qq.com>
+     * @return bool
+     */
     static function moveDir($dirPath, $targetPath, $overwrite = true)
     {
         try {
@@ -129,6 +161,14 @@ class File
         }
     }
 
+    /**
+     * createFile  [创建文件]
+     * @param $filePath
+     * @param bool $overwrite
+     * @copyright Copyright (c)
+     * @author Wongzx <842687571@qq.com>
+     * @return bool
+     */
     static function createFile($filePath, $overwrite = true)
     {
         if (file_exists($filePath) && $overwrite == false) {
@@ -150,6 +190,16 @@ class File
         }
     }
 
+
+    /**
+     * saveFile  [保存文件]
+     * @param $filePath
+     * @param $content
+     * @param bool $overwrite
+     * @copyright Copyright (c)
+     * @author Wongzx <842687571@qq.com>
+     * @return bool|int
+     */
     static function saveFile($filePath, $content, $overwrite = true)
     {
         if (self::createFile($filePath, $overwrite)) {
@@ -159,6 +209,15 @@ class File
         }
     }
 
+    /**
+     * copyFile  [cp 文件]
+     * @param $filePath
+     * @param $targetFilePath
+     * @param bool $overwrite
+     * @copyright Copyright (c)
+     * @author Wongzx <842687571@qq.com>
+     * @return bool
+     */
     static function copyFile($filePath, $targetFilePath, $overwrite = true)
     {
         if (!file_exists($filePath)) {
@@ -178,6 +237,15 @@ class File
         return copy($filePath, $targetFilePath);
     }
 
+    /**
+     * moveFile  [移动文件]
+     * @param $filePath
+     * @param $targetFilePath
+     * @param bool $overwrite
+     * @copyright Copyright (c)
+     * @author Wongzx <842687571@qq.com>
+     * @return bool
+     */
     static function moveFile($filePath, $targetFilePath, $overwrite = true)
     {
         if (!file_exists($filePath)) {
@@ -197,6 +265,14 @@ class File
         return rename($filePath, $targetFilePath);
     }
 
+
+    /**
+     * deleteFile  [删除文件]
+     * @param $filePath
+     * @copyright Copyright (c)
+     * @author Wongzx <842687571@qq.com>
+     * @return bool
+     */
     static function deleteFile($filePath)
     {
         try {

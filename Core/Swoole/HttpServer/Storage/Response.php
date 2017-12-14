@@ -8,6 +8,8 @@
 
 namespace Core\Swoole\HttpServer\Storage;
 
+use Session\Cookie;
+
 class Response extends Message
 {
 
@@ -43,6 +45,12 @@ class Response extends Message
         $this->swooleHttpResponse = $response;
     }
 
+    /**
+     * end  [发送]
+     * @param bool $realEnd
+     * @copyright Copyright (c)
+     * @author Wongzx <842687571@qq.com>
+     */
     public function end($realEnd = false)
     {
         if ($this->isEndResponse == self::STATUS_NOT_END) {
@@ -64,6 +72,7 @@ class Response extends Message
                 }
             }
             $cookies = $this->getCookies();
+            print_r($cookies);
             foreach ($cookies as $cookie) {
                 $this->swooleHttpResponse->cookie($cookie->getName(), $cookie->getValue(), $cookie->getExpire(), $cookie->getPath(), $cookie->getDomain(), $cookie->getSecure(), $cookie->getHttponly());
             }
@@ -79,7 +88,53 @@ class Response extends Message
         }
     }
 
-    public function write($obj)
+    /**
+     * write  [输出]
+     * @param $obj
+     * @copyright Copyright (c)
+     * @author Wongzx <842687571@qq.com>
+     * @return bool
+     */
+    public function write($obj, $statusCode = 200, $msg = 'success')
+    {
+        if (!$this->isEndResponse()) {
+            $data = [
+                "code" => $statusCode,
+                "msg" => $msg,
+                "data" => $obj
+            ];
+            if (is_object($data)) {
+                if (method_exists($data, "__toString")) {
+                    $data = $data->__toString();
+                } else if (method_exists($data, 'jsonSerialize')) {
+                    $data = json_encode($data, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES);
+                } else {
+                    $data = var_export($data, true);
+                }
+            } else if (is_array($data)) {
+                $data = json_encode($data, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES);
+            }
+            $this->getBody()->write($data);
+            $this->withHeader('Content-type', 'application/json;charset=utf-8');
+            $this->withStatus($statusCode);
+            return true;
+        } else {
+            trigger_error("write");
+            return false;
+        }
+    }
+
+
+    /**
+     * output  [json格式数据输出]
+     * @param int $statusCode
+     * @param null $result
+     * @param null $msg
+     * @copyright Copyright (c)
+     * @author Wongzx <842687571@qq.com>
+     * @return bool
+     */
+    public function assign($obj)
     {
         if (!$this->isEndResponse()) {
             if (is_object($obj)) {
@@ -94,18 +149,34 @@ class Response extends Message
                 $obj = json_encode($obj, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES);
             }
             $this->getBody()->write($obj);
+            $this->withHeader("Content-type", "text/html;charset=utf-8");
             return true;
         } else {
-            trigger_error("write");
+            trigger_error("response has end");
             return false;
         }
     }
 
+
+    /**
+     * getStatusCode  [状态码]
+     * @copyright Copyright (c)
+     * @author Wongzx <842687571@qq.com>
+     * @return int
+     */
     private function getStatusCode()
     {
         return $this->statusCode;
     }
 
+    /**
+     * withStatus  [设置状态码]
+     * @param $code
+     * @param string $reasonPhrase
+     * @copyright Copyright (c)
+     * @author Wongzx <842687571@qq.com>
+     * @return $this
+     */
     public function withStatus($code, $reasonPhrase = '')
     {
         // TODO: Implement withStatus() method.
@@ -122,6 +193,25 @@ class Response extends Message
         }
     }
 
+
+    public function setCookies($name, $value = '', $expire = 0, $path = '/', $domain = '', $secure = false, $httponly = false)
+    {
+        if (!$this->isEndResponse()) {
+            $cookie = new Cookie();
+            $cookie->setName($name);
+            $cookie->setValue($value);
+            $cookie->setExpire($expire);
+            $cookie->setPath($path);
+            $cookie->setDomain($domain);
+            $cookie->setSecure($secure);
+            $cookie->setHttponly($httponly);
+            $this->cookies = $cookie;
+            return true;
+        } else {
+            trigger_error("response has end");
+            return false;
+        }
+    }
 
     public function isEndResponse()
     {

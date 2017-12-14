@@ -25,6 +25,8 @@ class Request
 
     private $protocol;
 
+    private $cookieParams = [];
+
     static function getInstance(\swoole_http_request $request = null)
     {
         if ($request !== null) {
@@ -53,7 +55,7 @@ class Request
          * POST GET
          */
         $this->method = $this->httpRequest->server['request_method'];
-
+        $this->withCookieParams($this->initCookie());
     }
 
 
@@ -97,6 +99,43 @@ class Request
         } else {
             return [];
         }
+    }
+
+
+    /**
+     * withCookieParams  [写入保存cookie信息]
+     * @param array $cookies
+     * @copyright Copyright (c)
+     * @author Wongzx <842687571@qq.com>
+     * @return $this
+     */
+    public function withCookieParams(array $cookies)
+    {
+        // TODO: Implement withCookieParams() method.
+        $this->cookieParams = $cookies;
+        return $this;
+    }
+
+    /**
+     * getCookieParams  [获取cookie信息]
+     * @param null $name
+     * @copyright Copyright (c)
+     * @author Wongzx <842687571@qq.com>
+     * @return array|mixed|null
+     */
+    public function getCookieParams($name = null)
+    {
+        // TODO: Implement getCookieParams() method.
+        if ($name === null) {
+            return $this->cookieParams;
+        } else {
+            if (isset($this->cookieParams[$name])) {
+                return $this->cookieParams[$name];
+            } else {
+                return null;
+            }
+        }
+
     }
 
 

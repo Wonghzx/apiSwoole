@@ -38,11 +38,10 @@ class Index extends AbstractController
 //   </div>
 //        ');
 
-        $a = $this->response()->setCookies('aa','aa',40000);
-//        $a  = new SessionInstance('ApiSwoole');
-
-        $id = $a->getId();
-        $this->response()->assign($id);
+//        $a = new SessionInstance('ApiSwoole');
+//        $sa = $a->getId();
+        $sa = $_SESSION['asd'];
+        $this->response()->assign($sa);
     }
 
     public function test()

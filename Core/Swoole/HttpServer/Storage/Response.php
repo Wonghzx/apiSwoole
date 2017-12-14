@@ -8,7 +8,8 @@
 
 namespace Core\Swoole\HttpServer\Storage;
 
-use Session\Cookie;
+use Core\Component\Cookie;
+
 
 class Response extends Message
 {
@@ -72,7 +73,6 @@ class Response extends Message
                 }
             }
             $cookies = $this->getCookies();
-            print_r($cookies);
             foreach ($cookies as $cookie) {
                 $this->swooleHttpResponse->cookie($cookie->getName(), $cookie->getValue(), $cookie->getExpire(), $cookie->getPath(), $cookie->getDomain(), $cookie->getSecure(), $cookie->getHttponly());
             }
@@ -205,7 +205,7 @@ class Response extends Message
             $cookie->setDomain($domain);
             $cookie->setSecure($secure);
             $cookie->setHttponly($httponly);
-            $this->cookies = $cookie;
+            $this->withAddedCookie($cookie);
             return true;
         } else {
             trigger_error("response has end");
@@ -213,12 +213,26 @@ class Response extends Message
         }
     }
 
+    /**
+     * withAddedCookie  [description]
+     * @param Cookie $cookie
+     * @copyright Copyright (c)
+     * @author Wongzx <842687571@qq.com>
+     * @return $this
+     */
+    private function withAddedCookie(Cookie $cookie)
+    {
+        $this->cookies[$cookie->getName()] = $cookie;
+        return $this;
+    }
+
+
     public function isEndResponse()
     {
         return $this->isEndResponse;
     }
 
-    private function getCookies()
+    public function getCookies()
     {
         return $this->cookies;
     }

@@ -118,8 +118,9 @@ class Core
         /**
          * 加载第三方依赖组件
          */
-        $autoload->addNamespace('FastRoute', 'Core/Package/FastRoute');
-        $autoload->addNamespace('Session', 'Core/Package/Session');
+        $autoload->addNamespace('FastRoute', 'Core/Package/FastRoute');//路由
+        $autoload->addNamespace('Session', 'Core/Package/Session'); //session
+        $autoload->addNamespace('SuperClosure', 'Core/Package/SuperClosure'); //用于序列化闭包和匿名函数的PHP库。
 
         return $this;
 

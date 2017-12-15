@@ -11,10 +11,9 @@ namespace Http\Controller;
 
 
 use Core\AbstractInterface\AbstractController;
-use Core\Component\Random;
-use Core\Component\Sort;
-use Session\Session;
-use Session\SessionInstance;
+use Core\Component\SessionFacade;
+use Core\Swoole\Session\Session;
+
 
 class Index extends AbstractController
 {
@@ -38,10 +37,10 @@ class Index extends AbstractController
 //   </div>
 //        ');
 
-        $this->response()->setCookies('a','a');
-//        $sa = $a->getId();
-//        $sa = $_SESSION['asd'];
-        $this->response()->assign('s');
+//        $a = SessionFacade::set('aa','xx');
+        $a = SessionFacade::sessionId();
+        $this->response()->assign($a);
+//        $this->response()->assign($set);
     }
 
     public function test()

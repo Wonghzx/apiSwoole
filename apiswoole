@@ -58,8 +58,9 @@ function commandHandler()
             startServer();
             break;
         case 'stop': //停止
+            stopServer($comm['options']);
             break;
-        case 'reload': //重装
+        case 'reload': //重载服务
             break;
         case 'update': //升级系统
             break;
@@ -78,6 +79,33 @@ function startServer()
     echo lconLogo() . "\n";
     global $server;
     $server->run();
+}
+
+
+function stopServer($options)
+{
+    $pidFile = \Conf\Config::getInstance()->getConf("SERVER.CONFIG.pid_file");
+    if (!empty($options['pid'])) {
+        $pidFile = $options['pid'];
+    }
+    if (!file_exists($pidFile)) {
+        echo "pid file :{$pidFile} not exist \n";
+        return;
+    }
+    $pid = file_get_contents($pidFile);
+    if (!swoole_process::kill($pid, 0)) {
+        echo "pid :{$pid} not exist \n";
+        return;
+    }
+    sleep(2);
+    if (swoole_process::kill($pid, SIGTERM)) {
+        echo "server stop at " . date("y-m-d h:i:s") . "\n";
+        if (is_file($pidFile)) {
+            unlink($pidFile);
+        }
+    } else {
+        echo "stop server fail try again \n";
+    }
 }
 
 

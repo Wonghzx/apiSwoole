@@ -22,7 +22,7 @@ class Di
     }
 
     /**
-     * set  [description]
+     * set  [设置]
      * @param $key
      * @param $obj
      * @param array ...$arg
@@ -37,7 +37,6 @@ class Di
         }
         /*
          * 注入的时候不做任何的类型检测与转换
-         * 由于编程人员为问题，该入注资源并不一定会被用到
          */
         $this->container[$key] = [
             "obj" => $obj,
@@ -47,7 +46,7 @@ class Di
     }
 
     /**
-     * delete  [description]
+     * delete  [删除]
      * @param $key
      * @copyright Copyright (c)
      * @author Wongzx <842687571@qq.com>
@@ -58,7 +57,7 @@ class Di
     }
 
     /**
-     * clear  [description]
+     * clear  [清空 IoC 容器的所有内容。]
      * @copyright Copyright (c)
      * @author Wongzx <842687571@qq.com>
      */
@@ -74,22 +73,38 @@ class Di
     function get($key)
     {
         if (isset($this->container[$key])) {
+
             $result = $this->container[$key];
+
             if (is_object($result['obj'])) {
+
                 return $result['obj'];
+
             } else if (is_callable($result['obj'])) {
+
                 $ret = call_user_func_array($result['obj'], $result['params']);
+
                 $this->container[$key]['obj'] = $ret;
+
                 return $this->container[$key]['obj'];
+
             } else if (is_string($result['obj']) && class_exists($result['obj'])) {
+
                 $reflection = new \ReflectionClass ($result['obj']);
+
                 $ins = $reflection->newInstanceArgs($result['params']);
+
                 $this->container[$key]['obj'] = $ins;
+
                 return $this->container[$key]['obj'];
+
             } else {
+
                 return $result['obj'];
             }
+
         } else {
+
             return null;
         }
     }

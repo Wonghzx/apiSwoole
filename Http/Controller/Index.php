@@ -11,6 +11,7 @@ namespace Http\Controller;
 
 
 use Core\AbstractInterface\AbstractController;
+use Core\Component\Logger;
 use Core\Component\SessionFacade;
 use Core\Swoole\Session\Session;
 
@@ -40,9 +41,9 @@ class Index extends AbstractController
 //        $a = SessionFacade::set('aa','xx');
 //        SessionFacade::set('aa','xxxxxx');
         $a = SessionFacade::find('aa');
-        $s = SessionFacade::sessionId();
+
         $this->response()->assign($a);
-        $this->response()->assign($s);
+//        $this->response()->assign($s);
     }
 
     public function test()

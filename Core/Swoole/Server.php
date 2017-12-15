@@ -8,8 +8,6 @@
 
 namespace Core\Swoole;
 
-use Core\Event;
-
 class Server
 {
     protected static $instance;
@@ -37,6 +35,7 @@ class Server
         switch ($serverType) {
             case SERVER_TYPE_SERVER:
                 $this->serverApi = new \swoole_server($ip, $port, $runMode, $socketType);
+                $this->swooleServer();
                 break;
             case SERVER_TYPE_WEB:
                 $this->serverApi = new \swoole_http_server($ip, $port, $runMode);
@@ -64,7 +63,7 @@ class Server
      */
     private function swooleServer()
     {
-
+        \Core\Swoole\SwooleServer\Server::getInstance()->serverStart($this->getServerApi(), $this->conf);
     }
 
 
@@ -98,9 +97,6 @@ class Server
     {
         return $this->serverApi;
     }
-
-
-
 
 
 }

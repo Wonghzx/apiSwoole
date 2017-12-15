@@ -20,7 +20,7 @@ abstract class AbstractErrorHandler
      * @author Wongzx <842687571@qq.com>
      * @return mixed
      */
-    abstract public function handler($msg, $file = null, $line = null, $errorCode = null, $trace);
+    abstract function handler($msg, $file = null, $line = null, $errorCode = null, $trace);
 
 
     /**
@@ -34,7 +34,7 @@ abstract class AbstractErrorHandler
      * @author Wongzx <842687571@qq.com>
      * @return mixed
      */
-    abstract public function display($msg, $file = null, $line = null, $errorCode = null, $trace);
+    abstract function display($msg, $file = null, $line = null, $errorCode = null, $trace);
 
 
     /**
@@ -48,5 +48,5 @@ abstract class AbstractErrorHandler
      * @author Wongzx <842687571@qq.com>
      * @return mixed
      */
-    abstract public function log($msg, $file = null, $line = null, $errorCode = null, $trace);
+    abstract function log($msg, $file = null, $line = null, $errorCode = null, $trace);
 }

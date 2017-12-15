@@ -8,12 +8,12 @@
 
 namespace Core\Component\Error;
 
-use Core\AbstractInterface\AbstractExceptionHandler;
+use Core\AbstractInterface\AbstractErrorHandler;
 use Core\Component\Logger;
 use Core\Swoole\HttpServer\Storage\Request;
 use Core\Swoole\HttpServer\Storage\Response;
 
-class ExceptionHandler extends AbstractExceptionHandler
+class ExceptionHandler extends AbstractErrorHandler
 {
 
     /**

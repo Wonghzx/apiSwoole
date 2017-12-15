@@ -32,12 +32,12 @@ class Server
     {
         $this->serverApi = $server;
         $this->serverApi->set($conf->getWorkerSetting()); //设置运行时参数
-        $this->pipeMessage();
+//        $this->pipeMessage();
         $this->requestEvent();
         $this->onTaskEvent();
         $this->onFinishEvent();
-        $this->workerStartEvent();
-        $this->workerStopEvent();
+//        $this->workerStartEvent();
+//        $this->workerStopEvent();
         $this->startEvent();//开启
     }
 
@@ -92,7 +92,7 @@ class Server
     }
 
     /**
-     * onFinishEvent  [description]
+     * onFinishEvent  [此函数用于在task进程中通知worker进程，投递的任务已完成。此函数可以传递结果数据给worker进程]
      * @copyright Copyright (c)
      * @author Wongzx <842687571@qq.com>
      */

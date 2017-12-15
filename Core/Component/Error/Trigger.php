@@ -9,8 +9,8 @@
 namespace Core\Component\Error;
 
 use Conf\Config;
-use Core\AbstractInterface\AbstractErrorHandler;
 use Core\AbstractInterface\AbstractExceptionHandler;
+use Core\AbstractInterface\AbstractErrorHandler;
 use Core\Component\Di;
 
 class Trigger
@@ -48,7 +48,7 @@ class Trigger
         /**
          * 判断是否记录错误Log文件
          */
-        if ($handler['LOG'] == true) {
+        if ($debug['LOG'] == true) {
             $handler->log($msg, $file, $line, $errorCode, $trace);
         }
     }
@@ -70,7 +70,7 @@ class Trigger
         }
 
         if ($debug['LOG'] == true) {
-            $handler->log($exception);
+            $handler->display($exception);
         }
 
     }

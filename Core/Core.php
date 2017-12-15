@@ -11,7 +11,10 @@ namespace Core;
 
 use Conf\Config;
 use Core\Component\Di;
+use Core\Component\Error\Trigger;
 use Core\Component\File;
+use Core\Swoole\HttpServer\Storage\Request;
+use Core\Swoole\HttpServer\Storage\Response;
 use Core\Swoole\Server;
 use Session\SessionInstance;
 
@@ -133,6 +136,24 @@ class Core
      */
     private function registerErrorHandler()
     {
+        $debug = Config::getInstance()->getConf('DEBUG');
+        if ($debug['ENABLE'] === true) {
+            ini_set("display_errors", "On");
+            error_reporting(E_ALL | E_STRICT);
+            set_error_handler(function ($errorCode, $description, $file = null, $line = null) {
+                Trigger::error($description, $file, $line, $errorCode, debug_backtrace());
+            });
+            register_shutdown_function(function () {
+                $error = error_get_last(); //获取最后发生的错误
+                if (!empty($error)) {
+                    Trigger::error($error['message'], $error['file'], $error['line'], E_ERROR, debug_backtrace());
+                    //HTTP下，发送致命错误时，原有进程无法按照预期结束链接,强制执行end
+                    if (Request::getInstance()) {
+                        Response::getInstance()->end(true);
+                    }
+                }
+            });
+        }
     }
 
 

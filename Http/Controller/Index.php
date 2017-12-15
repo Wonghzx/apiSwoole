@@ -38,9 +38,11 @@ class Index extends AbstractController
 //        ');
 
 //        $a = SessionFacade::set('aa','xx');
-        $a = SessionFacade::sessionId();
+//        SessionFacade::set('aa','xxxxxx');
+        $a = SessionFacade::find('aa');
+        $s = SessionFacade::sessionId();
         $this->response()->assign($a);
-//        $this->response()->assign($set);
+        $this->response()->assign($s);
     }
 
     public function test()

@@ -8,6 +8,7 @@
 
 namespace Core\Swoole\HttpServer;
 
+use Core\Component\Error\Trigger;
 use Core\Event;
 use Core\Swoole\HttpServer\Storage\Request;
 use Core\Swoole\HttpServer\Storage\Response;
@@ -68,6 +69,8 @@ class Server
                 Launcher::getInstance()->dispatch();
                 Event::getInstance()->onResponse($requests, $responses);
             } catch (\Exception $exception) {
+
+                Trigger::exception($exception);
             }
             $responses->end(true);
         });

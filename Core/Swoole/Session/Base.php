@@ -29,7 +29,6 @@ class Base
 
     public function sessionId($sid = null)
     {
-        $this->start();
         return $this->session->sessionId($sid);
     }
 

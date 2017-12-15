@@ -78,5 +78,8 @@ class ConstantClass
         defined(' SESSION_HANDLER') or define('SESSION_NAME', 'ApiSwoole'); //session_name
         defined('SESSION_GC_PROBABILITY') or define('SESSION_GC_PROBABILITY', 'SESSION_GC_PROBABILITY'); //
         defined('SESSION_GC_MAX_LIFE_TIME') or define('SESSION_GC_MAX_LIFE_TIME', 'SESSION_GC_MAX_LIFE_TIME'); //session GC 最大生命周期
+        defined('ERROR_HANDLER') or define('ERROR_HANDLER', 'ERROR_HANDLER');
+        defined('EXCEPTION_HANDLER') or define('EXCEPTION_HANDLER', 'EXCEPTION_HANDLER');
+        defined('LOGGER_WRITER') or define('LOGGER_WRITER', 'LOGGER_WRITER');
     }
 }

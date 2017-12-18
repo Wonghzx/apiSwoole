@@ -8,12 +8,12 @@
 
 namespace Core\Component\Error;
 
-use Core\AbstractInterface\AbstractErrorHandler;
+use Core\AbstractInterface\AbstractExceptionHandler;
 use Core\Component\Logger;
 use Core\Swoole\HttpServer\Storage\Request;
 use Core\Swoole\HttpServer\Storage\Response;
 
-class ExceptionHandler extends AbstractErrorHandler
+class ExceptionHandler extends AbstractExceptionHandler
 {
 
     /**
@@ -39,7 +39,7 @@ class ExceptionHandler extends AbstractErrorHandler
     {
         // TODO: Implement display() method.
         if (Request::getInstance()) {
-            Response::getInstance()->write(nl2br($exception->getMessage() . $exception->getTraceAsString()));
+            Response::getInstance()->assign(nl2br($exception->getMessage() . $exception->getTraceAsString()));
         } else {
             Logger::getInstance('error')->console($exception->getMessage() . $exception->getTraceAsString(), false);
         }

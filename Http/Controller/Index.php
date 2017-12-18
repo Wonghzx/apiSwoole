@@ -10,13 +10,13 @@
 namespace Http\Controller;
 
 
-use Core\AbstractInterface\AbstractController;
+use Core\AbstractInterface\AbstractViewController;
 use Core\Component\Logger;
 use Core\Component\SessionFacade;
 use Core\Swoole\Session\Session;
+use Illuminate\Database\Capsule\Manager AS DB;
 
-
-class Index extends AbstractController
+class Index extends AbstractViewController
 {
     use Base;
 
@@ -40,10 +40,10 @@ class Index extends AbstractController
 
 //        $a = SessionFacade::set('aa','xx');
 //        SessionFacade::set('aa','xxxxxx');
-        $a = SessionFacade::find('aa');
 
-        $this->response()->assign($a);
-//        $this->response()->assign($s);
+//        $a = SessionFacade::find('aa');
+        $a = DB::table('user')->get();
+        $this->view('Index/index', ['user' => $a]);
     }
 
     public function test()

@@ -70,7 +70,7 @@ class Trigger
         }
 
         if ($debug['LOG'] == true) {
-            $handler->display($exception);
+            $handler->log($exception);
         }
 
     }

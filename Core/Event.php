@@ -8,9 +8,13 @@
 
 namespace Core;
 
+use Conf\Config;
 use Conf\ConstantClass;
 use Core\Swoole\HttpServer\Storage\Request;
 use Core\Swoole\HttpServer\Storage\Response;
+use Illuminate\Database\Capsule\Manager AS Capsule;
+
+//use Illuminate\Database\Capsule\Manager AS Capsule;
 
 class Event extends \Core\AbstractInterface\AbstractEvent
 {
@@ -36,7 +40,24 @@ class Event extends \Core\AbstractInterface\AbstractEvent
      */
     function initializeEd()
     {
+//        include_once ROOT . '/vendor/autoload.php';
         // TODO: Implement initializeEd() method.
+        $dbConf = Config::getInstance()->getConf('database');
+//        $capsule = new Manager();
+        $capsule = new Capsule;
+        $capsule->addConnection($dbConf);
+
+        /*
+         * Make this capsule instance available globally.
+         * 设置全局静态可访问
+         */
+        $capsule->setAsGlobal();
+
+        /*
+         * Bootstrap Eloquent so it is ready for usage.
+         * 启动Eloquent
+         */
+        $capsule->bootEloquent();
     }
 
 

@@ -108,7 +108,7 @@ class DumpAutoload
     }
 
 
-    private static function requireFile($file)
+    public static function requireFile($file)
     {
         /*
          * 若不加ROOT，会导致在daemonize模式下
@@ -120,5 +120,15 @@ class DumpAutoload
             return true;
         }
         return false;
+    }
+
+
+    public function importPath($path, $ext = 'php')
+    {
+        $path = rtrim($path, '/');
+        $pat = $path . '/*.' . $ext;
+        foreach (glob($pat) as $file) {
+            $this->requireFile($file);
+        }
     }
 }

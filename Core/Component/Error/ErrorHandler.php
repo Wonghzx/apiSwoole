@@ -49,7 +49,7 @@ class ErrorHandler extends AbstractErrorHandler
         //判断是否在HTTP模式下
         if (Request::getInstance()) {
 
-            Response::getInstance()->write(nl2br($msg) . " in file {$file} line {$line}");
+            Response::getInstance()->assign(nl2br($msg) . " in file {$file} line {$line}");
 
         } else {
             Logger::getInstance('error')->console($msg . " in file {$file} line {$line}", false);

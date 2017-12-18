@@ -16,7 +16,7 @@ use Core\Component\File;
 use Core\Swoole\HttpServer\Storage\Request;
 use Core\Swoole\HttpServer\Storage\Response;
 use Core\Swoole\Server;
-use Session\SessionInstance;
+use Blade\Blade;
 
 class Core
 {
@@ -123,7 +123,16 @@ class Core
          */
         $autoload->addNamespace('FastRoute', 'Core/Package/FastRoute');//路由
         $autoload->addNamespace('SuperClosure', 'Core/Package/SuperClosure'); //用于序列化闭包和匿名函数的PHP库。
+        $autoload->addNamespace('Illuminate', 'Core/Package/Illuminate'); //
+        $autoload->addNamespace('Latte', 'Core/Package/Latte'); //
+        $autoload->addNamespace('Blade', 'Core/Package/Blade'); //
 
+
+        /**
+         * 加载自定义的函数
+         */
+        $autoload->requireFile('/Core/Package/Illuminate/Support/helpers.php');
+//        $autoload->requireFile('/Core/Package/latte.php');
         return $this;
 
     }

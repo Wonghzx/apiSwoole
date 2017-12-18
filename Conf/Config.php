@@ -39,7 +39,7 @@ class Config
                 'SERVER_NAME' => '',
                 'PORT' => 9501,
                 'RUN_MODE' => SWOOLE_PROCESS, //不建议更改此项
-                'SERVER_TYPE' => SERVER_TYPE_SERVER,//SERVER_TYPE_WEB = HttpServer & SERVER_TYPE_SERVER = Server &&  SERVER_TYPE_WEB_SOCKET = WebSocket
+                'SERVER_TYPE' => SERVER_TYPE_WEB,//SERVER_TYPE_WEB = HttpServer & SERVER_TYPE_SERVER = Server &&  SERVER_TYPE_WEB_SOCKET = WebSocket
                 'SOCKET_TYPE' => SWOOLE_TCP,
                 'CONFIG' => [ //设置运行时参数
                     'task_worker_num' => 8, //异步任务进程
@@ -67,7 +67,16 @@ class Config
     private function userConf()
     {
         return [
-
+            'database' => [
+                'driver' => 'mysql',
+                'host' => '192.168.1.161',
+                'database' => 'test',
+                'username' => 'root',
+                'password' => 'xcrozz###',
+                'charset' => 'utf8',
+                'collation' => 'utf8_unicode_ci',
+                'prefix' => '',
+            ]
         ];
     }
 

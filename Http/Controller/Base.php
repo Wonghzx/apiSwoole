@@ -8,8 +8,16 @@
  */
 
 namespace Http\Controller;
+
+
 trait Base
 {
+
+    protected $db;
+
+    public function __construct()
+    {
+    }
 
     public function abc()
     {

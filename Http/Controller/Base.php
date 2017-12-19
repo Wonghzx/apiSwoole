@@ -24,4 +24,9 @@ trait Base
         return 'Base';
     }
 
+    static public function page()
+    {
+
+    }
+
 }

@@ -12,9 +12,13 @@ namespace Http\Controller;
 
 use Core\AbstractInterface\AbstractViewController;
 use Core\Component\Logger;
+use Core\Component\Pagination\Page;
+use Core\Component\Pagination\Pagination;
 use Core\Component\SessionFacade;
 use Core\Swoole\Session\Session;
 use Illuminate\Database\Capsule\Manager AS DB;
+use JasonGrimes\Paginator;
+
 class Index extends AbstractViewController
 {
     use Base;
@@ -41,9 +45,20 @@ class Index extends AbstractViewController
 //        SessionFacade::set('aa','xxxxxx');
 
 //        $a = SessionFacade::find('aa');
-        $data = $this->request()->initGet();
-        $a = DB::table('user')->get()->forPage($data['id'],1);
-        $this->view('Index/index', ['user' => $a]);
+        $get = $this->request()->initGet();
+        $p = empty($get['page']) ?  1 : $get['page'];
+        $a = DB::table('user')->get()->forPage($p, 1);
+
+
+        $page = Page::show(3, 1);
+//        print_r($page);
+////        include_once ROOT.'/vendor/autoload.php';
+//        $page = new Paginator($totalItems, $itemsPerPage, $currentPage, $urlPattern);
+//        $page = new Pagination($totalItems, $itemsPerPage, $currentPage, $urlPattern);
+
+//        print_r($this->request()->getUri());
+        $this->view('Index/index', ['user' => $a, 'page' => $page]);
+//        $this->response()->assign($page);
     }
 
     public function test()

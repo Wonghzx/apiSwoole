@@ -281,7 +281,7 @@ abstract class HasOneOrMany extends Relation
     }
 
     /**
-     * Create a Collection of new instances of the related model.
+     * Create a Page of new instances of the related model.
      *
      * @param  array  $records
      * @return \Illuminate\Database\Eloquent\Collection

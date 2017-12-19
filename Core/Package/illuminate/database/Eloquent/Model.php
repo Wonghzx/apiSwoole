@@ -884,7 +884,7 @@ abstract class Model implements ArrayAccess, Arrayable, Jsonable, JsonSerializab
     }
 
     /**
-     * Create a new Eloquent Collection instance.
+     * Create a new Eloquent Page instance.
      *
      * @param  array  $models
      * @return \Illuminate\Database\Eloquent\Collection

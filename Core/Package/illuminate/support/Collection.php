@@ -1540,7 +1540,7 @@ class Collection implements ArrayAccess, Arrayable, Countable, IteratorAggregate
     /**
      * Zip the collection together with one or more arrays.
      *
-     * e.g. new Collection([1, 2, 3])->zip([4, 5, 6]);
+     * e.g. new Page([1, 2, 3])->zip([4, 5, 6]);
      *      => [[1, 4], [2, 5], [3, 6]]
      *
      * @param  mixed ...$items
@@ -1715,7 +1715,7 @@ class Collection implements ArrayAccess, Arrayable, Countable, IteratorAggregate
     }
 
     /**
-     * Results array of items from Collection or Arrayable.
+     * Results array of items from Page or Arrayable.
      *
      * @param  mixed  $items
      * @return array

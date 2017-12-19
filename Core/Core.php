@@ -132,6 +132,7 @@ class Core
          * 加载自定义的函数
          */
         $autoload->requireFile('/Core/Package/Illuminate/Support/helpers.php');
+        $autoload->requireFile('/Conf/Helpers.php');
 //        $autoload->requireFile('/Core/Package/latte.php');
         return $this;
 

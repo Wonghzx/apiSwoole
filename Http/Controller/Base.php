@@ -19,14 +19,4 @@ trait Base
     {
     }
 
-    public function abc()
-    {
-        return 'Base';
-    }
-
-    static public function page()
-    {
-
-    }
-
 }

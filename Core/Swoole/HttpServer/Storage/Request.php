@@ -71,7 +71,6 @@ class Request
         $uri->withHost($host[0]);
         $port = isset($host[1]) ? $host[1] : 80;
         $uri->withPort($port);
-//        print_r($this->httpRequest);
         return $uri;
     }
 

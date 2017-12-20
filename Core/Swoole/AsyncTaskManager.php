@@ -11,7 +11,7 @@ namespace Core\Swoole;
 use Core\Component\SuperClosure;
 
 /**
- * Class AsyncTaskManager 异步任务管理器
+ * Class AsyncTaskManager 异步进程任务管理器
  * @package Core\Swoole
  */
 class AsyncTaskManager
@@ -31,7 +31,7 @@ class AsyncTaskManager
 
 
     /**
-     * addTask  [添加任务]
+     * addTask  [添加非阻塞等待的任务]
      * 投递一个异步任务到task_worker池中。此函数是非阻塞的，执行完毕会立即返回。Worker进程可以继续处理新的请求。
      * 使用Task功能，必须先设置 task_worker_num，并且必须设置Server的onTask和onFinish事件回调函数。
      * $data要投递的任务数据，可以为除资源类型之外的任意PHP变量
@@ -54,8 +54,33 @@ class AsyncTaskManager
                 trigger_error("async task serialize fail ");
                 return false;
             }
-            Server::getInstance()->getServerApi()->task($taskCallable, $workerId, $finishCallBack);
+            return Server::getInstance()->getServerApi()->task($taskCallable, $workerId, $finishCallBack);
         }
     }
+
+
+    /**
+     * addTaskWait  [添加阻塞等待的任务]
+     * taskwait与task方法作用相同，用于投递一个异步的任务到task进程池去执行。与task不同的是taskwait是阻塞等待的，直到任务完成或者超时返回。
+     * $result为任务执行的结果，由$serv->finish函数发出。如果此任务超时，这里会返回false。
+     * @param $callable
+     * @param float $timeout
+     * @param int $workerId
+     * @copyright Copyright (c)
+     * @author Wongzx <842687571@qq.com>
+     */
+    public function addTaskWait($callable, $timeout = 0.5, $workerId = self::TASK_DISPATCHER_TYPE_RANDOM)
+    {
+        if ($callable instanceof \Closure) {
+            try {
+                $callable = new SuperClosure($callable);
+            } catch (\Exception $exception) {
+                trigger_error("async task serialize fail ");
+                return false;
+            }
+        }
+        return Server::getInstance()->getServerApi()->taskwait($callable, $timeout, $workerId);
+    }
+
 
 }

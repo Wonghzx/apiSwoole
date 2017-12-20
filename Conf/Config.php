@@ -45,7 +45,7 @@ class Config
                     'task_worker_num' => 8, //异步任务进程
                     'task_max_request' => 10,
                     'max_request' => 5000,//强烈建议设置此配置项
-                    'worker_num' => 8
+                    'worker_num' => 8,
                 ]
             ],
             'DEBUG' => [
@@ -53,7 +53,12 @@ class Config
                 'DISPLAY_ERROR' => true,
                 'ENABLE' => true,
             ],
-            'CONTROLLER_POOL' => true //web或wap socket模式有效
+            'CONTROLLER_POOL' => true, //web或wap socket模式有效
+            'REDIS' => [
+                'HOST' => '',
+                'PORT' => 6379,
+                'AUTH' => ''
+            ]
         ];
     }
 

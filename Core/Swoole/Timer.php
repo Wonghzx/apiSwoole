@@ -38,18 +38,19 @@ class Timer
      */
     static public function addAfter($second, \Closure $func)
     {
-
+        Server::getInstance()->getServerApi()->after($second, $func);
     }
 
 
     /**
-     * clearTimer  [description]
+     * clearTimer  [删除]
      * @param $timerId
      * @copyright Copyright (c)
      * @author Wongzx <842687571@qq.com>
      */
     static public function clearTimer($timerId)
     {
+        Server::getInstance()->getServerApi()->clearTimer($timerId);
     }
 
 }

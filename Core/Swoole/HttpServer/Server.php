@@ -36,8 +36,8 @@ class Server
         $this->requestEvent();
         $this->onTaskEvent();
         $this->onFinishEvent();
-//        $this->workerStartEvent();
-//        $this->workerStopEvent();
+        $this->workerStartEvent();
+        $this->workerStopEvent();
         $this->startEvent();//开启
     }
 

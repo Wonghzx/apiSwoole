@@ -8,6 +8,7 @@
 
 namespace Core\Swoole\HttpServer\Storage;
 
+
 class Request
 {
 
@@ -27,6 +28,8 @@ class Request
 
     private $cookieParams = [];
 
+    private $uploadedFiles = [];
+
     static function getInstance(\swoole_http_request $request = null)
     {
         if ($request !== null) {
@@ -39,7 +42,6 @@ class Request
     {
         $this->httpRequest = $request;
 
-
         //协议 HTTP 1.0 规定浏览器与服务器只保持短暂的连接    1.1 HTTP 1.1支持长连接
         $this->protocol = str_replace('HTTP/', '', $this->httpRequest->server['server_protocol']);
         /*
@@ -47,15 +49,17 @@ class Request
          * foo = bor
          */
         $rawContent = $this->httpRequest->rawContent();
+
         $this->body = new DataStream($rawContent);
         $this->uri = $this->initUri();
         $this->files = $this->initFiles();
+//        print_r($this->files);
         /**
          * 请求的方法
          * POST GET
          */
         $this->method = $this->httpRequest->server['request_method'];
-        $this->withCookieParams($this->initCookie());
+        $this->withCookieParams($this->initCookie())->withUploadedFiles($this->files);
     }
 
 
@@ -95,10 +99,26 @@ class Request
                     $value['type']
                 );
             }
+
             return $normalized;
         } else {
             return [];
         }
+    }
+
+
+    /**
+     * withUploadedFiles  [description]
+     * @param array $uploadedFiles
+     * @copyright Copyright (c)
+     * @author Wongzx <842687571@qq.com>
+     * @return $this
+     */
+    public function withUploadedFiles(array $uploadedFiles)
+    {
+        // TODO: Implement withUploadedFiles() method.
+        $this->uploadedFiles = $uploadedFiles;
+        return $this;
     }
 
 
@@ -195,4 +215,23 @@ class Request
     {
         return isset($this->httpRequest->get) ? $this->httpRequest->get : [];
     }
+
+
+    /**
+     * getUploadedFile  []
+     * @param $name
+     * @copyright Copyright (c)
+     * @author Wongzx <842687571@qq.com>
+     * @return null
+     */
+    public function getUploadedFile($name)
+    {
+        // TODO: Implement getUploadedFiles() method.
+        if (isset($this->uploadedFiles[$name])) {
+            return $this->uploadedFiles[$name];
+        } else {
+            return null;
+        }
+    }
+
 }

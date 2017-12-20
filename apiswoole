@@ -22,7 +22,7 @@
 ////////////////////////////////////////////////////////////////////
 
 include_once 'Core/Core.php';
-$server = \Core\Core::getInstance()->initialize();
+$server = \Core\Core::getInstance()->initialize();  //初始化
 /**
  *[commandParser 解释命令]
  * @author  Wongzx <[842687571@qq.com]>
@@ -74,6 +74,12 @@ function commandHandler()
     }
 }
 
+
+/**
+ * startServer  [开启框架]
+ * @copyright Copyright (c)
+ * @author Wongzx <842687571@qq.com>
+ */
 function startServer()
 {
     echo lconLogo() . "\n";

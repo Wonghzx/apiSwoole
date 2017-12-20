@@ -12,7 +12,7 @@ class FileIO extends Stream
     }
 
     /**
-     * lock  [非阻塞IO与记录锁]
+     * lock  [ +锁]
      * @param int $mode
      * @copyright Copyright (c)
      * @author Wongzx <842687571@qq.com>
@@ -24,7 +24,7 @@ class FileIO extends Stream
     }
 
     /**
-     * unlock  [非阻塞IO解锁]
+     * unlock  [解锁]
      * @param int $mode
      * @copyright Copyright (c)
      * @author Wongzx <842687571@qq.com>

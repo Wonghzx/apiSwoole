@@ -43,6 +43,7 @@ class Server
                 break;
             case SERVER_TYPE_WEB_SOCKET:
                 $this->serverApi = new \swoole_websocket_server($ip, $port, $runMode);
+                $this->swooleWebSocketServer();
                 break;
             default : {
                 exit('server type error');
@@ -85,7 +86,7 @@ class Server
      */
     private function swooleWebSocketServer()
     {
-
+        \Core\Swoole\WebSocket\Server::getInstance()->serverStart($this->getServerApi(), $this->conf);
     }
 
     /**

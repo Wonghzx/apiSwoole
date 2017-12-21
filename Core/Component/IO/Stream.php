@@ -12,9 +12,13 @@ namespace Core\Component\IO;
 class Stream
 {
     private $stream;
+
     private $seekable;
+
     private $readable;
+
     private $writable;
+
     private $readList = [
         'r' => true, 'w+' => true, 'r+' => true, 'x+' => true, 'c+' => true,
         'rb' => true, 'w+b' => true, 'r+b' => true, 'x+b' => true,
@@ -141,6 +145,12 @@ class Stream
         }
     }
 
+
+    /**
+     * rewind  [倒回文件指针的位置]
+     * @copyright Copyright (c)
+     * @author Wongzx <842687571@qq.com>
+     */
     public function rewind()
     {
         // TODO: Implement rewind() method.
@@ -226,6 +236,13 @@ class Stream
         return $this->stream;
     }
 
+    /**
+     * truncate  [接受文件指针 file 作为参数，并将文件大小截取为 size。如果成功则返回 TRUE，否则返回 FALSE。]
+     * @param int $size
+     * @copyright Copyright (c)
+     * @author Wongzx <842687571@qq.com>
+     * @return bool
+     */
     function truncate($size = 0)
     {
         return ftruncate($this->stream, $size);

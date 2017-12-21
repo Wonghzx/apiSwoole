@@ -61,6 +61,7 @@ function commandHandler()
             stopServer($comm['options']);
             break;
         case 'reload': //重载服务
+            reloadServer($comm['options']);
             break;
         case 'update': //升级系统
             break;
@@ -84,9 +85,44 @@ function startServer()
 {
     echo lconLogo() . "\n";
     global $server;
+    $conf = \Conf\Config::getInstance();
+
+    //IP
+    echo 'listen address       ' . "\033[32m ".$conf->getConf('SERVER.LISTEN')." \033[0m" . "\n";
+
+    //端口
+    echo 'listen port          ' . "\033[32m ".$conf->getConf('SERVER.PORT')." \033[0m" . "\n";
+
+    //进程数
+    echo 'worker num           ' . "\033[32m ".$conf->getConf('SERVER.CONFIG.worker_num')." \033[0m" . "\n";
+
+    //异步任务进程数
+    echo 'task worker num      ' . "\033[32m ".$conf->getConf('SERVER.CONFIG.task_worker_num')." \033[0m" . "\n";
+
+
     $server->run();
 }
 
+
+function reloadServer($options)
+{
+    $pidFile = \Conf\Config::getInstance()->getConf("SERVER.CONFIG.pid_file");
+    if (!empty($options['pid'])) {
+        $pidFile = $options['pid'];
+    }
+    if (!file_exists($pidFile)) {
+        echo "pid file :{$pidFile} not exist \n";
+        return;
+    }
+    $pid = file_get_contents($pidFile);
+    if (!swoole_process::kill($pid, 0)) {
+        echo "pid :{$pid} not exist \n";
+        return;
+    }
+
+    swoole_process::kill($pid, SIGUSR1);
+    echo "send server reload command at " . date("y-m-d h:i:s") . "\n";
+}
 
 function stopServer($options)
 {

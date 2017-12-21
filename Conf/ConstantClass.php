@@ -81,5 +81,7 @@ class ConstantClass
         defined('ERROR_HANDLER') or define('ERROR_HANDLER', 'ERROR_HANDLER');
         defined('EXCEPTION_HANDLER') or define('EXCEPTION_HANDLER', 'EXCEPTION_HANDLER');
         defined('LOGGER_WRITER') or define('LOGGER_WRITER', 'LOGGER_WRITER');
+        defined('SHARE_MEMORY_FILE') or define('SHARE_MEMORY_FILE', 'SHARE_MEMORY_FILE');
+        defined('TASK_RUNNING_NUM') or define('TASK_RUNNING_NUM', 'TASK_RUNNING_NUM');
     }
 }

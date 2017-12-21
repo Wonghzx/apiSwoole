@@ -18,7 +18,7 @@ class SplArray extends \ArrayObject
 
 
     /**
-     * set  [设置配置参数]
+     * set  [设置参数]
      * @param $path SERVER.LISTEN
      * @param $value data
      * @copyright Copyright (c)
@@ -31,6 +31,7 @@ class SplArray extends \ArrayObject
         while ($key = array_shift($path)) {
             $temp = &$temp[$key];
         }
+
         $temp = $value;
     }
 

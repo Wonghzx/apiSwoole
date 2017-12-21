@@ -10,9 +10,13 @@ namespace Core;
 
 use Conf\Config;
 use Conf\ConstantClass;
+use Core\Component\IO\ShareMemory;
+use Core\Swoole\AsyncTaskManager;
 use Core\Swoole\HttpServer\Server;
 use Core\Swoole\HttpServer\Storage\Request;
 use Core\Swoole\HttpServer\Storage\Response;
+use Core\Swoole\Timer;
+use Http\Model\Crawler\Polling;
 use Illuminate\Database\Capsule\Manager AS Capsule;
 
 //use Illuminate\Database\Capsule\Manager AS Capsule;
@@ -41,6 +45,7 @@ class Event extends \Core\AbstractInterface\AbstractEvent
      */
     function initializeEd()
     {
+        ShareMemory::getInstance()->clear();
 //        include_once ROOT . '/vendor/autoload.php';
         // TODO: Implement initializeEd() method.
         $dbConf = Config::getInstance()->getConf('database');
@@ -467,7 +472,6 @@ class Event extends \Core\AbstractInterface\AbstractEvent
     }
 
 
-
     function onWorkerStart(\swoole_server $server, $workerId)
     {
         // TODO: Implement onWorkerStart() method.
@@ -476,7 +480,6 @@ class Event extends \Core\AbstractInterface\AbstractEvent
          *
          */
         if ($workerId == 0) {
-
             $list = recursionDirFiles(ROOT . "/Http");
             // 为所有目录和文件添加inotify监视
             $notify = inotify_init();
@@ -484,7 +487,7 @@ class Event extends \Core\AbstractInterface\AbstractEvent
                 inotify_add_watch($notify, $item, IN_CREATE | IN_DELETE | IN_MODIFY);
             }
             // 加入EventLoop
-            swoole_event_add($notify, function () use ($notify,$server) {
+            swoole_event_add($notify, function () use ($notify, $server) {
                 $events = inotify_read($notify);
                 if (!empty($events)) {
                     $server->reload();

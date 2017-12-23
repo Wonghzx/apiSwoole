@@ -118,6 +118,11 @@ class Console
      */
     private function startServer()
     {
+        echo $this->iconLogo() . "\n";
+
+        $this->printParameters();
+
+
         Server::getInstance();
     }
 
@@ -156,6 +161,31 @@ _|"""""||"""""||"""""||"""""||"""""||"""""||"""""||"""""||"""""|
 STRING;
 
         return $string;
+    }
+
+
+    /**
+     *[printParameters void]
+     * @author  Wongzx <[842687571@qq.com]>
+     * @copyright Copyright (c)
+     * @return    [type]        [description]
+     */
+    private function printParameters()
+    {
+        $conf = Di::getInstance()->get('conf');
+
+        //IP
+        echo 'listen address       ' . "\033[32m " . $conf->get('http.host') . " \033[0m" . "\n";
+
+        //端口
+        echo 'listen port          ' . "\033[32m " . $conf->get('http.port') . " \033[0m" . "\n";
+
+        //进程数
+        echo 'worker num           ' . "\033[32m " . $conf->get('setting.worker_num') . " \033[0m" . "\n";
+
+        //异步任务进程数
+        echo 'task worker num      ' . "\033[32m " . $conf->get('setting.task_worker_num') . " \033[0m" . "\n";
+
     }
 
 

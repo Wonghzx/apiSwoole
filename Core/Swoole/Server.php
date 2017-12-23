@@ -40,7 +40,6 @@ class Server
                 $this->swooleServer();
                 break;
             case 'SERVER_TYPE_WEB':
-                var_dump(SWOOLE_PROCESS);die;
                 $this->serverApi = new \swoole_http_server($ip, $port, $runMode);
                 $this->swooleHttpServer();
                 break;

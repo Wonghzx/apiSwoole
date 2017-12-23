@@ -8,6 +8,8 @@
 
 namespace Core\Swoole;
 
+use Core\Component\Di;
+
 class Server
 {
     protected static $instance;
@@ -33,15 +35,16 @@ class Server
         $runMode = $this->conf->getRunMode();
         $socketType = $this->conf->getSocketType();
         switch ($serverType) {
-            case SERVER_TYPE_SERVER:
+            case 'SERVER_TYPE_SERVER':
                 $this->serverApi = new \swoole_server($ip, $port, $runMode, $socketType);
                 $this->swooleServer();
                 break;
-            case SERVER_TYPE_WEB:
+            case 'SERVER_TYPE_WEB':
+                var_dump(SWOOLE_PROCESS);die;
                 $this->serverApi = new \swoole_http_server($ip, $port, $runMode);
                 $this->swooleHttpServer();
                 break;
-            case SERVER_TYPE_WEB_SOCKET:
+            case 'SERVER_TYPE_WEB_SOCKET':
                 $this->serverApi = new \swoole_websocket_server($ip, $port, $runMode);
                 $this->swooleWebSocketServer();
                 break;

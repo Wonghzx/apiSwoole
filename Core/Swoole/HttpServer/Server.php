@@ -30,6 +30,7 @@ class Server
 
     public function serverStart($server, $conf)
     {
+//        print_r($conf);die;
         $this->serverApi = $server;
         $this->serverApi->set($conf->getWorkerSetting()); //设置运行时参数
 //        $this->pipeMessage();

@@ -8,7 +8,6 @@
 
 namespace Core\Component\Error;
 
-use Conf\Config;
 use Core\AbstractInterface\AbstractExceptionHandler;
 use Core\AbstractInterface\AbstractErrorHandler;
 use Core\Component\Di;
@@ -27,12 +26,12 @@ class Trigger
      */
     public static function error($msg, $file = null, $line = null, $errorCode = E_USER_ERROR, $trace = null)
     {
-        $debug = Config::getInstance()->getConf('DEBUG');
-
+        $conf = Di::getInstance()->get('conf');
+        $debug = $conf->get('debug');
         if ($trace == null) {
             $trace = debug_backtrace(); //产生一条回溯跟踪(函数生成一个 backtrace。)
         }
-        $handler = Di::getInstance()->get(ERROR_HANDLER);
+        $handler = $debug['error_handler'];
         if (!$handler instanceof AbstractErrorHandler) {
             $handler = new ErrorHandler();
         }
@@ -41,14 +40,14 @@ class Trigger
         /**
          * 判断是否页面输出 错误
          */
-        if ($debug['DISPLAY_ERROR'] == true) {
+        if ($debug['display_error'] == true) {
             $handler->display($msg, $file, $line, $errorCode, $trace);
         }
 
         /**
          * 判断是否记录错误Log文件
          */
-        if ($debug['LOG'] == true) {
+        if ($debug['log'] == true) {
             $handler->log($msg, $file, $line, $errorCode, $trace);
         }
     }
@@ -57,19 +56,20 @@ class Trigger
     public static function exception(\Exception $exception)
     {
 
-        $debug = Config::getInstance()->getConf('DEBUG');
+        $conf = Di::getInstance()->get('conf');
+        $debug = $conf->get('debug');
 
-        $handler = Di::getInstance()->get(EXCEPTION_HANDLER);
+        $handler = $debug['exception_handler'];
         if (!$handler instanceof AbstractExceptionHandler) {
             $handler = new ExceptionHandler();
         }
         $handler->handler($exception);
 
-        if ($debug['DISPLAY_ERROR'] == true) {
+        if ($debug['display_error'] == true) {
             $handler->display($exception);
         }
 
-        if ($debug['LOG'] == true) {
+        if ($debug['log'] == true) {
             $handler->log($exception);
         }
 

@@ -8,7 +8,11 @@
 
 namespace Core\Console;
 
+use Core\Component\Di;
 use Core\Console\Input\Input;
+use Core\Core;
+use Core\Swoole\Server;
+use Dotenv\Dotenv;
 
 /**
  * Class Console 控制室
@@ -86,7 +90,7 @@ class Console
         // 默认命令处理
         switch ($cmd) {
             case 'start': //启动
-                startServer();
+                $this->startServer();
                 break;
             case 'stop': //停止
                 stopServer();
@@ -114,7 +118,7 @@ class Console
      */
     private function startServer()
     {
-
+        Server::getInstance();
     }
 
 

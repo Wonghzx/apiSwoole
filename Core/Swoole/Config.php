@@ -9,7 +9,8 @@
 
 namespace Core\Swoole;
 
-use Conf\Config AS conf;
+
+use Core\Component\Di;
 
 class Config extends \Core\AbstractInterface\AbstractSwooleServerConf
 {
@@ -31,6 +32,10 @@ class Config extends \Core\AbstractInterface\AbstractSwooleServerConf
 
     private $socketType;
 
+    private $tcpListenIp;
+
+    private $tcpListenPort;
+
     private static $instance;
 
     static function getInstance()
@@ -43,15 +48,16 @@ class Config extends \Core\AbstractInterface\AbstractSwooleServerConf
 
     public function __construct()
     {
-        $this->listenIp = conf::getInstance()->getConf("SERVER.LISTEN");
-        $this->listenPort = conf::getInstance()->getConf("SERVER.PORT");
-        $this->workerSetting = conf::getInstance()->getConf("SERVER.CONFIG");
-        $this->workerNum = conf::getInstance()->getConf("SERVER.CONFIG.worker_num");
-        $this->taskWorkerNum = conf::getInstance()->getConf("SERVER.CONFIG.task_worker_num");
-        $this->serverName = conf::getInstance()->getConf("SERVER.SERVER_NAME");
-        $this->runMode = conf::getInstance()->getConf("SERVER.RUN_MODE");
-        $this->serverType = conf::getInstance()->getConf("SERVER.SERVER_TYPE");
-        $this->socketType = conf::getInstance()->getConf("SERVER.SOCKET_TYPE");
+        $conf = Di::getInstance()->get('conf');
+        $this->listenIp = $conf->get('http.host');
+        $this->listenPort = $conf->get('http.port');
+        $this->workerSetting = $conf->get('setting');
+        $this->workerNum = $conf->get('setting.worker_num');
+        $this->taskWorkerNum = $conf->get('setting.task_worker_num');
+        $this->serverName = $conf->get('setting.server_name');
+        $this->runMode = $conf->get('http.model');
+        $this->serverType = $conf->get('setting.server_type');
+        $this->socketType = $conf->get('http.type');
     }
 
     /**

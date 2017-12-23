@@ -8,15 +8,12 @@
 
 namespace Core;
 
-use Conf\Config;
-use Conf\ConstantClass;
 use Core\Component\IO\ShareMemory;
 use Core\Swoole\AsyncTaskManager;
 use Core\Swoole\HttpServer\Server;
 use Core\Swoole\HttpServer\Storage\Request;
 use Core\Swoole\HttpServer\Storage\Response;
 use Core\Swoole\Timer;
-use Http\Model\Crawler\Polling;
 use Illuminate\Database\Capsule\Manager AS Capsule;
 
 //use Illuminate\Database\Capsule\Manager AS Capsule;
@@ -34,7 +31,6 @@ class Event extends \Core\AbstractInterface\AbstractEvent
     {
         // TODO: Implement initialize() method.
         date_default_timezone_set('Asia/Shanghai');
-        ConstantClass::getInstance();
     }
 
     /**
@@ -45,25 +41,25 @@ class Event extends \Core\AbstractInterface\AbstractEvent
      */
     function initializeEd()
     {
-        ShareMemory::getInstance()->clear();
-//        include_once ROOT . '/vendor/autoload.php';
-        // TODO: Implement initializeEd() method.
-        $dbConf = Config::getInstance()->getConf('database');
-//        $capsule = new Manager();
-        $capsule = new Capsule;
-        $capsule->addConnection($dbConf);
-
-        /*
-         * Make this capsule instance available globally.
-         * 设置全局静态可访问
-         */
-        $capsule->setAsGlobal();
-
-        /*
-         * Bootstrap Eloquent so it is ready for usage.
-         * 启动Eloquent
-         */
-        $capsule->bootEloquent();
+//        ShareMemory::getInstance()->clear();
+////        include_once ROOT . '/vendor/autoload.php';
+//        // TODO: Implement initializeEd() method.
+//        $dbConf = Config::getInstance()->getConf('database');
+////        $capsule = new Manager();
+//        $capsule = new Capsule;
+//        $capsule->addConnection($dbConf);
+//
+//        /*
+//         * Make this capsule instance available globally.
+//         * 设置全局静态可访问
+//         */
+//        $capsule->setAsGlobal();
+//
+//        /*
+//         * Bootstrap Eloquent so it is ready for usage.
+//         * 启动Eloquent
+//         */
+//        $capsule->bootEloquent();
     }
 
 
@@ -479,21 +475,21 @@ class Event extends \Core\AbstractInterface\AbstractEvent
          * 使用Reload机制实现代码重载入 ，确定 已经 PHP inotify 扩展
          *
          */
-        if ($workerId == 0) {
-            $list = recursionDirFiles(ROOT . "/Http");
-            // 为所有目录和文件添加inotify监视
-            $notify = inotify_init();
-            foreach ($list as $item) {
-                inotify_add_watch($notify, $item, IN_CREATE | IN_DELETE | IN_MODIFY);
-            }
-            // 加入EventLoop
-            swoole_event_add($notify, function () use ($notify, $server) {
-                $events = inotify_read($notify);
-                if (!empty($events)) {
-                    $server->reload();
-                }
-            });
-        }
+//        if ($workerId == 0) {
+//            $list = recursionDirFiles(ROOT . "/Http");
+//            // 为所有目录和文件添加inotify监视
+//            $notify = inotify_init();
+//            foreach ($list as $item) {
+//                inotify_add_watch($notify, $item, IN_CREATE | IN_DELETE | IN_MODIFY);
+//            }
+//            // 加入EventLoop
+//            swoole_event_add($notify, function () use ($notify, $server) {
+//                $events = inotify_read($notify);
+//                if (!empty($events)) {
+//                    $server->reload();
+//                }
+//            });
+//        }
     }
 
     function onWorkerStop(\swoole_server $server, $workerId)

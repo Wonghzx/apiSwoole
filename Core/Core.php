@@ -9,7 +9,6 @@
 
 namespace Core;
 
-use Conf\Config;
 use Core\Component\Di;
 use Core\Component\Error\Trigger;
 use Core\Component\File;
@@ -18,6 +17,7 @@ use Core\Swoole\HttpServer\Storage\Request;
 use Core\Swoole\HttpServer\Storage\Response;
 use Core\Swoole\Server;
 use Dotenv\Dotenv;
+use Noodlehaus\Config;
 
 /**
  * Class Core 应用简写类
@@ -29,6 +29,9 @@ class Core
 
     private $preCall;
 
+
+    private $loadConf;
+
     /**
      * 应用对象
      * @var Application
@@ -36,86 +39,20 @@ class Core
     private $app;
 
 
-    private static $aliases = [
-        '@ApiSwoole' => __DIR__,
-    ];
-
-
-    function __construct($preCall)
+    function __construct()
     {
-        $this->preCall = $preCall;
+
     }
 
-    static function getInstance(callable $preCall = null)
+    static function getInstance()
     {
 
         if (!isset(self::$instance)) {
-            self::$instance = new static($preCall);
+            self::$instance = new static();
         }
         return self::$instance;
     }
 
-
-    /**
-     * setAliases  [注册多个别名]
-     * @param array $aliases
-     * @copyright Copyright (c)
-     * @author Wongzx <842687571@qq.com>
-     */
-    static public function setAliases(array $aliases)
-    {
-        foreach ($aliases as $name => $path) {
-            self::setAlias($name, $path);
-        }
-    }
-
-
-    /**
-     * setAlias  [注册别名]
-     * @param string $alias
-     * @param string|null $path
-     * @copyright Copyright (c)
-     * @author Wongzx <842687571@qq.com>
-     */
-    static public function setAlias(string $alias, string $path = null)
-    {
-        if (strncmp($alias, '@', 1)) {
-            $alias = '@' . $alias;
-        }
-
-        // 删除别名
-        if ($path == null) {
-            unset(self::$aliases[$alias]);
-
-            return;
-        }
-
-        // $path不是别名，直接设置
-        $isAlias = strpos($path, '@');
-        if ($isAlias === false) {
-            self::$aliases[$alias] = $path;
-
-            return;
-        }
-
-
-        // $path是一个别名
-        if (isset(self::$aliases[$path])) {
-            self::$aliases[$alias] = self::$aliases[$path];
-
-            return;
-        }
-
-        list($root) = explode('/', $path);
-        if (!isset(self::$aliases[$root])) {
-            throw new \InvalidArgumentException("设置的根别名不存在，alias=" . $root);
-        }
-
-        $rootPath = self::$aliases[$root];
-        $aliasPath = str_replace($root, "", $path);
-
-        self::$aliases[$alias] = $rootPath . $aliasPath;
-    }
 
     /**
      * run  [开启框架]
@@ -124,6 +61,7 @@ class Core
      */
     public function run()
     {
+
         Server::getInstance();
     }
 
@@ -136,13 +74,23 @@ class Core
     {
         if (phpversion() < 5.5)
             die('您的PHP版本低于5.5 ，该框架需要PHP版本5.5 或 > 5.5^');
-
-        defined('ROOT') or define("ROOT", realpath(__DIR__ . '/../'));
+        $this->defineSysConf();
         $this->registerAutoLoader();
+        /**
+         * 加载 Conf
+         */
+        Di::getInstance()->set('conf', Config::load(ROOT . '/Conf'));
+        $this->loadConf = Di::getInstance()->get('conf');
+
+        /**
+         * 初始化
+         */
         Event::getInstance()->initialize();//初始化框架前
         $this->sysDirectoryInit();//系统目录初始化
         Event::getInstance()->initializeEd();//初始化框架后
         $this->registerErrorHandler();//错误处理程序
+
+        Console::getInstance()->run(); //执行命令行
         return $this;
     }
 
@@ -150,11 +98,8 @@ class Core
     private function sysDirectoryInit()
     {
         //创建Runtime目录
-        $tempDir = Di::getInstance()->get(TEMP_DIRECTORY);
-        if (empty($tempDir)) {
-            $tempDir = ROOT . '/Runtime';
-            Di::getInstance()->set(TEMP_DIRECTORY, $tempDir);
-        }
+        $tempDir = $this->loadConf->get('common.runtime_directory');
+
 
         if (!File::createDir($tempDir)) {
             die("create Temp Directory:{$tempDir} fail");
@@ -162,24 +107,15 @@ class Core
             //创建默认Session存储目录
             $path = $tempDir . "/Session";
             File::createDir($path);
-            Di::getInstance()->set(SESSION_SAVE_PATH, $path);
         }
 
-        $logDir = Di::getInstance()->get(LOG_DIRECTORY);
-        if (empty($logDir)) {
-            $logDir = $tempDir . "/Log";
-            Di::getInstance()->set(LOG_DIRECTORY, $logDir);
-        }
+        $logDir = $tempDir . $this->loadConf->get('common.runtime_logs');
+
         if (!File::createDir($logDir)) {
             die("create log Directory:{$logDir} fail");
         }
-        Config::getInstance()->setSysConf('SERVER.CONFIG.log_file', $logDir . '/swoole.log');
-        Config::getInstance()->setSysConf('SERVER.CONFIG.pid_file', $logDir . '/pid.pid');
 
     }
-
-
-
 
 
     /**
@@ -196,24 +132,16 @@ class Core
          */
         $autoload->addNamespace('Http', 'Http');
         $autoload->addNamespace('Core', 'Core');
-        $autoload->addNamespace('Conf', 'Conf');
 
-//        Console::getInstance()->run();
 
         /**
          * 加载第三方依赖组件
          */
         $autoload->addNamespace('FastRoute', 'Core/Package/FastRoute');//路由
         $autoload->addNamespace('SuperClosure', 'Core/Package/SuperClosure'); //用于序列化闭包和匿名函数的PHP库。
-        $autoload->addNamespace('Illuminate', 'Core/Package/Illuminate'); //
         $autoload->addNamespace('Latte', 'Core/Package/Latte'); //
         $autoload->addNamespace('Blade', 'Core/Package/Blade'); //
 
-
-        /**
-         * 加载自定义的函数
-         */
-        $autoload->requireFile('/Core/Package/Illuminate/Support/helpers.php');
         $autoload->requireFile('/Conf/Helpers.php');
 //        $autoload->requireFile('/Core/Package/latte.php');
         return $this;
@@ -228,8 +156,8 @@ class Core
      */
     private function registerErrorHandler()
     {
-        $debug = Config::getInstance()->getConf('DEBUG');
-        if ($debug['ENABLE'] === true) {
+        $debug = $this->loadConf->get('debug');
+        if ($debug['enable'] === true) {
             ini_set("display_errors", "On");
             error_reporting(E_ALL | E_STRICT);
             set_error_handler(function ($errorCode, $description, $file = null, $line = null) {
@@ -246,6 +174,19 @@ class Core
                 }
             });
         }
+    }
+
+
+    /**
+     * defineSysConf  [description]
+     * @copyright Copyright (c)
+     * @author Wongzx <842687571@qq.com>
+     */
+    private function defineSysConf()
+    {
+        defined('ROOT') or define("ROOT", realpath(__DIR__ . '/../'));
+        $dotenv = new Dotenv(ROOT);
+        $dotenv->load();
     }
 
 

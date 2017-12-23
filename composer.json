@@ -13,13 +13,19 @@
   ],
   "require": {
     "php": ">=5.5.0",
-    "jasongrimes/paginator": "^1.0"
+    "jasongrimes/paginator": "^1.0",
+    "vlucas/phpdotenv": "^2.4"
   },
   "autoload": {
     "psr-4": {
       "Conf\\": "Conf",
       "Http\\": "Http"
     }
+  },
+  "scripts": {
+    "post-root-package-install": [
+      "@php -r \"file_exists('.env') || copy('.env.example', '.env');\""
+    ]
   },
   "repositories": {
     "packagist": {

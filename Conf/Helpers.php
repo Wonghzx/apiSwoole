@@ -43,3 +43,18 @@ if (!function_exists('recursionDirFiles')) {
         return $data;
     }
 }
+
+if (!function_exists('shaEncrypt')) {
+
+    /**
+     * shaEncrypt  [webSocket握手 Hash 安全哈希算法]
+     * @copyright Copyright (c)
+     * @author Wongzx <842687571@qq.com>
+     */
+    function hash1Encrypt($req)
+    {
+        $mask = "258EAFA5-E914-47DA-95CA-C5AB0DC85B11";
+
+        return base64_encode(sha1($req . $mask, true));
+    }
+}

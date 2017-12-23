@@ -13,16 +13,32 @@ use Conf\Config;
 use Core\Component\Di;
 use Core\Component\Error\Trigger;
 use Core\Component\File;
+use Core\Console\Console;
 use Core\Swoole\HttpServer\Storage\Request;
 use Core\Swoole\HttpServer\Storage\Response;
 use Core\Swoole\Server;
-use Blade\Blade;
+use Dotenv\Dotenv;
 
+/**
+ * Class Core 应用简写类
+ * @package Core
+ */
 class Core
 {
     protected static $instance;
 
     private $preCall;
+
+    /**
+     * 应用对象
+     * @var Application
+     */
+    private $app;
+
+
+    private static $aliases = [
+        '@ApiSwoole' => __DIR__,
+    ];
 
 
     function __construct($preCall)
@@ -39,6 +55,67 @@ class Core
         return self::$instance;
     }
 
+
+    /**
+     * setAliases  [注册多个别名]
+     * @param array $aliases
+     * @copyright Copyright (c)
+     * @author Wongzx <842687571@qq.com>
+     */
+    static public function setAliases(array $aliases)
+    {
+        foreach ($aliases as $name => $path) {
+            self::setAlias($name, $path);
+        }
+    }
+
+
+    /**
+     * setAlias  [注册别名]
+     * @param string $alias
+     * @param string|null $path
+     * @copyright Copyright (c)
+     * @author Wongzx <842687571@qq.com>
+     */
+    static public function setAlias(string $alias, string $path = null)
+    {
+        if (strncmp($alias, '@', 1)) {
+            $alias = '@' . $alias;
+        }
+
+        // 删除别名
+        if ($path == null) {
+            unset(self::$aliases[$alias]);
+
+            return;
+        }
+
+        // $path不是别名，直接设置
+        $isAlias = strpos($path, '@');
+        if ($isAlias === false) {
+            self::$aliases[$alias] = $path;
+
+            return;
+        }
+
+
+        // $path是一个别名
+        if (isset(self::$aliases[$path])) {
+            self::$aliases[$alias] = self::$aliases[$path];
+
+            return;
+        }
+
+        list($root) = explode('/', $path);
+        if (!isset(self::$aliases[$root])) {
+            throw new \InvalidArgumentException("设置的根别名不存在，alias=" . $root);
+        }
+
+        $rootPath = self::$aliases[$root];
+        $aliasPath = str_replace($root, "", $path);
+
+        self::$aliases[$alias] = $rootPath . $aliasPath;
+    }
 
     /**
      * run  [开启框架]
@@ -102,6 +179,9 @@ class Core
     }
 
 
+
+
+
     /**
      * registerAutoLoader  [创建自动加载机制]
      * @copyright Copyright (c)
@@ -117,6 +197,8 @@ class Core
         $autoload->addNamespace('Http', 'Http');
         $autoload->addNamespace('Core', 'Core');
         $autoload->addNamespace('Conf', 'Conf');
+
+//        Console::getInstance()->run();
 
         /**
          * 加载第三方依赖组件

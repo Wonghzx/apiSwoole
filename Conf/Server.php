@@ -2,7 +2,6 @@
 
 return [
     'server' => [
-        'pfile'         => ROOT . env('PFILE', '/Runtime/Logs/apiswoole.pid'),
         'pname'         => env('PNAME', 'php-Apiswoole'),
         'tcpable'       => env('TCPABLE', true),
         'cronable'      => env('CRONABLE', false),
@@ -32,6 +31,7 @@ return [
         'daemonize'         => env('DAEMONIZE', 0),
         'dispatch_mode'     => env('DISPATCH_MODE', 2),
         'log_file'          => ROOT . env('LOG_FILE', '/Runtime/Logs/swoole.log'),
+        'pid_file'             => ROOT . env('PFILE', '/Runtime/Logs/apiswoole.pid'),
         'task_max_request'  => env('TASK_MAX_REQUEST', 10),
         'task_worker_num'   => env('TASK_WORKER_NUM', 8),
         'upload_tmp_dir'    => ROOT . env('UPLOAD_TMP_DIR', '/Runtime/UploadFiles'),

@@ -11,10 +11,12 @@ namespace Http\Controller;
 
 
 use Core\AbstractInterface\AbstractViewController;
+use Core\Component\Di;
+use Core\Component\Memory\FilesShareMemory;
 use Core\Component\Pagination\Page;
 use Illuminate\Database\Capsule\Manager AS DB;
 use Illuminate\Support\Facades\Auth;
-
+use Core\Component\Memory\ShareMemory;
 
 class Index extends AbstractViewController
 {
@@ -40,7 +42,6 @@ class Index extends AbstractViewController
         $get = $this->request()->initGet();
         $p = empty($get['page']) ? 1 : $get['page'];
         $a = DB::table('user')->get()->forPage($p, 1);
-
         $page = Page::show(3, 1);
         $this->view('Index/index', ['user' => $a, 'page' => $page]);
     }

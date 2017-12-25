@@ -27,6 +27,8 @@ abstract class AbstractController
         }
     }
 
+
+
     public function request()
     {
         return Request::getInstance();

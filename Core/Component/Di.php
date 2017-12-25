@@ -21,6 +21,12 @@ class Di
         return self::$instance;
     }
 
+    public function getConf(string $key)
+    {
+        $conf = $this->get('conf');
+        return $conf->get($key);
+    }
+
     /**
      * set  [设置]
      * @param $key

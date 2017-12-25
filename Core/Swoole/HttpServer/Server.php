@@ -12,6 +12,9 @@ use Core\Component\Error\Trigger;
 use Core\Event;
 use Core\Swoole\HttpServer\Storage\Request;
 use Core\Swoole\HttpServer\Storage\Response;
+use Swoole\Http\Request AS Req;
+use Swoole\Http\Response AS Res;
+
 
 class Server
 {
@@ -19,6 +22,7 @@ class Server
 
     protected static $instance;
 
+    private $conf;
 
     static function getInstance()
     {
@@ -30,98 +34,128 @@ class Server
 
     public function serverStart($server, $conf)
     {
-//        print_r($conf);die;
+
         $this->serverApi = $server;
+        $this->conf = $conf;
         $this->serverApi->set($conf->getWorkerSetting()); //设置运行时参数
-//        $this->pipeMessage();
-        $this->requestEvent();
-        $this->onTaskEvent();
-        $this->onFinishEvent();
-        $this->workerStartEvent();
-        $this->workerStopEvent();
-        $this->startEvent();//开启
-    }
 
+        // 设置事件监听
+        $this->serverApi->on('start', [$this, 'onStart']);
+        $this->serverApi->on('workerStart', [$this, 'onWorkerStart']);
+        $this->serverApi->on('workerStop', [$this, 'onWorkerStop']);
+        $this->serverApi->on('task', [$this, 'onTask']);
+        $this->serverApi->on('finish', [$this, 'onFinish']);
+        $this->serverApi->on('request', [$this, 'onRequest']);
+        $this->serverApi->on('pipeMessage', [$this, 'onPipeMessage']);
 
-    /**
-     * pipeMessage  [此函数可以向任意worker进程或者task进程发送消息。在非主进程和管理进程中可调用。收到消息的进程会触发onPipeMessage事件。]
-     * @copyright Copyright (c)
-     * @author Wongzx <842687571@qq.com>
-     */
-    private function pipeMessage()
-    {
-        $this->serverApi->on('pipeMessage', function ($server, $src_worker_id, $data) {
-            print_r($server);
-        });
-    }
-
-    /**
-     * request  [监听http请求]
-     * @copyright Copyright (c)
-     * @author Wongzx <842687571@qq.com>
-     */
-    private function requestEvent()
-    {
-        $this->serverApi->on('request', function (\swoole_http_request $request, \swoole_http_response $response) {
-            $requests = Request::getInstance($request);    //请求
-            $responses = Response::getInstance($response);  //响应
-            try {
-                Event::getInstance()->onRequest($requests, $responses);
-                Launcher::getInstance()->dispatch();
-                Event::getInstance()->onResponse($requests, $responses);
-            } catch (\Exception $exception) {
-
-                Trigger::exception($exception);
-            }
-            $responses->end(true);
-        });
-
-
-    }
-
-
-    /**
-     * onTaskEvent  [description]
-     * @copyright Copyright (c)
-     * @author Wongzx <842687571@qq.com>
-     */
-    private function onTaskEvent()
-    {
-        $this->serverApi->on('task', function (\swoole_server $server, $task_id, $data) {
-            print_r($server);
-        });
-    }
-
-    /**
-     * onFinishEvent  [此函数用于在task进程中通知worker进程，投递的任务已完成。此函数可以传递结果数据给worker进程]
-     * @copyright Copyright (c)
-     * @author Wongzx <842687571@qq.com>
-     */
-    private function onFinishEvent()
-    {
-        $this->serverApi->on('finish', function (\swoole_server $server, $taskId, $taskObj) {
-            print_r($server);
-        });
-    }
-
-
-    private function startEvent()
-    {
         $this->serverApi->start();
     }
 
 
-    private function workerStartEvent()
+    /**
+     * onStart  [启动Http服务器。]
+     * @copyright Copyright (c)
+     * @author Wongzx <842687571@qq.com>
+     */
+    public function onStart($server)
     {
-        $this->serverApi->on("workerStart", function (\swoole_server $server, $workerId) {
-            Event::getInstance()->onWorkerStart($server, $workerId);
-        });
+
     }
 
-    private function workerStopEvent()
+
+    /**
+     * onWorkerStart  [worker进程启动前初始化]
+     * @param $server
+     * @param int $workerId
+     * @copyright Copyright (c)
+     * @author Wongzx <842687571@qq.com>
+     */
+    public function onWorkerStart($server, int $workerId)
     {
-        $this->serverApi->on("workerStop", function (\swoole_server $server, $workerId) {
-            Event::getInstance()->onWorkerStop($server, $workerId);
-        });
+        Event::getInstance()->onWorkerStart($server, $workerId);
     }
+
+
+    /**
+     * onWorkerStop  [description]
+     * @param $server
+     * @param int $workerId
+     * @copyright Copyright (c)
+     * @author Wongzx <842687571@qq.com>
+     */
+    public function onWorkerStop($server, int $workerId)
+    {
+        Event::getInstance()->onWorkerStop($server, $workerId);
+    }
+
+
+    /**
+     * onRequest  [监听http请求]
+     * @param Req $request
+     * @param Res $response
+     * @copyright Copyright (c)
+     * @author Wongzx <842687571@qq.com>
+     */
+    public function onRequest(Req $request, Res $response)
+    {
+
+//        $requests = Request::getInstance();    //请求
+        $requests = Request::loadFromRequest($request);
+//        $responses = Response::getInstance($response);  //响应
+//        try {
+//            Event::getInstance()->onRequest($requests, $responses);
+//            Launcher::getInstance()->dispatch();
+//            Event::getInstance()->onResponse($requests, $responses);
+//        } catch (\Exception $exception) {
+//
+//            Trigger::exception($exception);
+//        }
+//        $responses->end(true);
+    }
+
+
+    /**
+     * onTask  [description]
+     * @param $server
+     * @param $task_id
+     * @param $data
+     * @copyright Copyright (c)
+     * @author Wongzx <842687571@qq.com>
+     */
+    public function onTask($server, $task_id, $data)
+    {
+
+    }
+
+    /**
+     * onFinish  [description]
+     * @param $server
+     * @param $taskId
+     * @param $taskObj
+     * @copyright Copyright (c)
+     * @author Wongzx <842687571@qq.com>
+     */
+    public function onFinish($server, $taskId, $taskObj)
+    {
+
+    }
+
+
+    /**
+     * onPipeMessage  [
+     * 此函数可以向任意worker进程或者task进程发送消息。
+     * 在非主进程和管理进程中可调用。收到消息的进程会触发onPipeMessage事件。
+     * ]
+     * @param $server
+     * @param $src_worker_id
+     * @param $data
+     * @copyright Copyright (c)
+     * @author Wongzx <842687571@qq.com>
+     */
+    public function onPipeMessage($server, int $fromWorkerId, string $message)
+    {
+
+    }
+
+
 }

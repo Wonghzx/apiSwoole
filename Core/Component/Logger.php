@@ -37,14 +37,14 @@ class Logger
 
     public function log($obj)
     {
-        $loggerWriter = Di::getInstance()->get(LOGGER_WRITER);
+        $loggerWriter = Di::getInstance()->get('LOGGER_WRITER');
         if ($loggerWriter instanceof AbstractLoggerWriter) {
             $loggerWriter->writeLog($obj, $this->logCategory, time());
         } else {
             $obj = $this->objectToString($obj);
             $str = "time : " . date("y-m-d H:i:s") . " message: " . $obj . "\n";
             $filePrefix = $this->logCategory . "_" . date('ym');
-            $filePath = Di::getInstance()->get(LOG_DIRECTORY) . "/{$filePrefix}.log";
+            $filePath = Di::getInstance()->get('LOG_DIRECTORY') . "/{$filePrefix}.log";
             file_put_contents($filePath, $str, FILE_APPEND | LOCK_EX);
         }
         return $this;

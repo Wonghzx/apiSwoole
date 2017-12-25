@@ -8,14 +8,17 @@
 
 namespace Core\AbstractInterface;
 
-use Latte\View;
+use Latte\Engine;
 
 abstract class AbstractViewController extends AbstractController
 {
+
     public function view($tplName, $tplData = [])
     {
-        $viewTemplate = View::getInstance()->renderToString(ROOT . '/Http/Views/' . $tplName . '.html', json_decode(json_encode($tplData), true));
-        View::getInstance()->setAutoRefresh(false);
+        $Engine = new Engine();
+        $Engine->setTempDirectory(ROOT . '/Runtime/TplCache');
+        $viewTemplate = $Engine->renderToString(ROOT . '/Http/Views/' . $tplName . '.html', json_decode(json_encode($tplData), true));
+        $Engine->setAutoRefresh(false);
         $this->response()->assign($viewTemplate);
 
     }

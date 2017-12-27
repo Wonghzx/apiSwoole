@@ -9,54 +9,13 @@
 namespace Core\Swoole\HttpServer\Storage;
 
 
-class Status
+use Psr\Http\Message\ResponseInterface;
+use Psr\Http\Message\StreamInterface;
+
+class Status implements ResponseInterface
 {
-    // Informational 1xx
-    const CODE_CONTINUE = 100;
-    const CODE_SWITCHING_PROTOCOLS = 101;
-    // Success 2xx
-    const CODE_OK = 200;
-    const CODE_CREATED = 210;
-    const CODE_ACCEPTED = 202;
-    const CODE_NON_AUTHORITATIVE_INFORMATION = 203;
-    const CODE_NO_CONTENT = 204;
-    const CODE_RESET_CONTENT = 205;
-    const CODE_PARTIAL_CONTENT = 206;
-    // Redirection 3xx
-    const CODE_MULTIPLE_CHOICES = 300;
-    const CODE_MOVED_PERMANENTLY = 301;
-    const CODE_MOVED_TEMPORARILY = 302;
-    const CODE_SEE_OTHER = 303;
-    const CODE_NOT_MODIFIED = 304;
-    const CODE_USE_PROXY = 305;
-    const CODE_TEMPORARY_REDIRECT = 307;
-    // Client Error 4xx
-    const CODE_BAD_REQUEST = 400;
-    const CODE_UNAUTHORIZED = 401;
-    const CODE_PAYMENT_REQUIRED = 402;
-    const CODE_FORBIDDEN = 403;
-    const CODE_NOT_FOUND = 404;
-    const CODE_METHOD_NOT_ALLOWED = 405;
-    const CODE_NOT_ACCEPTABLE = 406;
-    const CODE_PROXY_AUTHENTICATION_REQUIRED = 407;
-    const CODE_REQUEST_TIMEOUT = 408;
-    const CODE_CONFLICT = 409;
-    const CODE_GONE = 410;
-    const CODE_LENGTH_REQUIRED = 411;
-    const CODE_PRECONDITION_FAILED = 412;
-    const CODE_REQUIRED_ENTITY_TOO_LARGE = 413;
-    const CODE_REQUEST_URI_TOO_LONG = 414;
-    const CODE_UNSUPPORTED_MEDIA_TYPE = 415;
-    const CODE_REQUESTED_RANGE_NOT_SATISFIABLE = 416;
-    const CODE_EXPECTATION_FAILED = 415;
-    // Server Error 5xx
-    const CODE_INTERNAL_SERVER_ERROR = 500;
-    const CODE_NOT_IMPLEMENTED = 501;
-    const CODE_BAD_GATEWAY = 502;
-    const CODE_SERVICE_UNAVAILABLE = 503;
-    const CODE_GATEWAY_TIMEOUT = 505;
-    const CODE_HTTP_VERSION_NOT_SUPPORTED = 505;
-    const CODE_BANDWIDTH_LIMIT_EXCEEDED = 509;
+
+    use MessageTrait;
 
     private static $phrases = [
         100 => 'Continue',
@@ -101,7 +60,7 @@ class Status
         422 => 'Unprocessable Entity',
         423 => 'Locked',
         424 => 'Failed Dependency',
-        425 => 'Unordered Page',
+        425 => 'Unordered Collection',
         426 => 'Upgrade Required',
         428 => 'Precondition Required',
         429 => 'Too Many Requests',
@@ -119,13 +78,389 @@ class Status
         511 => 'Network Authentication Required',
     ];
 
-    static function getReasonPhrase($statusCode)
+
+    /**
+     * @var string
+     */
+    protected $reasonPhrase = '';
+
+    /**
+     * @var int
+     */
+    protected $statusCode = 200;
+
+    /**
+     * @var string
+     */
+    protected $charset = 'utf-8';
+
+    /**
+     * @var array
+     */
+    private $attributes = [];
+
+    /**
+     * swoole响应请求
+     *
+     * @var \Swoole\Http\Response
+     */
+    protected $response;
+
+
+    /**
+     * Status 初始化响应请求.
+     * @param \swoole_http_response|null $response
+     */
+    public function __construct(\swoole_http_response $response = null)
     {
-        if (isset(self::$phrases[$statusCode])) {
-            return self::$phrases[$statusCode];
-        } else {
-            return null;
-        }
+        $this->response = $response;
     }
 
+
+    public function getAttributes()
+    {
+        return $this->attributes;
+    }
+
+
+    public function getAttribute($name, $default = null)
+    {
+        return array_key_exists($name, $this->attributes) ? $this->attributes[$name] : $default;
+    }
+
+
+    public function withAttribute($name, $value)
+    {
+        $clone = clone $this;
+        $clone->attributes[$name] = $value;
+        return $clone;
+    }
+
+
+    /**
+     * 响应数据
+     */
+    public function send()
+    {
+
+    }
+
+    /**
+     * Retrieves the HTTP protocol version as a string.
+     *
+     * The string MUST contain only the HTTP version number (e.g., "1.1", "1.0").
+     *
+     * @return string HTTP protocol version.
+     */
+    public function getProtocolVersion()
+    {
+        // TODO: Implement getProtocolVersion() method.
+    }
+
+    /**
+     * Return an instance with the specified HTTP protocol version.
+     *
+     * The version string MUST contain only the HTTP version number (e.g.,
+     * "1.1", "1.0").
+     *
+     * This method MUST be implemented in such a way as to retain the
+     * immutability of the message, and MUST return an instance that has the
+     * new protocol version.
+     *
+     * @param string $version HTTP protocol version
+     * @return static
+     */
+    public function withProtocolVersion($version)
+    {
+        // TODO: Implement withProtocolVersion() method.
+    }
+
+    /**
+     * Retrieves all message header values.
+     *
+     * The keys represent the header name as it will be sent over the wire, and
+     * each value is an array of strings associated with the header.
+     *
+     *     // Represent the headers as a string
+     *     foreach ($message->getHeaders() as $name => $values) {
+     *         echo $name . ": " . implode(", ", $values);
+     *     }
+     *
+     *     // Emit headers iteratively:
+     *     foreach ($message->getHeaders() as $name => $values) {
+     *         foreach ($values as $value) {
+     *             header(sprintf('%s: %s', $name, $value), false);
+     *         }
+     *     }
+     *
+     * While header names are not case-sensitive, getHeaders() will preserve the
+     * exact case in which headers were originally specified.
+     *
+     * @return string[][] Returns an associative array of the message's headers. Each
+     *     key MUST be a header name, and each value MUST be an array of strings
+     *     for that header.
+     */
+    public function getHeaders()
+    {
+        // TODO: Implement getHeaders() method.
+    }
+
+    /**
+     * Checks if a header exists by the given case-insensitive name.
+     *
+     * @param string $name Case-insensitive header field name.
+     * @return bool Returns true if any header names match the given header
+     *     name using a case-insensitive string comparison. Returns false if
+     *     no matching header name is found in the message.
+     */
+    public function hasHeader($name)
+    {
+        // TODO: Implement hasHeader() method.
+    }
+
+    /**
+     * Retrieves a message header value by the given case-insensitive name.
+     *
+     * This method returns an array of all the header values of the given
+     * case-insensitive header name.
+     *
+     * If the header does not appear in the message, this method MUST return an
+     * empty array.
+     *
+     * @param string $name Case-insensitive header field name.
+     * @return string[] An array of string values as provided for the given
+     *    header. If the header does not appear in the message, this method MUST
+     *    return an empty array.
+     */
+    public function getHeader($name)
+    {
+        // TODO: Implement getHeader() method.
+    }
+
+    /**
+     * Retrieves a comma-separated string of the values for a single header.
+     *
+     * This method returns all of the header values of the given
+     * case-insensitive header name as a string concatenated together using
+     * a comma.
+     *
+     * NOTE: Not all header values may be appropriately represented using
+     * comma concatenation. For such headers, use getHeader() instead
+     * and supply your own delimiter when concatenating.
+     *
+     * If the header does not appear in the message, this method MUST return
+     * an empty string.
+     *
+     * @param string $name Case-insensitive header field name.
+     * @return string A string of values as provided for the given header
+     *    concatenated together using a comma. If the header does not appear in
+     *    the message, this method MUST return an empty string.
+     */
+    public function getHeaderLine($name)
+    {
+        // TODO: Implement getHeaderLine() method.
+    }
+
+    /**
+     * Return an instance with the provided value replacing the specified header.
+     *
+     * While header names are case-insensitive, the casing of the header will
+     * be preserved by this function, and returned from getHeaders().
+     *
+     * This method MUST be implemented in such a way as to retain the
+     * immutability of the message, and MUST return an instance that has the
+     * new and/or updated header and value.
+     *
+     * @param string $name Case-insensitive header field name.
+     * @param string|string[] $value Header value(s).
+     * @return static
+     * @throws \InvalidArgumentException for invalid header names or values.
+     */
+    public function withHeader($name, $value)
+    {
+        // TODO: Implement withHeader() method.
+    }
+
+    /**
+     * Return an instance with the specified header appended with the given value.
+     *
+     * Existing values for the specified header will be maintained. The new
+     * value(s) will be appended to the existing list. If the header did not
+     * exist previously, it will be added.
+     *
+     * This method MUST be implemented in such a way as to retain the
+     * immutability of the message, and MUST return an instance that has the
+     * new header and/or value.
+     *
+     * @param string $name Case-insensitive header field name to add.
+     * @param string|string[] $value Header value(s).
+     * @return static
+     * @throws \InvalidArgumentException for invalid header names or values.
+     */
+    public function withAddedHeader($name, $value)
+    {
+        // TODO: Implement withAddedHeader() method.
+    }
+
+    /**
+     * Return an instance without the specified header.
+     *
+     * Header resolution MUST be done without case-sensitivity.
+     *
+     * This method MUST be implemented in such a way as to retain the
+     * immutability of the message, and MUST return an instance that removes
+     * the named header.
+     *
+     * @param string $name Case-insensitive header field name to remove.
+     * @return static
+     */
+    public function withoutHeader($name)
+    {
+        // TODO: Implement withoutHeader() method.
+    }
+
+    /**
+     * Gets the body of the message.
+     *
+     * @return StreamInterface Returns the body as a stream.
+     */
+    public function getBody()
+    {
+        // TODO: Implement getBody() method.
+    }
+
+    /**
+     * Return an instance with the specified message body.
+     *
+     * The body MUST be a StreamInterface object.
+     *
+     * This method MUST be implemented in such a way as to retain the
+     * immutability of the message, and MUST return a new instance that has the
+     * new body stream.
+     *
+     * @param StreamInterface $body Body.
+     * @return static
+     * @throws \InvalidArgumentException When the body is not valid.
+     */
+    public function withBody(StreamInterface $body)
+    {
+        // TODO: Implement withBody() method.
+    }
+
+    /**
+     * Gets the response status code.
+     *
+     * The status code is a 3-digit integer result code of the server's attempt
+     * to understand and satisfy the request.
+     *
+     * @return int Status code.
+     */
+    public function getStatusCode(): int
+    {
+        // TODO: Implement getStatusCode() method.
+        return $this->statusCode;
+    }
+
+    /**
+     * Return an instance with the specified status code and, optionally, reason phrase.
+     *
+     * If no reason phrase is specified, implementations MAY choose to default
+     * to the RFC 7231 or IANA recommended reason phrase for the response's
+     * status code.
+     *
+     * This method MUST be implemented in such a way as to retain the
+     * immutability of the message, and MUST return an instance that has the
+     * updated status and reason phrase.
+     *
+     * @link http://tools.ietf.org/html/rfc7231#section-6
+     * @link http://www.iana.org/assignments/http-status-codes/http-status-codes.xhtml
+     * @param int $code The 3-digit integer result code to set.
+     * @param string $reasonPhrase The reason phrase to use with the
+     *     provided status code; if none is provided, implementations MAY
+     *     use the defaults as suggested in the HTTP specification.
+     * @return static
+     * @throws \InvalidArgumentException For invalid status code arguments.
+     */
+    public function withStatus($code, $reasonPhrase = ''): self
+    {
+        // TODO: Implement withStatus() method.
+        $clone = clone $this;
+        $clone->statusCode = (int)$code;
+        if (!$reasonPhrase && isset(self::$phrases[$code])) {
+            $reasonPhrase = self::$phrases[$code];
+        }
+        $clone->reasonPhrase = $reasonPhrase;
+        return $clone;
+    }
+
+
+    /**
+     * getReasonPhraseByCode  [用代码返回原因短语]
+     * @param $code
+     * @copyright Copyright (c)
+     * @author Wongzx <842687571@qq.com>
+     * @return string
+     */
+    public static function getReasonPhraseByCode($code): string
+    {
+        return self::$phrases[$code] ?? '';
+    }
+
+
+    /**
+     * withCharset  [返回与指定的字符集的内容类型的一个实例。]
+     * @param $charset
+     * @copyright Copyright (c)
+     * @author Wongzx <842687571@qq.com>
+     * @return Status
+     */
+    public function withCharset($charset): self
+    {
+        $clone = clone $this;
+        $clone->withAddedHeader('Content-Type', sprintf('charset=%s', $charset));
+        return $clone;
+    }
+
+    /**
+     * Gets the response reason phrase associated with the status code.
+     *
+     * Because a reason phrase is not a required element in a response
+     * status line, the reason phrase value MAY be null. Implementations MAY
+     * choose to return the default RFC 7231 recommended reason phrase (or those
+     * listed in the IANA HTTP Status Code Registry) for the response's
+     * status code.
+     *
+     * @link http://tools.ietf.org/html/rfc7231#section-6
+     * @link http://www.iana.org/assignments/http-status-codes/http-status-codes.xhtml
+     * @return string Reason phrase; must return an empty string if none present.
+     */
+    public function getReasonPhrase(): string
+    {
+        // TODO: Implement getReasonPhrase() method.
+        return $this->reasonPhrase;
+    }
+
+    /**
+     * getCharset  [description]
+     * @copyright Copyright (c)
+     * @author Wongzx <842687571@qq.com>
+     * @return string
+     */
+    public function getCharset(): string
+    {
+        return $this->charset;
+    }
+
+    /**
+     * setCharset  [description]
+     * @param string $charset
+     * @copyright Copyright (c)
+     * @author Wongzx <842687571@qq.com>
+     * @return Response
+     */
+    public function setCharset(string $charset): Status
+    {
+        $this->charset = $charset;
+        return $this;
+    }
 }

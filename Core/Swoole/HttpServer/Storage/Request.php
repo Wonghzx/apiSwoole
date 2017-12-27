@@ -14,8 +14,7 @@ use Psr\Http\Message\UploadedFileInterface;
 class Request extends Psr7Request implements ServerRequestInterface
 {
 
-    protected static $instance;
-
+    private static $instance;
 
     /**
      * @var array
@@ -40,6 +39,11 @@ class Request extends Psr7Request implements ServerRequestInterface
 
 
     /**
+     * @var array
+     */
+    private $uploadedFiles = [];
+
+    /**
      * the body of parser
      *
      * @var mixed
@@ -47,15 +51,25 @@ class Request extends Psr7Request implements ServerRequestInterface
     private $bodyParams;
 
 
-    protected $httpRequest = null;
+    private $httpRequest = null;
 
     private $cookieParams = [];
 
+    private $a = [];
 
-    static public function loadFromRequest(\swoole_http_request $request)
+    static function getInstance(\swoole_http_request $request = null)
+    {
+        if ($request !== null) {
+            self::$instance = new Request($request);
+        }
+        return self::$instance;
+    }
+
+
+    public function __construct(\swoole_http_request $request)
     {
         $server = $request->server;
-
+        $this->httpRequest = $request;
         $method = $server['request_method'] ?? 'GET';
 
         $headers = $request->header ?? [];
@@ -70,7 +84,7 @@ class Request extends Psr7Request implements ServerRequestInterface
 
         //协议 HTTP 1.0 规定浏览器与服务器只保持短暂的连接    1.1 HTTP 1.1支持长连接
         $protocol = isset($server['server_protocol']) ? str_replace('HTTP/', '', $server['server_protocol']) : '1.1';
-        $requests = new static($method, $uri, $headers, $body, $protocol);
+        parent::__construct($method, $uri, $headers, $body, $protocol);
 
 
         $cookie = $request->cookie ?? []; //HTTP请求携带的COOKIE信息，与PHP的$_COOKIE相同，格式为数组
@@ -78,13 +92,22 @@ class Request extends Psr7Request implements ServerRequestInterface
         $postBody = $request->post ?? []; //HTTP POST参数，格式为数组。
         $files = $request->file ?? [];
 
-        return $requests->withCookieParams($cookie)
-            ->withQueryParams($getQuery)
+
+        $this->withCookieParams($cookie)
+            ->withQueryParams($this->initGet())
             ->withParsedBody($postBody)
 //            ->withUploadedFiles()
             ->setRequest($request);
     }
 
+
+    /**
+     * getUriFromGlobals  [description]
+     * @param \swoole_http_request $request
+     * @copyright Copyright (c)
+     * @author Wongzx <842687571@qq.com>
+     * @return Uri|static
+     */
     private static function getUriFromGlobals(\swoole_http_request $request)
     {
         $server = $request->server;
@@ -152,9 +175,10 @@ class Request extends Psr7Request implements ServerRequestInterface
      *
      * @return array
      */
-    public function getCookieParams()
+    public function getCookieParams(): array
     {
         // TODO: Implement getCookieParams() method.
+        return $this->cookieParams;
     }
 
     /**
@@ -197,6 +221,8 @@ class Request extends Psr7Request implements ServerRequestInterface
     public function getQueryParams()
     {
         // TODO: Implement getQueryParams() method.
+        print_r($this->queryParams);
+//        return $this->queryParams;
     }
 
     /**
@@ -245,6 +271,7 @@ class Request extends Psr7Request implements ServerRequestInterface
     public function getUploadedFiles()
     {
         // TODO: Implement getUploadedFiles() method.
+        return $this->uploadedFiles;
     }
 
     /**
@@ -261,6 +288,9 @@ class Request extends Psr7Request implements ServerRequestInterface
     public function withUploadedFiles(array $uploadedFiles)
     {
         // TODO: Implement withUploadedFiles() method.
+        $clone = clone $this;
+        $clone->uploadedFiles = $uploadedFiles;
+        return $clone;
     }
 
     /**
@@ -281,6 +311,7 @@ class Request extends Psr7Request implements ServerRequestInterface
     public function getParsedBody()
     {
         // TODO: Implement getParsedBody() method.
+        return $this->parsedBody;
     }
 
     /**
@@ -333,6 +364,7 @@ class Request extends Psr7Request implements ServerRequestInterface
     public function getAttributes()
     {
         // TODO: Implement getAttributes() method.
+        return $this->attributes;
     }
 
     /**
@@ -353,6 +385,7 @@ class Request extends Psr7Request implements ServerRequestInterface
     public function getAttribute($name, $default = null)
     {
         // TODO: Implement getAttribute() method.
+        return array_key_exists($name, $this->attributes) ? $this->attributes[$name] : $default;
     }
 
     /**
@@ -373,6 +406,9 @@ class Request extends Psr7Request implements ServerRequestInterface
     public function withAttribute($name, $value)
     {
         // TODO: Implement withAttribute() method.
+        $clone = clone $this;
+        $clone->attributes[$name] = $value;
+        return $clone;
     }
 
     /**
@@ -392,10 +428,18 @@ class Request extends Psr7Request implements ServerRequestInterface
     public function withoutAttribute($name)
     {
         // TODO: Implement withoutAttribute() method.
+        if (false === array_key_exists($name, $this->attributes)) {
+            return $this;
+        }
+
+        $clone = clone $this;
+        unset($clone->attributes[$name]);
+
+        return $clone;
     }
 
 
-    public function getRequest(): \swoole_http_request
+    public function getRequest()
     {
         return $this->httpRequest;
     }
@@ -404,6 +448,12 @@ class Request extends Psr7Request implements ServerRequestInterface
     {
         $this->httpRequest = $request;
         return $this;
+    }
+
+    private function initGet(): array
+    {
+        return $this->httpRequest->get ?? [];
+
     }
 
 }

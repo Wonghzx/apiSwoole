@@ -8,6 +8,7 @@
 
 namespace Core\Swoole\HttpServer\Storage;
 
+use Core\Component\IO\Stream;
 use Psr\Http\Message\StreamInterface;
 
 trait MessageTrait
@@ -276,7 +277,7 @@ trait MessageTrait
     public function getBody()
     {
         if (!$this->stream) {
-            $this->stream = new SwooleStream('');
+            $this->stream = new Stream('');
         }
 
         return $this->stream;

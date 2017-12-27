@@ -99,18 +99,17 @@ class Server
     public function onRequest(Req $request, Res $response)
     {
 
-//        $requests = Request::getInstance();    //请求
-        $requests = Request::loadFromRequest($request);
-//        $responses = Response::getInstance($response);  //响应
-//        try {
-//            Event::getInstance()->onRequest($requests, $responses);
-//            Launcher::getInstance()->dispatch();
-//            Event::getInstance()->onResponse($requests, $responses);
-//        } catch (\Exception $exception) {
-//
-//            Trigger::exception($exception);
-//        }
-//        $responses->end(true);
+        $requests = Request::getInstance($request); //请求
+        $responses = Response::getInstance($response);  //响应
+        try {
+            Event::getInstance()->onRequest($requests, $responses);
+            Launcher::getInstance()->dispatch();
+            Event::getInstance()->onResponse($requests, $responses);
+        } catch (\Exception $exception) {
+
+            Trigger::exception($exception);
+        }
+        $responses->send(true);
     }
 
 

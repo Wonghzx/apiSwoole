@@ -16,27 +16,28 @@ class Page
 
     static public function show($countPage = 1, $itemsPerPage = 8)
     {
-        $page = new Pagination($countPage, $itemsPerPage, self::pageNum(), self::getUrl());
-        return $page->toHtml();
+//        $page = new Pagination($countPage, $itemsPerPage, self::pageNum(), self::getUrl());
+//        return $page->toHtml();
     }
 
     static private function pageNum()
     {
-        $page = Request::getInstance()->initGet();
-        if (empty($page)) {
-            $page = 1;
-        } else {
-            $page = $page['page'];
-        }
-        return $page;
+        $page = Request::getInstance()->getRequest();
+
+//        if (empty($page)) {
+//            $page = 1;
+//        } else {
+//            $page = $page['page'];
+//        }
+//        return $page;
     }
 
 
     static private function getUrl()
     {
-        $domain = Request::getInstance()->getUri()->getHost();
-        $path = Request::getInstance()->getUri()->getPath();
-        return 'http://' . $domain . $path . '?page=(:num)';
+//        $domain = Request::getInstance()->getUri()->getHost();
+//        $path = Request::getInstance()->getUri()->getPath();
+//        return 'http://' . $domain . $path . '?page=(:num)';
     }
 
 

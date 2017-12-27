@@ -42,11 +42,6 @@ class Launcher
         return self::$instance;
     }
 
-    public function __construct()
-    {
-//        $this->useControllerPool = Config::getInstance()->getConf("CONTROLLER_POOL");
-    }
-
     /**
      *[dispatch void]
      * @author  Wongzx <[842687571@qq.com]>
@@ -55,10 +50,13 @@ class Launcher
      */
     public function dispatch()
     {
-        $pathInfo = UrlParser::pathInfo(); // url = /Index/index
+//        $pathInfo = UrlParser::pathInfo(); // url = /Index/index
+        $pathInfo = Request::getInstance()->getUri()->getPath();
+
         if ($pathInfo === '/' || $pathInfo === '/Index') {
             $pathInfo = '/Index/index';
         }
+
         $routeInfo = $this->doFastRouter($pathInfo, Request::getInstance()->getMethod());
         if ($routeInfo !== false) {
             switch ($routeInfo[0]) {

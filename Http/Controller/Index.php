@@ -40,19 +40,15 @@ class Index extends AbstractViewController
 //       <span style="font-size:20px">[ 欢迎前往 <a href="https://github.com/Wonghzx/apiSwoole" target="apiSwoole">GitHub</a> 为 ApiSwoole 赏一个Star ]</span>
 //   </div>
 //        ');
-//        $get = $this->request()->initGet();
-
-//        $p = empty($get['page']) ? 1 : $get['page'];
-//        $a = DB::table('user')->get()->forPage($p, 1);
-//        $page = Page::show(3, 1);
-//        $this->view('Index/index', ['user' => $a, 'page' => $page]);
-        print_r($this->request()->getQueryParams());
+        $get = $this->request()->getQueryParams();
+        $p = empty($get['page']) ? 1 : $get['page'];
+        $a = DB::table('user')->get()->forPage($p, 1);
+        $page = Page::show(3, 1);
+        $this->view('Index/index', ['user' => $a, 'page' => $page]);
     }
 
     public function test()
     {
-        $a = $this->abc();
-        $this->response()->assign($a);
     }
 
 }

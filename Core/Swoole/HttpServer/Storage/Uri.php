@@ -43,7 +43,7 @@ class Uri implements UriInterface
     public function __construct($uri = '')
     {
         // weak type check to also accept null until we can add scalar type hints
-        if ($uri != '') {
+        if ($uri !== '') {
             $parts = parse_url($uri);
             if ($parts === false) {
                 throw new \InvalidArgumentException("Unable to parse URI: $uri");
@@ -139,7 +139,7 @@ class Uri implements UriInterface
     public function getHost()
     {
         // TODO: Implement getHost() method.
-        $this->host;
+        return $this->host;
     }
 
     /**

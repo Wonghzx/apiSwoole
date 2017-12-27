@@ -53,9 +53,9 @@ class Request extends Psr7Request implements ServerRequestInterface
 
     private $httpRequest = null;
 
+
     private $cookieParams = [];
 
-    private $a = [];
 
     static function getInstance(\swoole_http_request $request = null)
     {
@@ -94,10 +94,11 @@ class Request extends Psr7Request implements ServerRequestInterface
 
 
         $this->withCookieParams($cookie)
-            ->withQueryParams($this->initGet())
+            ->withQueryParams($getQuery)
             ->withParsedBody($postBody)
 //            ->withUploadedFiles()
             ->setRequest($request);
+
     }
 
 
@@ -113,7 +114,6 @@ class Request extends Psr7Request implements ServerRequestInterface
         $server = $request->server;
         $uri = new Uri();
         $uri = $uri->withScheme(!empty($server['https']) && $server['https'] !== 'off' ? 'https' : 'http');
-
         $hasPort = false;
         if (isset($server['http_host'])) {
             $hostHeaderParts = explode(':', $server['http_host']);
@@ -126,6 +126,10 @@ class Request extends Psr7Request implements ServerRequestInterface
             $uri = $uri->withHost($server['server_name']);
         } elseif (isset($server['server_addr'])) {
             $uri = $uri->withHost($server['server_addr']);
+        } else  {
+            $host = $request->header['host'];
+            $host = explode(":", $host);
+            $uri = $uri->withHost($host[0]);
         }
 
         if (!$hasPort && isset($server['server_port'])) {
@@ -201,9 +205,8 @@ class Request extends Psr7Request implements ServerRequestInterface
     public function withCookieParams(array $cookies)
     {
         // TODO: Implement withCookieParams() method.
-        $clone = clone $this;
-        $clone->cookieParams = $cookies;
-        return $clone;
+        $this->cookieParams = $cookies;
+        return $this;
     }
 
     /**
@@ -221,8 +224,7 @@ class Request extends Psr7Request implements ServerRequestInterface
     public function getQueryParams()
     {
         // TODO: Implement getQueryParams() method.
-        print_r($this->queryParams);
-//        return $this->queryParams;
+        return $this->queryParams;
     }
 
     /**
@@ -250,9 +252,8 @@ class Request extends Psr7Request implements ServerRequestInterface
     public function withQueryParams(array $query)
     {
         // TODO: Implement withQueryParams() method.
-        $clone = clone $this;
-        $clone->queryParams = $query;
-        return $clone;
+        $this->queryParams = $query;
+        return $this;
 
     }
 
@@ -288,9 +289,8 @@ class Request extends Psr7Request implements ServerRequestInterface
     public function withUploadedFiles(array $uploadedFiles)
     {
         // TODO: Implement withUploadedFiles() method.
-        $clone = clone $this;
-        $clone->uploadedFiles = $uploadedFiles;
-        return $clone;
+        $this->uploadedFiles = $uploadedFiles;
+        return $this;
     }
 
     /**
@@ -345,9 +345,8 @@ class Request extends Psr7Request implements ServerRequestInterface
     public function withParsedBody($data)
     {
         // TODO: Implement withParsedBody() method.
-        $clone = clone $this;
-        $clone->parsedBody = $data;
-        return $clone;
+        $this->parsedBody = $data;
+        return $this;
     }
 
     /**
@@ -406,9 +405,8 @@ class Request extends Psr7Request implements ServerRequestInterface
     public function withAttribute($name, $value)
     {
         // TODO: Implement withAttribute() method.
-        $clone = clone $this;
-        $clone->attributes[$name] = $value;
-        return $clone;
+        $this->attributes[$name] = $value;
+        return $this;
     }
 
     /**
@@ -432,10 +430,9 @@ class Request extends Psr7Request implements ServerRequestInterface
             return $this;
         }
 
-        $clone = clone $this;
-        unset($clone->attributes[$name]);
+        unset($this->attributes[$name]);
 
-        return $clone;
+        return $this;
     }
 
 
@@ -444,16 +441,11 @@ class Request extends Psr7Request implements ServerRequestInterface
         return $this->httpRequest;
     }
 
-    public function setRequest(\swoole_http_request $request)
+    private function setRequest(\swoole_http_request $request)
     {
         $this->httpRequest = $request;
         return $this;
     }
 
-    private function initGet(): array
-    {
-        return $this->httpRequest->get ?? [];
-
-    }
 
 }

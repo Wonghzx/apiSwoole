@@ -10,7 +10,6 @@ namespace Core\AbstractInterface;
 
 use Core\Swoole\HttpServer\Storage\Response;
 use Core\Swoole\HttpServer\Storage\Request;
-use Core\Swoole\HttpServer\Storage\Status;
 
 abstract class AbstractController
 {
@@ -26,7 +25,6 @@ abstract class AbstractController
             $this->actionName = $actionName;
         }
     }
-
 
 
     public function request()
@@ -48,9 +46,9 @@ abstract class AbstractController
            * response、__call
         */
         if (in_array($actionName, [
-            '__call'
+            '__call', 'request', 'response'
         ])) {
-            $this->response()->withStatus(Status::CODE_INTERNAL_SERVER_ERROR);
+            $this->response()->withStatus(500);
             return;
         }
         //执行onRequest事件
@@ -61,7 +59,7 @@ abstract class AbstractController
             if (method_exists($this, $realName)) {
                 $this->$realName();
             } else {
-                print_r('12312312');
+                print_r('s');
             }
         }
     }

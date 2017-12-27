@@ -13,11 +13,8 @@ use Core\AbstractInterface\AbstractController;
 use Core\AbstractInterface\AbstractRouter;
 use Core\Event;
 use Core\Swoole\HttpServer\Storage\Response;
-use Core\Swoole\HttpServer\Storage\Status;
-//use FastRoute\Dispatcher\GroupCountBased;
 use Core\Swoole\HttpServer\Storage\Request;
 use Core\Component\Di;
-//use  FastRoute\DataGenerator\GroupCountBased;
 use FastRoute\Dispatcher\GroupCountBased;
 
 
@@ -56,8 +53,8 @@ class Launcher
         if ($pathInfo === '/' || $pathInfo === '/Index') {
             $pathInfo = '/Index/index';
         }
-
-        $routeInfo = $this->doFastRouter($pathInfo, Request::getInstance()->getMethod());
+        $method = Request::getInstance()->getMethod();
+        $routeInfo = $this->doFastRouter($pathInfo, $method);
         if ($routeInfo !== false) {
             switch ($routeInfo[0]) {
                 case \FastRoute\Dispatcher::NOT_FOUND:
@@ -159,7 +156,7 @@ class Launcher
                     $controller->__call($actionName, null);
                 }
             } else {
-                Response::getInstance()->withStatus(Status::CODE_NOT_FOUND); //404
+                Response::getInstance()->withStatus(404); //404
             }
         }
 //        $controller = [$finalClass, $actionName];

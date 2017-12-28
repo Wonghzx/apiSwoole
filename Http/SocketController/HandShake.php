@@ -53,7 +53,7 @@ class HandShake
      * @copyright Copyright (c)
      * @author Wongzx <842687571@qq.com>
      */
-    public function onHandShake()
+    public function onHandShake(): bool
     {
         if (!self::$isHandShake) {
 

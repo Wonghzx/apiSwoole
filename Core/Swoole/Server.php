@@ -28,22 +28,33 @@ class Server
 
     function __construct()
     {
-        $this->conf = Config::getInstance();
-        $serverType = $this->conf->getServerType();
-        $ip = $this->conf->getListenIp();  //ip
-        $port = $this->conf->getListenPort(); //端口
-        $runMode = $this->conf->getRunMode();
-        $socketType = $this->conf->getSocketType();
+        $this->conf = Di::getInstance()->get('conf');
+
+        $serverType = $this->conf->get('setting.server_type');
         switch ($serverType) {
             case 'SERVER_TYPE_SERVER':
+                $ip = $this->conf->get('tcp.host');
+                $port = $this->conf->get('tcp.port');
+                $runMode = $this->conf->get('tcp.model');
+                $socketType = $this->conf->get('tcp.type');
+
                 $this->serverApi = new \swoole_server($ip, $port, $runMode, $socketType);
                 $this->swooleServer();
                 break;
             case 'SERVER_TYPE_WEB':
+                $ip = $this->conf->get('http.host');
+                $port = $this->conf->get('http.port');
+                $runMode = $this->conf->get('http.model');
+
                 $this->serverApi = new \swoole_http_server($ip, $port, $runMode);
                 $this->swooleHttpServer();
                 break;
             case 'SERVER_TYPE_WEB_SOCKET':
+
+                $ip = $this->conf->get('socket.host');
+                $port = $this->conf->get('socket.port');
+                $runMode = $this->conf->get('socket.model');
+
                 $this->serverApi = new \swoole_websocket_server($ip, $port, $runMode);
                 $this->swooleWebSocketServer();
                 break;
@@ -66,7 +77,7 @@ class Server
      */
     private function swooleServer()
     {
-        \Core\Swoole\SwooleServer\Server::getInstance()->serverStart($this->getServerApi(), $this->conf);
+        \Core\Swoole\Server\Server::getInstance()->serverStart($this->getServerApi(), $this->conf);
     }
 
 

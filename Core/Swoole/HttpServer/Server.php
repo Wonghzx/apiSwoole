@@ -22,7 +22,6 @@ class Server
 
     protected static $instance;
 
-    private $conf;
 
     static function getInstance()
     {
@@ -34,10 +33,9 @@ class Server
 
     public function serverStart($server, $conf)
     {
-
         $this->serverApi = $server;
-        $this->conf = $conf;
-        $this->serverApi->set($conf->getWorkerSetting()); //设置运行时参数
+
+        $this->serverApi->set($conf->get('setting')); //设置运行时参数
 
         // 设置事件监听
         $this->serverApi->on('start', [$this, 'onStart']);

@@ -10,9 +10,7 @@ namespace Core\Console;
 
 use Core\Component\Di;
 use Core\Console\Input\Input;
-use Core\Core;
 use Core\Swoole\Server;
-use Dotenv\Dotenv;
 
 /**
  * Class Console 控制室
@@ -23,6 +21,7 @@ class Console
 
     private static $_instance;
 
+    private static $version = '1.0.0';
 
     const DEFAULT_CMD = [
         'start', //启动
@@ -48,7 +47,7 @@ class Console
      * 每个命令唯一ID
      * @var ID
      */
-    private static $id;
+    private static $pid;
 
 
     static public function getInstance()
@@ -60,11 +59,6 @@ class Console
         return self::$_instance;
     }
 
-
-    public function __construct()
-    {
-        self::$id = time();
-    }
 
     public function run()
     {
@@ -93,10 +87,10 @@ class Console
                 $this->startServer();
                 break;
             case 'stop': //停止
-                stopServer();
+                $this->stopServer();
                 break;
             case 'reload': //重载服务
-                reloadServer();
+                $this->reloadServer();
                 break;
             case 'update': //升级系统
                 break;
@@ -105,7 +99,7 @@ class Console
                 break;
             case 'help': //帮助
             default: {
-                help();
+                $this->help();
             }
         }
     }
@@ -122,18 +116,46 @@ class Console
 
         $this->printParameters();
 
-
         Server::getInstance();
     }
 
 
     /**
-     * stopServer  [停止]
+     * stopServer  [description]
      * @copyright Copyright (c)
      * @author Wongzx <842687571@qq.com>
+     * @return bool|void
      */
     private function stopServer()
     {
+
+
+        $pidFile = Di::getInstance()->getConf('setting.pid_file');
+
+        if (!file_exists($pidFile)) {
+            echo "pid file :{$pidFile} not exist \n";
+            return false;
+        }
+
+        $pid = file_get_contents($pidFile);
+
+        /**
+         * 可以检测进程是否存在，不会发送信号
+         */
+        if (!posix_kill($pid, 0)) {
+            echo "pid :{$pid} not exist \n";
+            return;
+        }
+        sleep(1);
+        if (posix_kill($pid, SIGTERM)) {
+            echo "server stop at " . date("y-m-d h:i:s") . "\n";
+            if (is_file($pidFile)) {
+                unlink($pidFile);
+            }
+        } else {
+            echo "stop server fail try again \n";
+        }
+
 
     }
 
@@ -145,10 +167,33 @@ class Console
      */
     private function reloadServer()
     {
+        $pidFile = Di::getInstance()->getConf('setting.pid_file');
 
+        if (!file_exists($pidFile)) {
+            echo "pid file :{$pidFile} not exist \n";
+            return false;
+        }
+
+        if (function_exists('apc_clear_cache')) {
+            apc_clear_cache();
+        }
+        if (function_exists('opcache_reset')) {
+            opcache_reset();
+        }
+
+
+        self::$pid = file_get_contents($pidFile);
+        posix_kill(self::$pid, SIGUSR1);
+        echo "send server reload command at " . date("y-m-d h:i:s") . "\n";
     }
 
 
+    /**
+     * iconLogo  [description]
+     * @copyright Copyright (c)
+     * @author Wongzx <842687571@qq.com>
+     * @return string
+     */
     private function iconLogo(): string
     {
         $string = <<<STRING
@@ -159,7 +204,6 @@ class Console
 _|"""""||"""""||"""""||"""""||"""""||"""""||"""""||"""""||"""""| 
 "`-0-0-'"`-0-0-'"`-0-0-'"`-0-0-'"`-0-0-'"`-0-0-'"`-0-0-'"`-0-0-'"`-0-0-' 
 STRING;
-
         return $string;
     }
 
@@ -186,6 +230,28 @@ STRING;
         //异步任务进程数
         echo 'task worker num      ' . "\033[32m " . $conf->get('setting.task_worker_num') . " \033[0m" . "\n";
 
+    }
+
+
+    /**
+     * help  [description]
+     * @copyright Copyright (c)
+     * @author Wongzx <842687571@qq.com>
+     */
+    private function help(): string
+    {
+
+        echo $this->iconLogo() . "\n\n";
+
+        echo "\033[36m ApiSwoole \033[0mversion \033[33m" . self::$version . " \033[0m" . date('Y-m-d H:i:s') . "\n\n";
+
+        $helpString = <<<HELPSTRING
+\033[32m start \033[0m           启动服务
+\033[32m stop \033[0m            停止服务
+\033[32m update \033[0m          升级系统
+\033[32m reload \033[0m          重装服务
+HELPSTRING;
+        echo $helpString . "\n";
     }
 
 

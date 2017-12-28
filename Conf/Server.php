@@ -5,7 +5,6 @@ return [
         'pname'         => env('PNAME', 'php-Apiswoole'),
         'tcpable'       => env('TCPABLE', true),
         'cronable'      => env('CRONABLE', false),
-        'autoReload'    => env('AUTO_RELOAD', true),
     ],
     'tcp' => [
         'host'                  => env('TCP_HOST', '0.0.0.0'),
@@ -21,6 +20,11 @@ return [
         'model'      => env('HTTP_MODEL', SWOOLE_PROCESS),
         'type'       => env('HTTP_TYPE', SWOOLE_SOCK_TCP),
     ],
+    'socket' => [
+        'host'                       => env('SOCKET_HOST', '0.0.0.0'),
+        'port'                       => env('SOCKET_PORT', 9501),
+        'model'                      => env('SOCKET_MODEL', SWOOLE_PROCESS),
+    ],
     'crontab' => [ //定时任务
         'task_count' => env('CRONTAB_TASK_COUNT', 1024),
         'task_queue' => env('CRONTAB_TASK_QUEUE', 2048),
@@ -35,7 +39,7 @@ return [
         'task_max_request'  => env('TASK_MAX_REQUEST', 10),
         'task_worker_num'   => env('TASK_WORKER_NUM', 8),
         'upload_tmp_dir'    => ROOT . env('UPLOAD_TMP_DIR', '/Runtime/UploadFiles'),
-        'server_name'    => env('SERVER_NAME', ''),
-        'server_type'    => env('SERVER_TYPE', 'SERVER_TYPE_WEB'),
+        'server_name'    => env('SERVER_NAME', 'http://apiswoole.com/'),
+        'server_type'    => env('SERVER_TYPE', 'SERVER_TYPE_WEB_SOCKET'), //SERVER_TYPE_WEB => HttpServer && SERVER_TYPE_SERVER => SwooleServer && SERVER_TYPE_WEB_SOCKET => WebSocket
     ],
 ];

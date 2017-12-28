@@ -7,11 +7,14 @@
  */
 
 namespace Core\Swoole\WebSocket;
+
 class Server
 {
+    /**
+     * @var
+     */
     private static $instance;
 
-    private $conf;
 
     static public function getInstance()
     {
@@ -23,20 +26,16 @@ class Server
 
     public function serverStart($server, $conf)
     {
-        $this->conf = $conf;
-        $server->set([
-            'worker_num' => 8, //进程数
-            'daemonize' => false, //1 加入此参数后，执行php server.php将转入后台作为守护进程运行
-            'max_request' => 10000, //此参数表示worker进程在处理完n次请求后结束运行。manager会重新创建一个worker进程。此选项用来防止worker进程内存溢出。
-            'dispatch_mode' => 2, //1平均分配，2按FD取模固定分配，3抢占式分配，默认为取模(dispatch=2)
-            'debug_mode' => 1,
-            'websocket_subprotocol' => 'chat'
-        ]);
+        $conf->set('setting.debug_mode', '1');
+        $conf->set('setting.websocket_subprotocol', 'chat');
 
+        $server->set($conf->get('setting'));
         $server->on('handshake', [$this, 'onHandShake']);
         $server->on('open', [$this, 'onOpen']);
         $server->on('message', [$this, 'onMessage']);
         $server->on('close', [$this, 'onClose']);
+        $server->on('task', [$this, 'onTask']);
+        $server->on('finish', [$this, 'onFinish']);
 
         $server->start();
     }
@@ -146,6 +145,34 @@ class Server
      */
     final public function onRequest($request, $response)
     {
+    }
+
+
+    /**
+     * onTask  [description]
+     * @param $server
+     * @param $task_id
+     * @param $data
+     * @copyright Copyright (c)
+     * @author Wongzx <842687571@qq.com>
+     */
+    final public function onTask($server, $task_id, $data)
+    {
+
+    }
+
+
+    /**
+     * onFinish  [description]
+     * @param $server
+     * @param $taskId
+     * @param $taskObj
+     * @copyright Copyright (c)
+     * @author Wongzx <842687571@qq.com>
+     */
+    public function onFinish($server, $taskId, $taskObj)
+    {
+
     }
 
 }

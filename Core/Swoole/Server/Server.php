@@ -6,7 +6,7 @@
  * Time: 17:30
  */
 
-namespace Core\Swoole\SwooleServer;
+namespace Core\Swoole\Server;
 
 class Server
 {
@@ -26,14 +26,18 @@ class Server
     public function serverStart($server, $conf)
     {
         $this->serverApi = $server;
-        $this->serverApi->set($conf->getWorkerSetting());
-        $this->onConnect();
-        $this->onReceive();
-        $this->onClose();
-        $this->workerStartEvent();
-        $this->onTaskEvent();
-        $this->onFinishEvent();
-        $this->onStart();
+        $this->serverApi->set($conf->get('setting'));
+
+        // 设置事件监听
+        $this->serverApi->on('start', [$this, 'onStart']);
+        $this->serverApi->on('workerStart', [$this, 'onWorkerStart']);
+        $this->serverApi->on('workerStop', [$this, 'onWorkerStop']);
+        $this->serverApi->on('task', [$this, 'onTask']);
+        $this->serverApi->on('finish', [$this, 'onFinish']);
+        $this->serverApi->on('request', [$this, 'onRequest']);
+        $this->serverApi->on('pipeMessage', [$this, 'onPipeMessage']);
+
+        $this->serverApi->start();
     }
 
 
@@ -42,15 +46,9 @@ class Server
      * @copyright Copyright (c)
      * @author Wongzx <842687571@qq.com>
      */
-    private function onConnect()
+    public function onConnect()
     {
         $this->serverApi->on('Connect', function (\swoole_server $server, $fd, $reactorId) {
-//            print_r($server);
-//            echo "server" . "\n";
-            print_r($fd);
-            echo "\n";
-            print_r($reactorId);
-            echo "\n";
         });
     }
 
@@ -60,7 +58,7 @@ class Server
      * @copyright Copyright (c)
      * @author Wongzx <842687571@qq.com>
      */
-    private function onReceive()
+    public function onReceive()
     {
         $this->serverApi->on('Receive', function (\swoole_server $server, $fd, $reactor_id, $data) {
 
@@ -73,7 +71,7 @@ class Server
      * @copyright Copyright (c)
      * @author Wongzx <842687571@qq.com>
      */
-    private function onClose()
+    public function onClose()
     {
         $this->serverApi->on('Close', function (\swoole_server $server, $fd, $reactorId) {
 
@@ -85,7 +83,7 @@ class Server
      * @copyright Copyright (c)
      * @author Wongzx <842687571@qq.com>
      */
-    private function workerStartEvent()
+    public function workerStartEvent()
     {
         $this->serverApi->on("workerStart", function (\swoole_server $server, $workerId) {
 
@@ -102,7 +100,7 @@ class Server
      * @copyright Copyright (c)
      * @author Wongzx <842687571@qq.com>
      */
-    private function onTaskEvent()
+    public function onTaskEvent()
     {
         $this->serverApi->on('task', function (\swoole_server $server, $task_id, $data) {
 //            print_r($server);
@@ -114,14 +112,14 @@ class Server
      * @copyright Copyright (c)
      * @author Wongzx <842687571@qq.com>
      */
-    private function onFinishEvent()
+    public function onFinishEvent()
     {
         $this->serverApi->on('finish', function (\swoole_server $server, $taskId, $taskObj) {
 //            print_r($server);
         });
     }
 
-    private function onStart()
+    public function onStart()
     {
         $this->serverApi->start();
     }

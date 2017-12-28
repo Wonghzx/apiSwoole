@@ -90,15 +90,85 @@ class Request extends Psr7Request implements ServerRequestInterface
         $cookie = $request->cookie ?? []; //HTTP请求携带的COOKIE信息，与PHP的$_COOKIE相同，格式为数组
         $getQuery = $request->get ?? [];  //Http请求的GET参数，相当于PHP中的$_GET，格式为数组。
         $postBody = $request->post ?? []; //HTTP POST参数，格式为数组。
-        $files = $request->file ?? [];
-
+        $files = $request->files ?? [];
 
         $this->withCookieParams($cookie)
             ->withQueryParams($getQuery)
             ->withParsedBody($postBody)
-//            ->withUploadedFiles()
+            ->withUploadedFiles(self::normalizeFiles($files))
             ->setRequest($request);
 
+    }
+
+
+    /**
+     * normalizeFiles  [返回一个数组uploadedFile实例。]
+     * @param array $files
+     * @copyright Copyright (c)
+     * @author Wongzx <842687571@qq.com>
+     * @return array
+     */
+    private static function normalizeFiles(array $files)
+    {
+        $normalized = [];
+
+        foreach ($files as $key => $value) {
+            if ($value instanceof UploadedFileInterface) {
+                $normalized[$key] = $value;
+            } elseif (is_array($value) && isset($value['tmp_name'])) {
+                $normalized[$key] = self::createUploadedFileFromSpec($value);
+            } elseif (is_array($value)) {
+                $normalized[$key] = self::normalizeFiles($value);
+                continue;
+            } else {
+                throw new \InvalidArgumentException('Invalid value in files specification');
+            }
+        }
+
+        return $normalized;
+    }
+
+
+    /**
+     * createUploadedFileFromSpec  [创建并返回一个$ _files规范uploadedFile实例。]
+     * @param array $value
+     * @copyright Copyright (c)
+     * @author Wongzx <842687571@qq.com>
+     * @return array|UploadFile
+     */
+    private static function createUploadedFileFromSpec(array $value)
+    {
+        if (is_array($value['tmp_name'])) {
+            return self::normalizeNestedFileSpec($value);
+        }
+
+        return new UploadFile($value['tmp_name'], (int)$value['size'], (int)$value['error'], $value['name'], $value['type']);
+    }
+
+
+    /**
+     * normalizeNestedFileSpec  [遍历所有嵌套的文件，并返回一个规范化数组]
+     * @param array $files
+     * @copyright Copyright (c)
+     * @author Wongzx <842687571@qq.com>
+     * @return array
+     */
+    private static function normalizeNestedFileSpec(array $files = [])
+    {
+        $normalizedFiles = [];
+
+        foreach (array_keys($files['tmp_name']) as $key) {
+            $spec = [
+                'tmp_name' => $files['tmp_name'][$key],
+                'size' => $files['size'][$key],
+                'error' => $files['error'][$key],
+                'name' => $files['name'][$key],
+                'type' => $files['type'][$key],
+            ];
+            $normalizedFiles[$key] = self::createUploadedFileFromSpec($spec);
+        }
+
+        return $normalizedFiles;
     }
 
 
@@ -126,7 +196,7 @@ class Request extends Psr7Request implements ServerRequestInterface
             $uri = $uri->withHost($server['server_name']);
         } elseif (isset($server['server_addr'])) {
             $uri = $uri->withHost($server['server_addr']);
-        } else  {
+        } else {
             $host = $request->header['host'];
             $host = explode(":", $host);
             $uri = $uri->withHost($host[0]);

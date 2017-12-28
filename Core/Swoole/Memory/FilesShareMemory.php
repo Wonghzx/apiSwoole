@@ -6,7 +6,7 @@
  * Time: 13:44
  */
 
-namespace Core\Component\Memory;
+namespace Core\Swoole\Memory;
 
 use Core\Component\Di;
 use Core\Component\File;

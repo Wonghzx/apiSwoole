@@ -14,6 +14,7 @@ use Core\AbstractInterface\AbstractViewController;
 use Core\Component\Di;
 use Core\Component\Memory\FilesShareMemory;
 use Core\Component\Pagination\Page;
+use Core\Component\SessionFacade;
 use Illuminate\Database\Capsule\Manager AS DB;
 use Illuminate\Support\Facades\Auth;
 use Core\Component\Memory\ShareMemory;
@@ -40,6 +41,7 @@ class Index extends AbstractViewController
 //       <span style="font-size:20px">[ 欢迎前往 <a href="https://github.com/Wonghzx/apiSwoole" target="apiSwoole">GitHub</a> 为 ApiSwoole 赏一个Star ]</span>
 //   </div>
 //        ');
+
         $get = $this->request()->getQueryParams();
         $p = empty($get['page']) ? 1 : $get['page'];
         $a = DB::table('user')->get()->forPage($p, 1);

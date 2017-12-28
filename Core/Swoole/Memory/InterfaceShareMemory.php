@@ -7,7 +7,7 @@
  * Time: 12:02
  */
 
-namespace Core\Component\Memory;
+namespace Core\Swoole\Memory;
 use Swoole\Table;
 interface InterfaceShareMemory
 {

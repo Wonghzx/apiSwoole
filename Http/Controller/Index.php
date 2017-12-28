@@ -11,14 +11,9 @@ namespace Http\Controller;
 
 
 use Core\AbstractInterface\AbstractViewController;
-use Core\Component\Di;
-use Core\Component\Memory\FilesShareMemory;
 use Core\Component\Pagination\Page;
-use Core\Component\SessionFacade;
 use Illuminate\Database\Capsule\Manager AS DB;
-use Illuminate\Support\Facades\Auth;
-use Core\Component\Memory\ShareMemory;
-use Illuminate\Support\Facades\Request;
+
 
 class Index extends AbstractViewController
 {

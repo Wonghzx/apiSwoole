@@ -76,7 +76,7 @@ class Core
          * 加载 Conf
          */
         Di::getInstance()->set('conf', Config::load(ROOT . '/Conf'));
-        $this->loadConf = Di::getInstance()->get('conf');
+        $this->loadConf = getDi('conf');
 
         /**
          * 初始化

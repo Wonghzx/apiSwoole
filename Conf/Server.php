@@ -22,7 +22,7 @@ return [
     ],
     'socket' => [
         'host'                       => env('SOCKET_HOST', '0.0.0.0'),
-        'port'                       => env('SOCKET_PORT', 9501),
+        'port'                       => env('SOCKET_PORT', 8888),
         'model'                      => env('SOCKET_MODEL', SWOOLE_PROCESS),
     ],
     'crontab' => [ //定时任务

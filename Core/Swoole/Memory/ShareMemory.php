@@ -8,7 +8,6 @@
 
 namespace Core\Swoole\Memory;
 
-use Core\Component\Di;
 use Core\Component\Spl\SplArray;
 
 use Swoole\Table as swTable;

@@ -9,9 +9,6 @@
 
 namespace Core\Swoole;
 
-
-use Core\Component\Di;
-
 class Config extends \Core\AbstractInterface\AbstractSwooleServerConf
 {
     private $listenIp;
@@ -48,7 +45,7 @@ class Config extends \Core\AbstractInterface\AbstractSwooleServerConf
 
     public function __construct()
     {
-        $conf = Di::getInstance()->get('conf');
+        $conf = getDi('conf');
         $this->listenIp = $conf->get('http.host');
         $this->listenPort = $conf->get('http.port');
         $this->workerSetting = $conf->get('setting');

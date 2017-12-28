@@ -14,7 +14,6 @@ use Core\AbstractInterface\AbstractRouter;
 use Core\Event;
 use Core\Swoole\HttpServer\Storage\Response;
 use Core\Swoole\HttpServer\Storage\Request;
-use Core\Component\Di;
 use FastRoute\Dispatcher\GroupCountBased;
 
 
@@ -101,8 +100,7 @@ class Launcher
             $controllerNameSpacePrefix = "Http\\Controller";
             $actionName = null; //控制器名称
             $finalClass = null; //方法
-            $conf = Di::getInstance()->get('conf');
-            $controlMaxDepth = $conf->get('controller_max_depth');
+            $controlMaxDepth = getConf('controller_max_depth');
             if (intval($controlMaxDepth) <= 0) {
                 $controlMaxDepth = 3;
             }

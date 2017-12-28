@@ -8,8 +8,6 @@
 
 namespace Core\Swoole;
 
-use Core\Component\Di;
-
 class Server
 {
     protected static $instance;
@@ -28,9 +26,10 @@ class Server
 
     function __construct()
     {
-        $this->conf = Di::getInstance()->get('conf');
+        $this->conf = getDi('conf');
 
         $serverType = $this->conf->get('setting.server_type');
+
         switch ($serverType) {
             case 'SERVER_TYPE_SERVER':
                 $ip = $this->conf->get('tcp.host');
@@ -54,7 +53,6 @@ class Server
                 $ip = $this->conf->get('socket.host');
                 $port = $this->conf->get('socket.port');
                 $runMode = $this->conf->get('socket.model');
-
                 $this->serverApi = new \swoole_websocket_server($ip, $port, $runMode);
                 $this->swooleWebSocketServer();
                 break;

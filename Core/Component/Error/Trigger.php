@@ -10,7 +10,6 @@ namespace Core\Component\Error;
 
 use Core\AbstractInterface\AbstractExceptionHandler;
 use Core\AbstractInterface\AbstractErrorHandler;
-use Core\Component\Di;
 
 class Trigger
 {
@@ -26,8 +25,7 @@ class Trigger
      */
     public static function error($msg, $file = null, $line = null, $errorCode = E_USER_ERROR, $trace = null)
     {
-        $conf = Di::getInstance()->get('conf');
-        $debug = $conf->get('debug');
+        $debug = getConf('debug');
         if ($trace == null) {
             $trace = debug_backtrace(); //产生一条回溯跟踪(函数生成一个 backtrace。)
         }
@@ -56,8 +54,7 @@ class Trigger
     public static function exception(\Exception $exception)
     {
 
-        $conf = Di::getInstance()->get('conf');
-        $debug = $conf->get('debug');
+        $debug = getConf('debug');
 
         $handler = $debug['exception_handler'];
         if (!$handler instanceof AbstractExceptionHandler) {

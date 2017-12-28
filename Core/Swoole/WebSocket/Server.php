@@ -8,6 +8,9 @@
 
 namespace Core\Swoole\WebSocket;
 
+use Http\SocketController\HandShake;
+use Http\SocketController\Message;
+
 class Server
 {
     /**
@@ -51,38 +54,7 @@ class Server
      */
     final public function onHandShake($request, $response)
     {
-        //websocket握手连接算法验证
-        $secWebSocketKey = $request->header['sec-websocket-key'];
-
-        $patten = '#^[+/0-9A-Za-z]{21}[AQgw]==$#';
-        if (0 === preg_match($patten, $secWebSocketKey) || 16 !== strlen(base64_decode($secWebSocketKey))) {
-            $response->end();
-            return false;
-        }
-
-        $key = hash1Encrypt($secWebSocketKey); //加密
-
-        $headers = [
-            'Upgrade' => 'websocket',
-            'Connection' => 'Upgrade',
-            'Sec-WebSocket-Accept' => $key,
-            'Sec-WebSocket-Version' => '13',
-        ];
-
-        // WebSocket connection to 'ws://127.0.0.1:9502/'
-        // failed: Error during WebSocket handshake:
-        // Response must not include 'Sec-WebSocket-Protocol' header if not present in request: websocket
-        if (isset($request->header['sec-websocket-protocol'])) {
-            $headers['Sec-WebSocket-Protocol'] = $request->header['sec-websocket-protocol'];
-        }
-
-        foreach ($headers as $key => $val) {
-            $response->header($key, $val);
-        }
-
-        $response->status(101);
-        $response->end();
-        return true;
+        HandShake::getInstance($request, $response)->onHandShake();
     }
 
 
@@ -108,16 +80,7 @@ class Server
      */
     final public function onMessage($server, $frame)
     {
-        $chatData = json_decode($frame->data, true);
-
-        /**
-         * 判断是否第一次进来
-         */
-        if (isset($chatData['content'])) {
-
-        } else {
-            //
-        }
+        Message::getInstance($server, $frame)->onMessage();
     }
 
 
@@ -170,7 +133,7 @@ class Server
      * @copyright Copyright (c)
      * @author Wongzx <842687571@qq.com>
      */
-    public function onFinish($server, $taskId, $taskObj)
+    final public function onFinish($server, $taskId, $taskObj)
     {
 
     }

@@ -8,7 +8,7 @@
 
 namespace Core;
 
-use Core\Component\Di;
+
 use Core\Swoole\AsyncTaskManager;
 use Core\Swoole\HttpServer\Server;
 use Core\Swoole\HttpServer\Storage\Request;
@@ -44,8 +44,8 @@ class Event extends \Core\AbstractInterface\AbstractEvent
 //        ShareMemory::getInstance()->clear();
 //        include_once ROOT . '/vendor/autoload.php';
         // TODO: Implement initializeEd() method.
-        $conf  = Di::getInstance()->get('conf');
-        $dbConf = $conf->get('database');
+
+        $dbConf = getConf('database');
 //        $capsule = new Manager();
         $capsule = new Capsule;
         $capsule->addConnection($dbConf);

@@ -7,6 +7,7 @@
  */
 
 namespace Core\Component;
+
 class Di
 {
     protected static $instance;

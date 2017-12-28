@@ -8,7 +8,6 @@
 
 namespace Core\Swoole\Memory;
 
-use Core\Component\Di;
 use Core\Component\File;
 use Core\Component\IO\FileIO;
 use Core\Component\Logger;
@@ -68,8 +67,7 @@ class FilesShareMemory
     {
         $this->serializeType = $serializeType;
         if ($file == null) {
-            $conf = Di::getInstance()->get('conf');
-            $shareMemory = $conf->get('common.shareMemory');
+            $shareMemory = getConf('common.shareMemory');
 
             if (!file_exists($shareMemory)) {
                 if (!File::createFile($shareMemory)) {

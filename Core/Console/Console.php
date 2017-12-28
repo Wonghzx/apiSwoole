@@ -8,7 +8,6 @@
 
 namespace Core\Console;
 
-use Core\Component\Di;
 use Core\Console\Input\Input;
 use Core\Swoole\Server;
 
@@ -130,7 +129,7 @@ class Console
     {
 
 
-        $pidFile = Di::getInstance()->getConf('setting.pid_file');
+        $pidFile = getConf('setting.pid_file');
 
         if (!file_exists($pidFile)) {
             echo "pid file :{$pidFile} not exist \n";
@@ -167,7 +166,7 @@ class Console
      */
     private function reloadServer()
     {
-        $pidFile = Di::getInstance()->getConf('setting.pid_file');
+        $pidFile = getConf('setting.pid_file');
 
         if (!file_exists($pidFile)) {
             echo "pid file :{$pidFile} not exist \n";
@@ -216,7 +215,7 @@ STRING;
      */
     private function printParameters()
     {
-        $conf = Di::getInstance()->get('conf');
+        $conf = getDi('conf');
 
         //IP
         echo 'listen address       ' . "\033[32m " . $conf->get('http.host') . " \033[0m" . "\n";

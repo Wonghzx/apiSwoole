@@ -8,6 +8,7 @@
 
 namespace Core\Swoole\WebSocket;
 
+use Core\Event;
 use Http\SocketController\HandShake;
 use Http\SocketController\Message;
 
@@ -38,6 +39,7 @@ class Server
         $server->on('message', [$this, 'onMessage']);
         $server->on('close', [$this, 'onClose']);
         $server->on('task', [$this, 'onTask']);
+        $server->on('workerStart', [$this, 'onWorkerStart']);
         $server->on('finish', [$this, 'onFinish']);
 
         $server->start();
@@ -67,7 +69,6 @@ class Server
      */
     final public function onOpen($server, $request)
     {
-
     }
 
 
@@ -97,19 +98,6 @@ class Server
     }
 
 
-    /**
-     * onRequest  [description]
-     * 接收http请求从get获取message参数的值，给用户推送
-     * $this->server->connections 遍历所有websocket连接用户的fd，给所有用户推送
-     * @param $request
-     * @param $response
-     * @copyright Copyright (c)
-     * @author Wongzx <842687571@qq.com>
-     */
-    final public function onRequest($request, $response)
-    {
-    }
-
 
     /**
      * onTask  [description]
@@ -136,6 +124,19 @@ class Server
     final public function onFinish($server, $taskId, $taskObj)
     {
 
+    }
+
+
+    /**
+     * onWorkerStart  [worker进程启动前初始化]
+     * @param $server
+     * @param int $workerId
+     * @copyright Copyright (c)
+     * @author Wongzx <842687571@qq.com>
+     */
+    public function onWorkerStart($server, int $workerId)
+    {
+        Event::getInstance()->onWorkerStart($server, $workerId);
     }
 
 }

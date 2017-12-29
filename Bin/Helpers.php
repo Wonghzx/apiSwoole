@@ -68,3 +68,44 @@ if (!function_exists('recursionDirFiles')) {
         return $data;
     }
 }
+
+
+if (!function_exists('_env')) {
+    /**
+     *[env array|bool|false|mixed|string|void]
+     * @author  Wongzx <[842687571@qq.com]>
+     * @param $key
+     * @param null $default
+     * @copyright Copyright (c)
+     * @return    [type]        [description]
+     */
+    function _env($key, $default = null)
+    {
+        $value = getenv($key);
+
+        if ($value === false) {
+            return value($default);
+        }
+
+        switch (strtolower($value)) {
+            case 'true':
+            case '(true)':
+                return true;
+            case 'false':
+            case '(false)':
+                return false;
+            case 'empty':
+            case '(empty)':
+                return '';
+            case 'null':
+            case '(null)':
+                return;
+        }
+
+        if (defined($value)) {
+            $value = constant($value);
+        }
+
+        return $value;
+    }
+}

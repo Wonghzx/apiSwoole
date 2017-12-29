@@ -68,8 +68,8 @@ class Core
      */
     public function initialize()
     {
-        if (phpversion() < 5.5)
-            die('您的PHP版本低于5.5 ，该框架需要PHP版本5.5 或 > 5.5^');
+        if (phpversion() < 7)
+            die('您的PHP版本低于 7  ，该框架需要PHP版本7.0.0 或 > 7.0.0^');
         $this->defineSysConf();
         $this->registerAutoLoader();
         /**

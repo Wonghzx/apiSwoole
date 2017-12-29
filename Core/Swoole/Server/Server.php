@@ -29,13 +29,11 @@ class Server
         $this->serverApi->set($conf->get('setting'));
 
         // 设置事件监听
-        $this->serverApi->on('start', [$this, 'onStart']);
-        $this->serverApi->on('workerStart', [$this, 'onWorkerStart']);
-        $this->serverApi->on('workerStop', [$this, 'onWorkerStop']);
+        $this->serverApi->on('connect', [$this, 'onConnect']);
+        $this->serverApi->on('receive', [$this, 'onReceive']);
+        $this->serverApi->on('close', [$this, 'onClose']);
         $this->serverApi->on('task', [$this, 'onTask']);
         $this->serverApi->on('finish', [$this, 'onFinish']);
-        $this->serverApi->on('request', [$this, 'onRequest']);
-        $this->serverApi->on('pipeMessage', [$this, 'onPipeMessage']);
 
         $this->serverApi->start();
     }
@@ -46,10 +44,9 @@ class Server
      * @copyright Copyright (c)
      * @author Wongzx <842687571@qq.com>
      */
-    public function onConnect()
+    public function onConnect($server, $fd, $reactorId)
     {
-        $this->serverApi->on('Connect', function (\swoole_server $server, $fd, $reactorId) {
-        });
+
     }
 
 
@@ -58,11 +55,9 @@ class Server
      * @copyright Copyright (c)
      * @author Wongzx <842687571@qq.com>
      */
-    public function onReceive()
+    public function onReceive($server, $fd, $reactor_id, $data)
     {
-        $this->serverApi->on('Receive', function (\swoole_server $server, $fd, $reactor_id, $data) {
 
-        });
     }
 
 
@@ -71,57 +66,37 @@ class Server
      * @copyright Copyright (c)
      * @author Wongzx <842687571@qq.com>
      */
-    public function onClose()
+    public function onClose($server, $fd, $reactorId)
     {
-        $this->serverApi->on('Close', function (\swoole_server $server, $fd, $reactorId) {
 
-        });
-    }
-
-    /**
-     * workerStartEvent  [此事件在Worker进程/Task进程启动时发生。这里创建的对象可以在进程生命周期内使用。原型：]
-     * @copyright Copyright (c)
-     * @author Wongzx <842687571@qq.com>
-     */
-    public function workerStartEvent()
-    {
-        $this->serverApi->on("workerStart", function (\swoole_server $server, $workerId) {
-
-        });
     }
 
 
     /**
-     * onTaskEvent  [
-     * 在task_worker进程内被调用。worker进程可以使用swoole_server_task函数向task_worker进程投递新的任务。
-     * 当前的Task进程在调用onTask回调函数时会将进程状态切换为忙碌，
-     * 这时将不再接收新的Task，当onTask函数返回时会将进程状态切换为空闲然后继续接收新的Task
-     * ]
+     * onTask  [description]
+     * @param $server
+     * @param $task_id
+     * @param $data
      * @copyright Copyright (c)
      * @author Wongzx <842687571@qq.com>
      */
-    public function onTaskEvent()
+    public function onTask($server, $task_id, $data)
     {
-        $this->serverApi->on('task', function (\swoole_server $server, $task_id, $data) {
-//            print_r($server);
-        });
+
     }
+
 
     /**
-     * onFinishEvent  [当worker进程投递的任务在task_worker中完成时，task进程会通过swoole_server->finish()方法将任务处理的结果发送给worker进程。]
+     * onFinish  [description]
+     * @param $server
+     * @param $taskId
+     * @param $taskObj
      * @copyright Copyright (c)
      * @author Wongzx <842687571@qq.com>
      */
-    public function onFinishEvent()
+    public function onFinish($server, $taskId, $taskObj)
     {
-        $this->serverApi->on('finish', function (\swoole_server $server, $taskId, $taskObj) {
-//            print_r($server);
-        });
-    }
 
-    public function onStart()
-    {
-        $this->serverApi->start();
     }
 
 

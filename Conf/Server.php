@@ -40,6 +40,6 @@ return [
         'task_worker_num'   => env('TASK_WORKER_NUM', 8),
         'upload_tmp_dir'    => ROOT . env('UPLOAD_TMP_DIR', '/Runtime/UploadFiles'),
         'server_name'    => env('SERVER_NAME', 'http://apiswoole.com/'),
-        'server_type'    => env('SERVER_TYPE', 'SERVER_TYPE_WEB_SOCKET'), //SERVER_TYPE_WEB => HttpServer && SERVER_TYPE_SERVER => SwooleServer && SERVER_TYPE_WEB_SOCKET => WebSocket
+        'server_type'    => env('SERVER_TYPE', 'SERVER_TYPE_SERVER'), //SERVER_TYPE_WEB => HttpServer && SERVER_TYPE_SERVER => SwooleServer && SERVER_TYPE_WEB_SOCKET => WebSocket
     ],
 ];

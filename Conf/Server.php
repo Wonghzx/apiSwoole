@@ -40,6 +40,5 @@ return [
         'task_worker_num'   => _env('TASK_WORKER_NUM', 8),
         'upload_tmp_dir'    => ROOT . _env('UPLOAD_TMP_DIR', '/Runtime/UploadFiles'),
         'server_name'    => _env('SERVER_NAME', 'http://apiswoole.com/'),
-        'server_type'    => _env('SERVER_TYPE', 'SERVER_TYPE_SERVER'), //SERVER_TYPE_WEB => HttpServer && SERVER_TYPE_SERVER => SwooleServer && SERVER_TYPE_WEB_SOCKET => WebSocket
     ],
 ];

@@ -10,6 +10,7 @@ namespace Core\Console;
 
 use Core\Console\Input\Input;
 use Core\Swoole\Server;
+use Core\Console\Style\Style;
 
 /**
  * Class Console 控制室
@@ -27,20 +28,20 @@ class Console
         'stop',  //停止
         'reload', //重载服务
         'update', //升级系统
-        'help' //帮助
+        'help', //帮助
     ];
 
     /**
      * 参数输入
      * @var Input
      */
-    private $input;
+    private $input = [];
 
     /**
-     * 参数输出
-     * @var Output
+     * @var $monitor
      */
-    private $output;
+    private $monitor = [];
+
 
     /**
      * 每个命令唯一ID
@@ -48,6 +49,10 @@ class Console
      */
     private static $pid;
 
+    /**
+     * @var $serverType
+     */
+    private $serverType;
 
     static public function getInstance()
     {
@@ -61,10 +66,56 @@ class Console
 
     public function run()
     {
-        // 默认命令解析
-        $cmd = Input::getInstance()->getCommand();
-
         try {
+            // 默认命令解析
+            $cmd = Input::getInstance()->getCommand();
+
+            $this->input = explode(':', $cmd);
+            $conf = getDi('conf');
+            if (!in_array($this->input[0], self::DEFAULT_CMD)) {
+                switch ($this->input[0]) {
+                    case 'tcp':
+                        $conf->set('setting.server_type', 'SERVER_TYPE_SERVER');
+                        $this->monitor['host'] = $conf->get('tcp.host');
+                        $this->monitor['port'] = $conf->get('tcp.port');
+                        $this->serverType = 'Server';
+                        break;
+                    case 'socket':
+                        $conf->set('setting.server_type', 'SERVER_TYPE_WEB_SOCKET');
+                        $this->monitor['host'] = $conf->get('socket.host');
+                        $this->monitor['port'] = $conf->get('socket.port');
+                        $this->serverType = 'WebSocket';
+                        break;
+                    case 'http':
+                        $conf->set('setting.server_type', 'SERVER_TYPE_WEB');
+                        $this->serverType = 'HttpServer';
+                        break;
+                    default: {
+                        $errorCommand = [
+                            '               <warning>Warning: Information Panel</warning>     ',
+                            '******************************************************************',
+                            '<red>-bash:  ' . $this->input[0] . ':  command not found</red>',
+                            '<yellow>Usage:</yellow>',
+                            '<faintly>   php apiswoole help</faintly>',
+                            '<yellow>Commands:</yellow>',
+                            '<faintly>   You can input tcp:start to Start the Swoole_server</faintly>',
+                            '<faintly>   You can input http:start to Start the HttpServer can start with direct start</faintly>',
+                            '<faintly>   You can input socket:start to Start the WebSocket</faintly>',
+                            '******************************************************************',
+                        ];
+                        $this->writeln(implode("\n", $errorCommand), true, true);
+
+                    }
+                }
+                $cmd = $this->input[1];
+            } else {
+                $conf->set('setting.server_type', 'SERVER_TYPE_WEB');
+                $this->serverType = 'HttpServer';
+            }
+            if (!$this->monitor) {
+                $this->monitor['host'] = $conf->get('http.host');
+                $this->monitor['port'] = $conf->get('http.port');
+            }
             $this->commandHandler($cmd);
         } catch (\Throwable $e) {
 
@@ -96,7 +147,7 @@ class Console
             case 'version': //版本号
                 echo "";
                 break;
-            case 'help': //帮助
+            case  'help': //帮助
             default: {
                 $this->help();
             }
@@ -111,7 +162,7 @@ class Console
      */
     private function startServer()
     {
-        echo $this->iconLogo() . "\n";
+        $this->iconLogo();
 
         $this->printParameters();
 
@@ -193,17 +244,22 @@ class Console
      * @author Wongzx <842687571@qq.com>
      * @return string
      */
-    private function iconLogo(): string
+    private function iconLogo()
     {
-        $string = <<<STRING
+
+        $string = <<<ICONLOGO
+        <normal>
    ___    _ __    _     ___                          _           
   /   \  | '_ \  (_)   / __| __ __ __ ___    ___    | |    ___   
   | - |  | .__/  | |   \__ \ \ V  V // _ \  / _ \   | |   / -_)  
   |_|_|  |_|__  _|_|_  |___/  \_/\_/ \___/  \___/  _|_|_  \___|  
 _|"""""||"""""||"""""||"""""||"""""||"""""||"""""||"""""||"""""| 
 "`-0-0-'"`-0-0-'"`-0-0-'"`-0-0-'"`-0-0-'"`-0-0-'"`-0-0-'"`-0-0-'"`-0-0-' 
-STRING;
-        return $string;
+</normal>
+ICONLOGO;
+        $defaultMenu = ' <info>ApiSwoole</info> Version <yellow>' . self::$version . '</yellow> ' . date('Y-m-d H:i:s') . "\n";
+        $this->writeln($string);
+        $this->writeln($defaultMenu);
     }
 
 
@@ -215,19 +271,12 @@ STRING;
      */
     private function printParameters()
     {
-        $conf = getDi('conf');
-
-        //IP
-        echo 'listen address       ' . "\033[32m " . $conf->get('http.host') . " \033[0m" . "\n";
-
-        //端口
-        echo 'listen port          ' . "\033[32m " . $conf->get('http.port') . " \033[0m" . "\n";
-
-        //进程数
-        echo 'worker num           ' . "\033[32m " . $conf->get('setting.worker_num') . " \033[0m" . "\n";
-
-        //异步任务进程数
-        echo 'task worker num      ' . "\033[32m " . $conf->get('setting.task_worker_num') . " \033[0m" . "\n";
+        $options = ' <yellow>Information Panel:</yellow>  ' . $this->serverType . '
+      Listen Address:     <success>' . $this->monitor['host'] . '</success>
+      Listen Port:        <success>' . $this->monitor['port'] . '</success>
+      Worker Num:         <success>' . getConf('setting.worker_num') . '</success>
+      Task Worker Num:    <success>' . getConf('setting.task_worker_num') . '</success>';
+        $this->writeln($options);
 
     }
 
@@ -239,19 +288,41 @@ STRING;
      */
     private function help(): string
     {
-
-        echo $this->iconLogo() . "\n\n";
-
-        echo "\033[36m ApiSwoole \033[0mversion \033[33m" . self::$version . " \033[0m" . date('Y-m-d H:i:s') . "\n\n";
+        $this->iconLogo();
 
         $helpString = <<<HELPSTRING
-\033[32m start \033[0m           启动服务
-\033[32m stop \033[0m            停止服务
-\033[32m update \033[0m          升级系统
-\033[32m reload \033[0m          重装服务
+<info> start</info>          启动服务
+<info> stop</info>           停止服务
+<info> update</info>         升级系统
+<info> reload</info>         重装服务
 HELPSTRING;
-        echo $helpString . "\n";
+        $this->writeln($helpString);
     }
 
+
+    /**
+     *[writeln void]
+     * @author  Wongzx <[842687571@qq.com]>
+     * @param string $messages 信息
+     * @param bool $newline 是否换行
+     * @param bool $quit 是否退出
+     * @copyright Copyright (c)
+     * @return    [type]        [description]
+     */
+    private function writeln($messages = '', $newline = true, $quit = false)
+    {
+        // 文字里面颜色标签翻译
+        Style::init();
+        $messages = Style::t($messages);
+        // 输出文字
+        echo $messages;
+        if ($newline) {
+            echo "\n";
+        }
+        // 是否退出
+        if ($quit) {
+            exit();
+        }
+    }
 
 }

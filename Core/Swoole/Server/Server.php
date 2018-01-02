@@ -8,6 +8,8 @@
 
 namespace Core\Swoole\Server;
 
+use Core\Swoole\Process\MainProcess;
+
 class Server
 {
     private static $instance;

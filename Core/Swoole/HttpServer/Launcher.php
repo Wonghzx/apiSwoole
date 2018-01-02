@@ -57,7 +57,8 @@ class Launcher
         if ($routeInfo !== false) {
             switch ($routeInfo[0]) {
                 case \FastRoute\Dispatcher::NOT_FOUND:
-//                    echo "... 404 NdoDispatcherot Found";
+                    Response::getInstance()->withStatus(404);
+                    Response::getInstance()->assign(file_get_contents(ROOT . '/Http/Views/404.html'));
                     break;
                 case \FastRoute\Dispatcher::METHOD_NOT_ALLOWED:
 //                    Response::getInstance()->withStatus(Status::CODE_METHOD_NOT_ALLOWED);

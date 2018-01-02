@@ -271,7 +271,7 @@ ICONLOGO;
      */
     private function printParameters()
     {
-        $options = ' <yellow>Information Panel:</yellow>  ' . $this->serverType . '
+        $options = ' <yellow>Information Panel:</yellow>  ' . $this->serverType . ' version: <yellow>' . SWOOLE_VERSION . '</yellow>
       Listen Address:     <success>' . $this->monitor['host'] . '</success>
       Listen Port:        <success>' . $this->monitor['port'] . '</success>
       Worker Num:         <success>' . getConf('setting.worker_num') . '</success>

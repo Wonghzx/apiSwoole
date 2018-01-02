@@ -38,7 +38,6 @@ class Server
         $this->serverApi->set($conf->get('setting')); //设置运行时参数
 
         // 设置事件监听
-        $this->serverApi->on('start', [$this, 'onStart']);
         $this->serverApi->on('workerStart', [$this, 'onWorkerStart']);
         $this->serverApi->on('workerStop', [$this, 'onWorkerStop']);
         $this->serverApi->on('task', [$this, 'onTask']);
@@ -47,17 +46,6 @@ class Server
         $this->serverApi->on('pipeMessage', [$this, 'onPipeMessage']);
 
         $this->serverApi->start();
-    }
-
-
-    /**
-     * onStart  [启动Http服务器。]
-     * @copyright Copyright (c)
-     * @author Wongzx <842687571@qq.com>
-     */
-    public function onStart($server)
-    {
-
     }
 
 

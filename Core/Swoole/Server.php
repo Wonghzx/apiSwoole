@@ -38,6 +38,7 @@ class Server
                 $socketType = $this->conf->get('tcp.type');
 
                 $this->serverApi = new \swoole_server($ip, $port, $runMode, $socketType);
+                $this->serverApi->on('start', [$this, 'onStart']);
                 $this->swooleServer();
                 break;
             case 'SERVER_TYPE_WEB':
@@ -46,6 +47,7 @@ class Server
                 $runMode = $this->conf->get('http.model');
 
                 $this->serverApi = new \swoole_http_server($ip, $port, $runMode);
+                $this->serverApi->on('start', [$this, 'onStart']);
                 $this->swooleHttpServer();
                 break;
             case 'SERVER_TYPE_WEB_SOCKET':
@@ -54,6 +56,7 @@ class Server
                 $port = $this->conf->get('socket.port');
                 $runMode = $this->conf->get('socket.model');
                 $this->serverApi = new \swoole_websocket_server($ip, $port, $runMode);
+                $this->serverApi->on('start', [$this, 'onStart']);
                 $this->swooleWebSocketServer();
                 break;
             default : {
@@ -99,6 +102,19 @@ class Server
     {
         \Core\Swoole\WebSocket\Server::getInstance()->serverStart($this->getServerApi(), $this->conf);
     }
+
+
+    /**
+     * onStart  [description]
+     * @param $server
+     * @copyright Copyright (c)
+     * @author Wongzx <842687571@qq.com>
+     */
+    public function onStart($server)
+    {
+
+    }
+
 
     /**
      * getServerApi  [获取swoole 服务]

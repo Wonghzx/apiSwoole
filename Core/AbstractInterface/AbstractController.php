@@ -26,7 +26,6 @@ abstract class AbstractController
         }
     }
 
-
     public function request()
     {
         return Request::getInstance();
@@ -59,7 +58,7 @@ abstract class AbstractController
             if (method_exists($this, $realName)) {
                 $this->$realName();
             } else {
-                print_r('s');
+              echo '404 not Found';
             }
         }
     }

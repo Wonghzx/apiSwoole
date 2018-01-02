@@ -47,5 +47,4 @@ class Index extends AbstractViewController
     public function test()
     {
     }
-
 }

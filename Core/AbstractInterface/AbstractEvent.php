@@ -15,7 +15,7 @@ abstract class AbstractEvent
 {
     protected static $instance;
 
-    static function getInstance()
+    static public function getInstance()
     {
         if (!isset(self::$instance)) {
             self::$instance = new static();
@@ -29,7 +29,7 @@ abstract class AbstractEvent
      * @author Wongzx <842687571@qq.com>
      * @return mixed
      */
-    abstract function initialize();
+    abstract public function initialize();
 
 
     /**
@@ -38,7 +38,7 @@ abstract class AbstractEvent
      * @author Wongzx <842687571@qq.com>
      * @return mixed
      */
-    abstract function initializeEd();
+    abstract public function initializeEd();
 
 
     /**
@@ -51,7 +51,7 @@ abstract class AbstractEvent
      * @author Wongzx <842687571@qq.com>
      * @return mixed
      */
-    abstract function addListener();
+    abstract public function addListener();
 
 
     /**
@@ -60,7 +60,7 @@ abstract class AbstractEvent
      * @author Wongzx <842687571@qq.com>
      * @return mixed
      */
-    abstract function addProcess();
+    abstract public function addProcess();
 
 
     /**
@@ -69,7 +69,7 @@ abstract class AbstractEvent
      * @author Wongzx <842687571@qq.com>
      * @return mixed
      */
-    abstract function onListen();
+    abstract public function onListen();
 
 
     /**
@@ -78,7 +78,7 @@ abstract class AbstractEvent
      * @author Wongzx <842687571@qq.com>
      * @return mixed
      */
-    abstract function onStart();
+    abstract public function onStart();
 
 
     /**
@@ -87,7 +87,7 @@ abstract class AbstractEvent
      * @author Wongzx <842687571@qq.com>
      * @return mixed
      */
-    abstract function onReload();
+    abstract public function onReload();
 
 
     /**
@@ -96,7 +96,7 @@ abstract class AbstractEvent
      * @author Wongzx <842687571@qq.com>
      * @return mixed
      */
-    abstract function onStop();
+    abstract public function onStop();
 
 
     /**
@@ -105,7 +105,7 @@ abstract class AbstractEvent
      * @author Wongzx <842687571@qq.com>
      * @return mixed
      */
-    abstract function onShutdown();
+    abstract public function onShutdown();
 
 
     /**
@@ -114,7 +114,7 @@ abstract class AbstractEvent
      * @author Wongzx <842687571@qq.com>
      * @return mixed
      */
-    abstract function onTick();
+    abstract public function onTick();
 
 
     /**
@@ -123,7 +123,7 @@ abstract class AbstractEvent
      * @author Wongzx <842687571@qq.com>
      * @return mixed
      */
-    abstract function onAfter();
+    abstract public function onAfter();
 
 
     /**
@@ -134,7 +134,7 @@ abstract class AbstractEvent
      * @author Wongzx <842687571@qq.com>
      * @return mixed
      */
-    abstract function onDefer();
+    abstract public function onDefer();
 
 
     /**
@@ -143,7 +143,7 @@ abstract class AbstractEvent
      * @author Wongzx <842687571@qq.com>
      * @return mixed
      */
-    abstract function onClearTimer();
+    abstract public function onClearTimer();
 
 
     /**
@@ -152,7 +152,7 @@ abstract class AbstractEvent
      * @author Wongzx <842687571@qq.com>
      * @return mixed
      */
-    abstract function onClose();
+    abstract public function onClose();
 
 
     /**
@@ -161,7 +161,7 @@ abstract class AbstractEvent
      * @author Wongzx <842687571@qq.com>
      * @return mixed
      */
-    abstract function onSend();
+    abstract public function onSend();
 
 
     /**
@@ -170,7 +170,7 @@ abstract class AbstractEvent
      * @author Wongzx <842687571@qq.com>
      * @return mixed
      */
-    abstract function onSendFile();
+    abstract public function onSendFile();
 
 
     /**
@@ -179,7 +179,7 @@ abstract class AbstractEvent
      * @author Wongzx <842687571@qq.com>
      * @return mixed
      */
-    abstract function onSendTo();
+    abstract public function onSendTo();
 
 
     /**
@@ -188,7 +188,7 @@ abstract class AbstractEvent
      * @author Wongzx <842687571@qq.com>
      * @return mixed
      */
-    abstract function onSendWait();
+    abstract public function onSendWait();
 
 
     /**
@@ -197,7 +197,7 @@ abstract class AbstractEvent
      * @author Wongzx <842687571@qq.com>
      * @return mixed
      */
-    abstract function onSendMessage();
+    abstract public function onSendMessage();
 
 
     /**
@@ -206,7 +206,7 @@ abstract class AbstractEvent
      * @author Wongzx <842687571@qq.com>
      * @return mixed
      */
-    abstract function onExist();
+    abstract public function onExist();
 
 
     /**
@@ -215,7 +215,7 @@ abstract class AbstractEvent
      * @author Wongzx <842687571@qq.com>
      * @return mixed
      */
-    abstract function onPause();
+    abstract public function onPause();
 
 
     /**
@@ -224,7 +224,7 @@ abstract class AbstractEvent
      * @author Wongzx <842687571@qq.com>
      * @return mixed
      */
-    abstract function onResume();
+    abstract public function onResume();
 
 
     /**
@@ -233,7 +233,7 @@ abstract class AbstractEvent
      * @author Wongzx <842687571@qq.com>
      * @return mixed
      */
-    abstract function onConnectionInfo();
+    abstract public function onConnectionInfo();
 
 
     /**
@@ -244,7 +244,7 @@ abstract class AbstractEvent
      * @author Wongzx <842687571@qq.com>
      * @return mixed
      */
-    abstract function onConnectionList();
+    abstract public function onConnectionList();
 
 
     /**
@@ -253,7 +253,7 @@ abstract class AbstractEvent
      * @author Wongzx <842687571@qq.com>
      * @return mixed
      */
-    abstract function onBind();
+    abstract public function onBind();
 
 
     /**
@@ -262,7 +262,7 @@ abstract class AbstractEvent
      * @author Wongzx <842687571@qq.com>
      * @return mixed
      */
-    abstract function onStats();
+    abstract public function onStats();
 
 
     /**
@@ -273,7 +273,7 @@ abstract class AbstractEvent
      * @author Wongzx <842687571@qq.com>
      * @return mixed
      */
-    abstract function onTask();
+    abstract public function onTask();
 
 
     /**
@@ -282,7 +282,7 @@ abstract class AbstractEvent
      * @author Wongzx <842687571@qq.com>
      * @return mixed
      */
-    abstract function onTaskWait();
+    abstract public function onTaskWait();
 
 
     /**
@@ -291,7 +291,7 @@ abstract class AbstractEvent
      * @author Wongzx <842687571@qq.com>
      * @return mixed
      */
-    abstract function onTaskWaitMulti();
+    abstract public function onTaskWaitMulti();
 
 
     /**
@@ -300,7 +300,7 @@ abstract class AbstractEvent
      * @author Wongzx <842687571@qq.com>
      * @return mixed
      */
-    abstract function onTaskCo();
+    abstract public function onTaskCo();
 
 
     /**
@@ -309,7 +309,7 @@ abstract class AbstractEvent
      * @author Wongzx <842687571@qq.com>
      * @return mixed
      */
-    abstract function onFinish();
+    abstract public function onFinish();
 
 
     /**
@@ -319,7 +319,7 @@ abstract class AbstractEvent
      * @author Wongzx <842687571@qq.com>
      * @return mixed
      */
-    abstract function onHeartbeat();
+    abstract public function onHeartbeat();
 
 
     /**
@@ -328,7 +328,7 @@ abstract class AbstractEvent
      * @author Wongzx <842687571@qq.com>
      * @return mixed
      */
-    abstract function getLastError();
+    abstract public function getLastError();
 
 
     /**
@@ -337,7 +337,7 @@ abstract class AbstractEvent
      * @author Wongzx <842687571@qq.com>
      * @return mixed
      */
-    abstract function getSocket();
+    abstract public function getSocket();
 
 
     /**
@@ -346,7 +346,7 @@ abstract class AbstractEvent
      * @author Wongzx <842687571@qq.com>
      * @return mixed
      */
-    abstract function onProtect();
+    abstract public function onProtect();
 
 
     /**
@@ -359,16 +359,20 @@ abstract class AbstractEvent
      * @author Wongzx <842687571@qq.com>
      * @return mixed
      */
-    abstract function onConfirm();
+    abstract public function onConfirm();
 
 
-    abstract function onDispatcher(Request $request, Response $response, $targetControllerClass, $targetAction);
+    abstract public function onDispatcher(Request $request, Response $response, $targetControllerClass, $targetAction);
 
-    abstract function onRequest(Request $request, Response $response);
+    abstract public function onRequest(Request $request, Response $response);
 
-    abstract function onResponse(Request $request, Response $response);
+    abstract public function onResponse(Request $request, Response $response);
 
-    abstract function onWorkerStart(\swoole_server $server, $workerId);
+    abstract public function onWorkerStart(\swoole_server $server, $workerId);
 
-    abstract function onWorkerStop(\swoole_server $server, $workerId);
+    abstract public function onWorkerStop(\swoole_server $server, $workerId);
+
+    abstract public function onSetServer(\swoole_server $server);
+
+    abstract public function onGetServer();
 }

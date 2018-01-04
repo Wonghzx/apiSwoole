@@ -8,6 +8,7 @@
 
 namespace Core\Swoole\Server;
 
+use Core\Event;
 use Core\Swoole\Process\MainProcess;
 
 class Server
@@ -37,6 +38,7 @@ class Server
         $this->serverApi->on('task', [$this, 'onTask']);
         $this->serverApi->on('finish', [$this, 'onFinish']);
 
+        Event::getInstance()->onSetServer($this->serverApi);
         $this->serverApi->start();
     }
 

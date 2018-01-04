@@ -9,11 +9,8 @@
 namespace Core;
 
 
-use Core\Swoole\AsyncTaskManager;
-use Core\Swoole\HttpServer\Server;
 use Core\Swoole\HttpServer\Storage\Request;
 use Core\Swoole\HttpServer\Storage\Response;
-use Core\Swoole\Timer;
 use Illuminate\Database\Capsule\Manager AS Capsule;
 
 //use Illuminate\Database\Capsule\Manager AS Capsule;
@@ -21,13 +18,15 @@ use Illuminate\Database\Capsule\Manager AS Capsule;
 class Event extends \Core\AbstractInterface\AbstractEvent
 {
 
+    private $server;
+
     /**
      * initialize  [初始化框架前]
      * @copyright Copyright (c)
      * @author Wongzx <842687571@qq.com>
      * @return mixed
      */
-    function initialize()
+    public function initialize()
     {
         // TODO: Implement initialize() method.
         date_default_timezone_set('Asia/Shanghai');
@@ -39,7 +38,7 @@ class Event extends \Core\AbstractInterface\AbstractEvent
      * @author Wongzx <842687571@qq.com>
      * @return mixed
      */
-    function initializeEd()
+    public function initializeEd()
     {
 //        ShareMemory::getInstance()->clear();
 //        include_once ROOT . '/vendor/autoload.php';
@@ -74,7 +73,7 @@ class Event extends \Core\AbstractInterface\AbstractEvent
      * @author Wongzx <842687571@qq.com>
      * @return mixed
      */
-    function addListener()
+    public function addListener()
     {
         // TODO: Implement addListener() method.
     }
@@ -85,7 +84,7 @@ class Event extends \Core\AbstractInterface\AbstractEvent
      * @author Wongzx <842687571@qq.com>
      * @return mixed
      */
-    function addProcess()
+    public function addProcess()
     {
         // TODO: Implement addProcess() method.
     }
@@ -197,7 +196,7 @@ class Event extends \Core\AbstractInterface\AbstractEvent
      * @author Wongzx <842687571@qq.com>
      * @return mixed
      */
-    function onClose()
+    public function onClose()
     {
         // TODO: Implement onClose() method.
     }
@@ -208,7 +207,7 @@ class Event extends \Core\AbstractInterface\AbstractEvent
      * @author Wongzx <842687571@qq.com>
      * @return mixed
      */
-    function onSend()
+    public function onSend()
     {
         // TODO: Implement onSend() method.
     }
@@ -219,7 +218,7 @@ class Event extends \Core\AbstractInterface\AbstractEvent
      * @author Wongzx <842687571@qq.com>
      * @return mixed
      */
-    function onSendFile()
+    public function onSendFile()
     {
         // TODO: Implement onSendFile() method.
     }
@@ -230,7 +229,7 @@ class Event extends \Core\AbstractInterface\AbstractEvent
      * @author Wongzx <842687571@qq.com>
      * @return mixed
      */
-    function onSendTo()
+    public function onSendTo()
     {
         // TODO: Implement onSendTo() method.
     }
@@ -241,7 +240,7 @@ class Event extends \Core\AbstractInterface\AbstractEvent
      * @author Wongzx <842687571@qq.com>
      * @return mixed
      */
-    function onSendWait()
+    public function onSendWait()
     {
         // TODO: Implement onSendWait() method.
     }
@@ -252,7 +251,7 @@ class Event extends \Core\AbstractInterface\AbstractEvent
      * @author Wongzx <842687571@qq.com>
      * @return mixed
      */
-    function onSendMessage()
+    public function onSendMessage()
     {
         // TODO: Implement onSendMessage() method.
     }
@@ -263,7 +262,7 @@ class Event extends \Core\AbstractInterface\AbstractEvent
      * @author Wongzx <842687571@qq.com>
      * @return mixed
      */
-    function onExist()
+    public function onExist()
     {
         // TODO: Implement onExist() method.
     }
@@ -274,7 +273,7 @@ class Event extends \Core\AbstractInterface\AbstractEvent
      * @author Wongzx <842687571@qq.com>
      * @return mixed
      */
-    function onPause()
+    public function onPause()
     {
         // TODO: Implement onPause() method.
     }
@@ -285,7 +284,7 @@ class Event extends \Core\AbstractInterface\AbstractEvent
      * @author Wongzx <842687571@qq.com>
      * @return mixed
      */
-    function onResume()
+    public function onResume()
     {
         // TODO: Implement onResume() method.
     }
@@ -296,7 +295,7 @@ class Event extends \Core\AbstractInterface\AbstractEvent
      * @author Wongzx <842687571@qq.com>
      * @return mixed
      */
-    function onConnectionInfo()
+    public function onConnectionInfo()
     {
         // TODO: Implement onConnectionInfo() method.
     }
@@ -309,7 +308,7 @@ class Event extends \Core\AbstractInterface\AbstractEvent
      * @author Wongzx <842687571@qq.com>
      * @return mixed
      */
-    function onConnectionList()
+    public function onConnectionList()
     {
         // TODO: Implement onConnectionList() method.
     }
@@ -320,7 +319,7 @@ class Event extends \Core\AbstractInterface\AbstractEvent
      * @author Wongzx <842687571@qq.com>
      * @return mixed
      */
-    function onBind()
+    public function onBind()
     {
         // TODO: Implement onBind() method.
     }
@@ -331,7 +330,7 @@ class Event extends \Core\AbstractInterface\AbstractEvent
      * @author Wongzx <842687571@qq.com>
      * @return mixed
      */
-    function onStats()
+    public function onStats()
     {
         // TODO: Implement onStats() method.
     }
@@ -344,7 +343,7 @@ class Event extends \Core\AbstractInterface\AbstractEvent
      * @author Wongzx <842687571@qq.com>
      * @return mixed
      */
-    function onTask()
+    public function onTask()
     {
         // TODO: Implement onTask() method.
     }
@@ -355,7 +354,7 @@ class Event extends \Core\AbstractInterface\AbstractEvent
      * @author Wongzx <842687571@qq.com>
      * @return mixed
      */
-    function onTaskWait()
+    public function onTaskWait()
     {
         // TODO: Implement onTaskWait() method.
     }
@@ -366,7 +365,7 @@ class Event extends \Core\AbstractInterface\AbstractEvent
      * @author Wongzx <842687571@qq.com>
      * @return mixed
      */
-    function onTaskWaitMulti()
+    public function onTaskWaitMulti()
     {
         // TODO: Implement onTaskWaitMulti() method.
     }
@@ -377,7 +376,7 @@ class Event extends \Core\AbstractInterface\AbstractEvent
      * @author Wongzx <842687571@qq.com>
      * @return mixed
      */
-    function onTaskCo()
+    public function onTaskCo()
     {
         // TODO: Implement onTaskCo() method.
     }
@@ -388,7 +387,7 @@ class Event extends \Core\AbstractInterface\AbstractEvent
      * @author Wongzx <842687571@qq.com>
      * @return mixed
      */
-    function onFinish()
+    public function onFinish()
     {
         // TODO: Implement onFinish() method.
     }
@@ -400,7 +399,7 @@ class Event extends \Core\AbstractInterface\AbstractEvent
      * @author Wongzx <842687571@qq.com>
      * @return mixed
      */
-    function onHeartbeat()
+    public function onHeartbeat()
     {
         // TODO: Implement onHeartbeat() method.
     }
@@ -411,7 +410,7 @@ class Event extends \Core\AbstractInterface\AbstractEvent
      * @author Wongzx <842687571@qq.com>
      * @return mixed
      */
-    function getLastError()
+    public function getLastError()
     {
         // TODO: Implement getLastError() method.
     }
@@ -422,7 +421,7 @@ class Event extends \Core\AbstractInterface\AbstractEvent
      * @author Wongzx <842687571@qq.com>
      * @return mixed
      */
-    function getSocket()
+    public function getSocket()
     {
         // TODO: Implement getSocket() method.
     }
@@ -433,7 +432,7 @@ class Event extends \Core\AbstractInterface\AbstractEvent
      * @author Wongzx <842687571@qq.com>
      * @return mixed
      */
-    function onProtect()
+    public function onProtect()
     {
         // TODO: Implement onProtect() method.
     }
@@ -448,28 +447,28 @@ class Event extends \Core\AbstractInterface\AbstractEvent
      * @author Wongzx <842687571@qq.com>
      * @return mixed
      */
-    function onConfirm()
+    public function onConfirm()
     {
         // TODO: Implement onConfirm() method.
     }
 
-    function onDispatcher(Request $request, Response $response, $targetControllerClass, $targetAction)
+    public function onDispatcher(Request $request, Response $response, $targetControllerClass, $targetAction)
     {
         // TODO: Implement onDispatcher() method.
     }
 
-    function onRequest(Request $request, Response $response)
+    public function onRequest(Request $request, Response $response)
     {
         // TODO: Implement onRequest() method.
     }
 
-    function onResponse(Request $request, Response $response)
+    public function onResponse(Request $request, Response $response)
     {
         // TODO: Implement onResponse() method.
     }
 
 
-    function onWorkerStart(\swoole_server $server, $workerId)
+    public function onWorkerStart(\swoole_server $server, $workerId)
     {
         // TODO: Implement onWorkerStart() method.
         /*
@@ -493,9 +492,20 @@ class Event extends \Core\AbstractInterface\AbstractEvent
         }
     }
 
-    function onWorkerStop(\swoole_server $server, $workerId)
+    public function onWorkerStop(\swoole_server $server, $workerId)
     {
         // TODO: Implement onWorkerStop() method.
-//        print_r($server);
+    }
+
+    public function onSetServer(\swoole_server $server)
+    {
+        // TODO: Implement onSetServer() method.
+        $this->server = $server;
+    }
+
+    public function onGetServer(): \swoole_server
+    {
+        // TODO: Implement onGetServer() method.
+        return $this->server;
     }
 }

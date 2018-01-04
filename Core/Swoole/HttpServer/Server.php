@@ -45,6 +45,7 @@ class Server
         $this->serverApi->on('request', [$this, 'onRequest']);
         $this->serverApi->on('pipeMessage', [$this, 'onPipeMessage']);
 
+        Event::getInstance()->onSetServer($this->serverApi);
         $this->serverApi->start();
     }
 

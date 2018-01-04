@@ -42,6 +42,7 @@ class Server
         $server->on('workerStart', [$this, 'onWorkerStart']);
         $server->on('finish', [$this, 'onFinish']);
 
+        Event::getInstance()->onSetServer($server);
         $server->start();
     }
 

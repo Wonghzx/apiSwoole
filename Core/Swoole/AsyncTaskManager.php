@@ -9,6 +9,7 @@
 namespace Core\Swoole;
 
 use Core\Component\SuperClosure;
+use Core\Event;
 
 /**
  * Class AsyncTaskManager 异步进程任务管理器
@@ -19,7 +20,11 @@ class AsyncTaskManager
 
     const TASK_DISPATCHER_TYPE_RANDOM = -1;
 
+    /**
+     * @var 单例
+     */
     private static $instance;
+
 
     static function getInstance()
     {
@@ -45,7 +50,8 @@ class AsyncTaskManager
      * @copyright Copyright (c)
      * @author Wongzx <842687571@qq.com>
      */
-    public function addTask($taskCallable, $workerId = self::TASK_DISPATCHER_TYPE_RANDOM, $finishCallBack = null)
+
+    public function addTask($taskCallable, $finishCallBack = null, $workerId = self::TASK_DISPATCHER_TYPE_RANDOM)
     {
         if ($taskCallable instanceof \Closure) {
             try {
@@ -54,7 +60,7 @@ class AsyncTaskManager
                 trigger_error("async task serialize fail ");
                 return false;
             }
-            return Server::getInstance()->getServerApi()->task($taskCallable, $workerId, $finishCallBack);
+            return Event::getInstance()->onGetServer()->task($taskCallable, $workerId, $finishCallBack);
         }
     }
 
@@ -69,6 +75,7 @@ class AsyncTaskManager
      * @copyright Copyright (c)
      * @author Wongzx <842687571@qq.com>
      */
+
     public function addTaskWait($callable, $timeout = 0.5, $workerId = self::TASK_DISPATCHER_TYPE_RANDOM)
     {
         if ($callable instanceof \Closure) {
@@ -79,7 +86,7 @@ class AsyncTaskManager
                 return false;
             }
         }
-        return Server::getInstance()->getServerApi()->taskwait($callable, $timeout, $workerId);
+        return Event::getInstance()->onGetServer()->taskwait($callable, $timeout, $workerId);
     }
 
 

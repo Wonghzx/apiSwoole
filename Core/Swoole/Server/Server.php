@@ -35,8 +35,6 @@ class Server
         $this->serverApi->on('connect', [$this, 'onConnect']);
         $this->serverApi->on('receive', [$this, 'onReceive']);
         $this->serverApi->on('close', [$this, 'onClose']);
-        $this->serverApi->on('task', [$this, 'onTask']);
-        $this->serverApi->on('finish', [$this, 'onFinish']);
 
         Event::getInstance()->onSetServer($this->serverApi);
         $this->serverApi->start();
@@ -61,7 +59,7 @@ class Server
      */
     public function onReceive($server, $fd, $reactor_id, $data)
     {
-
+       print_r($reactor_id);
     }
 
 
@@ -74,34 +72,4 @@ class Server
     {
 
     }
-
-
-    /**
-     * onTask  [description]
-     * @param $server
-     * @param $task_id
-     * @param $data
-     * @copyright Copyright (c)
-     * @author Wongzx <842687571@qq.com>
-     */
-    public function onTask($server, $task_id, $data)
-    {
-
-    }
-
-
-    /**
-     * onFinish  [description]
-     * @param $server
-     * @param $taskId
-     * @param $taskObj
-     * @copyright Copyright (c)
-     * @author Wongzx <842687571@qq.com>
-     */
-    public function onFinish($server, $taskId, $taskObj)
-    {
-
-    }
-
-
 }

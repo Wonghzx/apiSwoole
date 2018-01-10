@@ -8,6 +8,11 @@
 
 namespace Core\Swoole;
 
+
+use Core\AbstractInterface\AbstractAsyncTask;
+use Core\Component\SuperClosure;
+use Noodlehaus\Exception;
+
 class Server
 {
     protected static $instance;
@@ -24,7 +29,7 @@ class Server
         return self::$instance;
     }
 
-    function __construct()
+    public function __construct()
     {
         $this->conf = getDi('conf');
 
@@ -38,7 +43,7 @@ class Server
                 $socketType = $this->conf->get('tcp.type');
 
                 $this->serverApi = new \swoole_server($ip, $port, $runMode, $socketType);
-                $this->serverApi->on('start', [$this, 'onStart']);
+                $this->gotoTasks();
                 $this->swooleServer();
                 break;
             case 'SERVER_TYPE_WEB':
@@ -47,7 +52,7 @@ class Server
                 $runMode = $this->conf->get('http.model');
 
                 $this->serverApi = new \swoole_http_server($ip, $port, $runMode);
-                $this->serverApi->on('start', [$this, 'onStart']);
+                $this->gotoTasks();
                 $this->swooleHttpServer();
                 break;
             case 'SERVER_TYPE_WEB_SOCKET':
@@ -56,7 +61,7 @@ class Server
                 $port = $this->conf->get('socket.port');
                 $runMode = $this->conf->get('socket.model');
                 $this->serverApi = new \swoole_websocket_server($ip, $port, $runMode);
-                $this->serverApi->on('start', [$this, 'onStart']);
+                $this->gotoTasks();
                 $this->swooleWebSocketServer();
                 break;
             default : {
@@ -64,7 +69,21 @@ class Server
             }
 
         }
+    }
 
+    /**
+     * gotoTasks  [description]
+     * @copyright Copyright (c)
+     * @author Wongzx <842687571@qq.com>
+     */
+    private function gotoTasks()
+    {
+        $this->serverApi->on('start', [$this, 'onStart']);
+
+        if ($this->conf->get('setting.task_worker_num')) {
+            $this->serverApi->on('task', [$this, 'onTask']);
+            $this->serverApi->on('finish', [$this, 'onFinish']);
+        }
     }
 
 
@@ -115,6 +134,55 @@ class Server
 
     }
 
+
+    /**
+     * onTask  [description]
+     * @param $server
+     * @param $task_id
+     * @param $data
+     * @copyright Copyright (c)
+     * @author Wongzx <842687571@qq.com>
+     */
+    public function onTask($ser, $task_id, $from_id, $taskObj)
+    {
+        try {
+            if (is_string($taskObj) && class_exists($taskObj)) {
+                $taskObj = new $taskObj();
+            }
+            if ($taskObj instanceof AbstractAsyncTask) {
+
+                return $taskObj->handler($ser, $task_id, $from_id);
+
+            } elseif ($taskObj instanceof SuperClosure) {
+
+                return $taskObj($ser, $task_id);
+            }
+            return null;
+        } catch (Exception $exception) {
+            return trigger_error($exception);
+        }
+    }
+
+
+    /**
+     * onFinish  [description]
+     * @param $server
+     * @param $taskId
+     * @param $taskObj
+     * @copyright Copyright (c)
+     * @author Wongzx <842687571@qq.com>
+     */
+    public function onFinish($server, $taskId, $taskObj)
+    {
+        try {
+            //仅仅接受AbstractTask回调处理
+            if ($taskObj instanceof AbstractAsyncTask) {
+                $taskObj->finishCallBack($server, $taskId, $taskObj->getDataForFinishCallBack());
+            }
+        } catch (\Exception $exception) {
+            trigger_error($exception);
+        }
+    }
 
     /**
      * getServerApi  [获取swoole 服务]

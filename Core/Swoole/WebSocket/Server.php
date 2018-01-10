@@ -38,9 +38,7 @@ class Server
         $server->on('open', [$this, 'onOpen']);
         $server->on('message', [$this, 'onMessage']);
         $server->on('close', [$this, 'onClose']);
-        $server->on('task', [$this, 'onTask']);
         $server->on('workerStart', [$this, 'onWorkerStart']);
-        $server->on('finish', [$this, 'onFinish']);
 
         Event::getInstance()->onSetServer($server);
         $server->start();
@@ -97,36 +95,6 @@ class Server
     {
 
     }
-
-
-
-    /**
-     * onTask  [description]
-     * @param $server
-     * @param $task_id
-     * @param $data
-     * @copyright Copyright (c)
-     * @author Wongzx <842687571@qq.com>
-     */
-    final public function onTask($server, $task_id, $data)
-    {
-
-    }
-
-
-    /**
-     * onFinish  [description]
-     * @param $server
-     * @param $taskId
-     * @param $taskObj
-     * @copyright Copyright (c)
-     * @author Wongzx <842687571@qq.com>
-     */
-    final public function onFinish($server, $taskId, $taskObj)
-    {
-
-    }
-
 
     /**
      * onWorkerStart  [worker进程启动前初始化]

@@ -38,12 +38,10 @@ class Server
         $this->serverApi->set($conf->get('setting')); //设置运行时参数
 
         // 设置事件监听
+        $this->serverApi->on('pipeMessage', [$this, 'onPipeMessage']);
+        $this->serverApi->on('request', [$this, 'onRequest']);
         $this->serverApi->on('workerStart', [$this, 'onWorkerStart']);
         $this->serverApi->on('workerStop', [$this, 'onWorkerStop']);
-        $this->serverApi->on('task', [$this, 'onTask']);
-        $this->serverApi->on('finish', [$this, 'onFinish']);
-        $this->serverApi->on('request', [$this, 'onRequest']);
-        $this->serverApi->on('pipeMessage', [$this, 'onPipeMessage']);
 
         Event::getInstance()->onSetServer($this->serverApi);
         $this->serverApi->start();
@@ -97,33 +95,6 @@ class Server
             Trigger::exception($exception);
         }
         $responses->send(true);
-    }
-
-
-    /**
-     * onTask  [description]
-     * @param $server
-     * @param $task_id
-     * @param $data
-     * @copyright Copyright (c)
-     * @author Wongzx <842687571@qq.com>
-     */
-    public function onTask($server, $task_id, $data)
-    {
-
-    }
-
-    /**
-     * onFinish  [description]
-     * @param $server
-     * @param $taskId
-     * @param $taskObj
-     * @copyright Copyright (c)
-     * @author Wongzx <842687571@qq.com>
-     */
-    public function onFinish($server, $taskId, $taskObj)
-    {
-
     }
 
 

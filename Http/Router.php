@@ -46,7 +46,7 @@ class Router extends AbstractRouter
                 'controller' => '/Index',
                 'action' => [
                     "GET,POST@index",
-                    "GET,POST@test",
+                    "GET,POST@taskManager",
                 ]
             ],
 

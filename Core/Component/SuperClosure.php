@@ -30,22 +30,22 @@ class SuperClosure
         $this->serializer = new Serializer();
     }
 
-    function __sleep()
+    public function __sleep()
     {
         // TODO: Implement __sleep() method.
         $this->serializedJson = $this->serializer->serialize($this->func);
         $this->isSerialized = 1;
-        return array("serializedJson", 'isSerialized');
+        return ["serializedJson", 'isSerialized'];
     }
 
-    function __wakeup()
+    public function __wakeup()
     {
         // TODO: Implement __wakeup() method.
         $this->serializer = new Serializer();
         $this->func = $this->serializer->unserialize($this->serializedJson);
     }
 
-    function __invoke()
+    public function __invoke()
     {
         // TODO: Implement __invoke() method.
         /*

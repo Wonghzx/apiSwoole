@@ -3,7 +3,7 @@
   "description": "PHP 常驻内存型PHP框架 ",
   "license": "MIT",
   "keywords": [
-    "message queue"
+    "message queue swoole Api"
   ],
   "version": "1.0.0",
   "authors": [

@@ -14,7 +14,7 @@ ApiSwoole 是一款基于Swoole Server 原生协程 开发的常驻内存型PHP�
 
 # 环境要求
 1. PHP 7.X
-2. [Swoole 2.x](https://github.com/swoole/swoole-src/releases), 需开启协程和异步Redis
+2. [Swoole 2.x](https://www.swoole.com/), 需开启协程和异步Redis
 4. [Composer](https://getcomposer.org/)
 5. [Inotify](https://pecl.php.net/package/inotify) (自动 Reload 服务 可选 )++在开发过程中经常需要更新文件，由于Swoole常驻内存的特性，文件在框架启动时已经载入了内存，当文件被修改时需要手动重启服务
 

@@ -109,3 +109,116 @@ if (!function_exists('_env')) {
         return $value;
     }
 }
+
+if (!function_exists('hideTel')) {
+    /**
+     * hideTel  [隐藏手机号中间4位]
+     * @param $phone
+     * @return mixed
+     */
+    function hideTel($phone)
+    {
+        $IsWhat = preg_match('/(0[0-9]{2,3}[-]?[2-9][0-9]{6,7}[-]?[0-9]?)/i', $phone);
+        if ($IsWhat == 1) {
+            return preg_replace('/(0[0-9]{2,3}[-]?[2-9])[0-9]{3,4}([0-9]{3}[-]?[0-9]?)/i', '$1****$2', $phone);
+        } else {
+            return preg_replace('/(1[3587]{1}[0-9])[0-9]{4}([0-9]{4})/i', '$1****$2', $phone);
+        }
+    }
+}
+
+
+if (!function_exists('timeDiff')) {
+    /**
+     * timeDiff  [计算两个时间的时差]
+     * @param $begin_time
+     * @param $end_time
+     * @return array
+     */
+    function timeDiff($begin_time, $end_time)
+    {
+        if ($begin_time < $end_time) {
+            $startTime = $begin_time;
+            $endTime = $end_time;
+        } else {
+            $startTime = $end_time;
+            $endTime = $begin_time;
+        }
+        $timeDiff = $endTime - $startTime;
+
+        $days = intval($timeDiff / 86400);
+
+        $remain = $timeDiff % 86400;
+
+        $hours = sprintf("%02d", intval($remain / 3600));
+
+        $remain = $remain % 3600;
+
+        $mins = sprintf("%02d", intval($remain / 60));
+
+        $secs = sprintf("%02d", $remain % 60);
+
+        $res = ["day" => $days, "hour" => $hours, "min" => $mins, "sec" => $secs];
+
+        return $res;
+    }
+}
+
+if (!function_exists('curlPosts')) {
+    /**
+     * curlPosts  [description]
+     * @param $url
+     * @param $data
+     * @return mixed
+     */
+    function curlPosts($url, array $params)
+    {
+        $curl = curl_init();
+        curl_setopt($curl, CURLOPT_CUSTOMREQUEST, "POST");
+        curl_setopt($curl, CURLOPT_POSTFIELDS, $params);
+        curl_setopt($curl, CURLOPT_URL, $url);
+        curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
+        curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, FALSE); // https请求 不验证证书和hosts
+        curl_setopt($curl, CURLOPT_SSL_VERIFYHOST, FALSE);
+        curl_setopt($curl, CURLOPT_HTTPHEADER, array(
+            "Content-Type: application/json", "Content-Length: " . strlen($params)));
+        $result = json_decode(curl_exec($curl), true);
+        curl_close($curl);
+
+        return $result;
+    }
+}
+
+if (!function_exists('curlGets')) {
+    /**
+     * curlGets  [description]
+     * @param $url
+     * @param array $params
+     * @param int $timeOut
+     * @return mixed
+     */
+    function curlGets($url, array $params, $timeOut = 300)
+    {
+        $flag = (strpos($url, '?') !== false) ? '&' : '?';
+        $query = http_build_query($params);
+        $url = $url . $flag . $query;
+        //初始化curl
+        $ch = curl_init();
+        //设置超时
+        curl_setopt($ch, CURLOPT_TIMEOUT, $timeOut);
+        //设置选项，包括URL
+        curl_setopt($ch, CURLOPT_URL, $url);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+        curl_setopt($ch, CURLOPT_HEADER, 0);
+        $return = curl_exec($ch);
+        curl_close($ch);
+        return $return;
+    }
+}
+
+if (!function_exists('sendMail')) {
+    function sendMail()
+    {
+        
+    }
+}

@@ -215,10 +215,3 @@ if (!function_exists('curlGets')) {
         return $return;
     }
 }
-
-if (!function_exists('sendMail')) {
-    function sendMail()
-    {
-        
-    }
-}

@@ -4,6 +4,8 @@ ApiSwoole 是一款基于Swoole Server 原生协程 开发的常驻内存型PHP�
 
 - 基于 Swoole 扩展
 - 内置 HTTP 协程服务器
+- 内置 WebSocket 协程服务器
+- 内置 TCP、UDP、UnixSocket 协程服务器
 - VC 分层设计 （目前没 M 模式）
 - 高性能路由
 - 全局容器注入
@@ -20,5 +22,4 @@ ApiSwoole 是一款基于Swoole Server 原生协程 开发的常驻内存型PHP�
 
 
 # 配置
-
 复制项目根目录的 `.env.example` 并命名为 `.env`

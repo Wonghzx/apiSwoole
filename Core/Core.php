@@ -15,7 +15,6 @@ use Core\Component\File;
 use Core\Console\Console;
 use Core\Swoole\HttpServer\Storage\Request;
 use Core\Swoole\HttpServer\Storage\Response;
-use Core\Swoole\Server;
 use Dotenv\Dotenv;
 use Noodlehaus\Config;
 
@@ -27,17 +26,7 @@ class Core
 {
     protected static $instance;
 
-    private $preCall;
-
-
     private $loadConf;
-
-    /**
-     * 应用对象
-     * @var Application
-     */
-    private $app;
-
 
 
     static function getInstance()
@@ -49,17 +38,6 @@ class Core
         return self::$instance;
     }
 
-
-    /**
-     * run  [开启框架]
-     * @copyright Copyright (c)
-     * @author Wongzx <842687571@qq.com>
-     */
-    public function run()
-    {
-
-        Server::getInstance();
-    }
 
     /**
      * initialize  [初始化]

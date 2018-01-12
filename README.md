@@ -56,4 +56,27 @@ php apiswoole tcp:start
 php apiswoole socket:start
 ```
 
+启动服务成功
+
+```
+
+         /\                         .-.                  .;
+     _  / |             .-. .;;;.`-'                    .;'
+    (  /  |  .`..:.     `-';;  (_)`;     .-.-.   .-.   .;  .-.
+     `/.__|_.' ;;  :   ;'  `;;;.  ;  ;   ;;   ;';   ;':: .;.-'
+ .:' /    |    ;;_.`_.;:._._   `: `.' `.' `;;'  `;;'_;;_.-`:::'
+(__.'     `-' .;'         (_.;;;'
+
+ ApiSwoole Version 1.0.0 2018-01-12 17:06:51
+
+ Information Panel:  HttpServer version: 2.0.10
+      Listen Address:     0.0.0.0
+      Listen Port:        9501
+      Worker Num:         8
+      Task Worker Num:    8
+
+
+```
+
+
 

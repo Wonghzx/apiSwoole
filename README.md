@@ -48,12 +48,12 @@ php apiswoole stop
 
 **TCP UDP UnixSocket 启动**
 ```php
-    php apiswoole tcp:start
+php apiswoole tcp:start
 ```
 
-** WebSocket 启动**
+**WebSocket 启动**
 ```php
-    php apiswoole socket:start
+php apiswoole socket:start
 ```
 
 

@@ -23,3 +23,12 @@ ApiSwoole 是一款基于Swoole Server 原生协程 开发的常驻内存型PHP�
 
 # 配置
 复制项目根目录的 `.env.example` 并命名为 `.env`
+
+
+# 运行
+1. composer update
+2. php apiswoole start (启动 HttpServer) tcp:start (启动 TCP UDP UnixSocket)  socket:start (启动WebSocket)
+
+
+
+

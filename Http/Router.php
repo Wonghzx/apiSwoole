@@ -11,7 +11,6 @@
 namespace Http;
 
 use Core\AbstractInterface\AbstractRouter;
-use Core\Swoole\HttpServer\Storage\Response;
 use FastRoute\RouteCollector;
 
 class Router extends AbstractRouter
@@ -46,9 +45,15 @@ class Router extends AbstractRouter
                 'controller' => '/Index',
                 'action' => [
                     "GET,POST@index",
-                    "GET,POST@taskManager",
                 ]
             ],
+            [
+                'controller' => '/Test',
+                'action' => [
+                    "GET@taskManager",
+                    "GET@testTimer",
+                ]
+            ]
 
         ];
     }

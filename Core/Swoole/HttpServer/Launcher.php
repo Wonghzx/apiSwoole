@@ -61,8 +61,8 @@ class Launcher
                     Response::getInstance()->assign(file_get_contents(ROOT . '/Http/Views/404.html'));
                     break;
                 case \FastRoute\Dispatcher::METHOD_NOT_ALLOWED:
-//                    Response::getInstance()->withStatus(Status::CODE_METHOD_NOT_ALLOWED);
-//                    echo "405 Method Not Allowed";
+                    Response::getInstance()->withStatus(404);
+                    Response::getInstance()->assign(file_get_contents(ROOT . '/Http/Views/404.html'));
                     break;
                 case \FastRoute\Dispatcher::FOUND:
                     $handler = $routeInfo[1];

@@ -9,6 +9,7 @@
 namespace Core\Swoole\Server;
 
 use Core\Event;
+use Core\Swoole\AsyncTaskManager;
 use Core\Swoole\Process\MainProcess;
 
 class Server
@@ -59,7 +60,9 @@ class Server
      */
     public function onReceive($server, $fd, $reactor_id, $data)
     {
-       print_r($reactor_id);
+        AsyncTaskManager::getInstance()->addTask(function () use ($fd) {
+
+        });
     }
 
 

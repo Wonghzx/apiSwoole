@@ -117,6 +117,7 @@ class Console
                 $this->monitor['port'] = $conf->get('http.port');
             }
             $this->commandHandler($cmd);
+            $this->opCacheClear();
         } catch (\Throwable $e) {
 
         }
@@ -325,4 +326,19 @@ HELPSTRING;
         }
     }
 
+
+    /**
+     * opCacheClear  [清除APC缓存]
+     * @copyright Copyright (c)
+     * @author Wongzx <842687571@qq.com>
+     */
+    private function opCacheClear()
+    {
+        if (function_exists('apc_clear_cache')) {
+            apc_clear_cache();
+        }
+        if (function_exists('opcache_reset')) {
+            opcache_reset();
+        }
+    }
 }

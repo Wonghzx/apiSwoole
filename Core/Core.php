@@ -9,13 +9,14 @@
 
 namespace Core;
 
-use Core\Component\Di;
+use Core\Component\Bean\Container;
 use Core\Component\Error\Trigger;
 use Core\Component\File;
 use Core\Console\Console;
 use Core\Swoole\HttpServer\Storage\Request;
 use Core\Swoole\HttpServer\Storage\Response;
 use Dotenv\Dotenv;
+use Http\Service\Dispatcher;
 use Noodlehaus\Config;
 
 /**
@@ -53,7 +54,7 @@ class Core
         /**
          * 加载 Conf
          */
-        Di::getInstance()->set('conf', Config::load(ROOT . '/Conf'));
+        Container::getInstance()->offsetSet('conf', Config::load(ROOT . '/Conf'));
         $this->loadConf = getDi('conf');
 
         /**

@@ -93,8 +93,9 @@ class Server
         } catch (\Exception $exception) {
 
             Trigger::exception($exception);
+        } finally {
+            $responses->send(true);
         }
-        $responses->send(true);
     }
 
 

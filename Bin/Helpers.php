@@ -14,12 +14,9 @@ if (!function_exists('getDi')) {
      * @author Wongzx <842687571@qq.com>
      * @return mixed|static
      */
-    function getDi($abstract = null)
+    function getDi($abstract = 'conf')
     {
-        if (is_null($abstract)) {
-            return \Core\Component\Di::getInstance();
-        }
-        return \Core\Component\Di::getInstance()->get($abstract);
+        return \Core\Component\Bean\Container::getInstance()->offsetGet($abstract);
     }
 
 }

@@ -9,6 +9,7 @@
 namespace Http\Service;
 
 use Core\Component\Error\Trigger;
+use Swoole\Coroutine\Redis AS red;
 
 class Dispatcher implements DispatcherInterface
 {
@@ -35,9 +36,7 @@ class Dispatcher implements DispatcherInterface
             Trigger::exception($exception);
 
         } finally {
-            foreach ($this->xrange(1, 9, 2) as $number) {
-//                print_r($number);
-            }
+
             $server->send($fd, $data);
         }
     }
@@ -68,25 +67,5 @@ class Dispatcher implements DispatcherInterface
         list($server, $fd, $reactorId) = $params;
     }
 
-    function xrange($start, $limit, $step = 1)
-    {
-        if ($start < $limit) {
-            if ($step <= 0) {
-                throw new \LogicException('Step must be +ve');
-            }
-
-            for ($i = $start; $i <= $limit; $i += $step) {
-                yield $i;
-            }
-        } else {
-            if ($step >= 0) {
-                throw new \LogicException('Step must be -ve');
-            }
-
-            for ($i = $start; $i >= $limit; $i += $step) {
-                yield $i;
-            }
-        }
-    }
 }
 

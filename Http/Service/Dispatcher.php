@@ -9,8 +9,10 @@
 namespace Http\Service;
 
 use Core\Component\Error\Trigger;
+use Core\Swoole\Async\Redis\RedisClient;
+use Core\Swoole\Async\Redis\RedisConnection;
 
-class Dispatcher implements DispatcherInterface
+class Dispatcher implements IDispatcher
 {
 
 
@@ -35,9 +37,7 @@ class Dispatcher implements DispatcherInterface
             Trigger::exception($exception);
 
         } finally {
-            $client = new \swoole_redis();
-            print_r($client);
-            $server->send($fd, $data);
+            $server->send($fd, 'xxxx');
         }
     }
 

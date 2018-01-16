@@ -12,7 +12,7 @@ namespace Http\Service;
  * Interface DispatcherInterface
  * @package Http\Service
  */
-interface DispatcherInterface
+interface IDispatcher
 {
     /**
      * doDispatcher  [description]

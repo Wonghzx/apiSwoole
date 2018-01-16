@@ -9,6 +9,7 @@
 namespace Core;
 
 
+use Core\Swoole\Async\Redis\RedisClient;
 use Core\Swoole\HttpServer\Storage\Request;
 use Core\Swoole\HttpServer\Storage\Response;
 use Illuminate\Database\Capsule\Manager AS Capsule;

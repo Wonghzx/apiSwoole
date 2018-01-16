@@ -16,7 +16,7 @@ use Noodlehaus\Exception;
  * Class Timer 定时器
  * @package Core\Swoole
  */
-class Timer implements InterfaceTimer
+class Timer implements ITimer
 {
 
     /**

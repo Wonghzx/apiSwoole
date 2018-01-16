@@ -29,13 +29,13 @@ if (!function_exists('getConf')) {
      * @author Wongzx <842687571@qq.com>
      * @return mixed|static
      */
-    function getConf(string $key)
+    function getConf(string $key = '', $default = '')
     {
         $conf = getDi('conf');
         if (is_null($key)) {
             return $conf;
         }
-        return $conf->get($key);
+        return $conf->get($key, $default);
     }
 }
 

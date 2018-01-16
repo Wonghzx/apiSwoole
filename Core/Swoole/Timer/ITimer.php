@@ -8,7 +8,7 @@
 
 namespace Core\Swoole\Timer;
 
-interface InterfaceTimer
+interface ITimer
 {
 
     /**

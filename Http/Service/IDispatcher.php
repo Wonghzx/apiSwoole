@@ -44,4 +44,13 @@ interface IDispatcher
     public function doClose(...$params);
 
 
+    /**
+     * onWorkerStart  [description]
+     * @param $server
+     * @param int $workerId
+     * @return mixed
+     */
+    public function doWorkerStart($server, int $workerId);
+
+
 }

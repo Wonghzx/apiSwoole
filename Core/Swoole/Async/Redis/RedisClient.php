@@ -17,6 +17,19 @@ class RedisClient
 
     public $debug = false;
 
+
+    private static $instance;
+
+
+    static public function getInstance($host = 'localhost', $port = 6379, $timeout = 0.1)
+    {
+        if (!isset(self::$instance)) {
+            self::$instance = new static($host = 'localhost', $port = 6379, $timeout = 0.1);
+        }
+        return self::$instance;
+    }
+
+
     /**
      * 空闲连接池
      * @var array

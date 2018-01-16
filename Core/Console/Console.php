@@ -74,7 +74,7 @@ class Console
             $conf = getDi('conf');
             if (!in_array($this->input[0], self::DEFAULT_CMD)) {
                 switch ($this->input[0]) {
-                    case 'tcp':
+                    case 'rpc':
                         $conf->set('setting.server_type', 'SERVER_TYPE_SERVER');
                         $this->monitor['host'] = $conf->get('tcp.host');
                         $this->monitor['port'] = $conf->get('tcp.port');

@@ -48,7 +48,7 @@ php apiswoole stop
 
 **RPC 启动**
 ```php
-php apiswoole tcp:start
+php apiswoole rpc:start
 ```
 
 **WebSocket 启动**

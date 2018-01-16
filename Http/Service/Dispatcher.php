@@ -9,7 +9,6 @@
 namespace Http\Service;
 
 use Core\Component\Error\Trigger;
-use Swoole\Coroutine\Redis AS red;
 
 class Dispatcher implements DispatcherInterface
 {
@@ -36,7 +35,8 @@ class Dispatcher implements DispatcherInterface
             Trigger::exception($exception);
 
         } finally {
-
+            $client = new \swoole_redis();
+            print_r($client);
             $server->send($fd, $data);
         }
     }

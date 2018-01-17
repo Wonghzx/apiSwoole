@@ -9,8 +9,9 @@
 namespace Http\Service;
 
 use Core\Component\Error\Trigger;
+use Core\Swoole\Async\Redis\RedisAsyncPool;
 use Core\Swoole\Async\Redis\RedisClient;
-use Core\Swoole\Async\Redis\RedisConnection;
+use Core\Swoole\AsyncTaskManager;
 
 class Dispatcher implements IDispatcher
 {
@@ -53,10 +54,6 @@ class Dispatcher implements IDispatcher
     {
         // TODO: Implement doConnect() method.
         list($server, $fd, $reactorId) = $params;
-        $res = new RedisClient('127.0.0.1');
-        $res->subscribe('test1', function ($instance, $channelName, $message) {
-            echo $channelName, "==>", $message, PHP_EOL;
-        });
 
     }
 
@@ -83,12 +80,29 @@ class Dispatcher implements IDispatcher
     {
         // TODO: Implement doWorkerStart() method.
         $jobType = $server->taskworker ? 'Tasker' : 'Worker';
+        $GLOBALS['server'] = $server;
         if ($jobType == 'Worker') {
             if ($workerId === 0) {
-                $redis = RedisClient::getInstance('127.0.0.1');
-                $a = $redis->get('test', function ($result, $success) {
-//                  print_r($result);
-                });
+                $redis = RedisAsyncPool::getInstance();
+                $redis->reconnect();
+                $redis->abc();
+//                $redis->execute(['get'], function ($client, $result) {
+//
+//                });
+//                $redis->redisPool->get('key', function ($client, $result){
+//                    print_r($result);
+//                });
+//                $redis = RedisClient::getInstance('127.0.0.1');
+//                $redis->psubscribe('test1', function ($ins, $pattern, $channel, $data) {
+//                    $taskData = array(
+//                        'cmd' => 'pushToClient',
+//                        'val' => $data,
+//                    );
+//                    //请注意，taskwait是同步阻塞的，所以改脚本并不是全异步非阻塞的
+//                    AsyncTaskManager::getInstance()->addTaskWait(function () use ($taskData) {
+//                        print_r($taskData);
+//                    });
+//                });
             }
         }
 
@@ -97,7 +111,7 @@ class Dispatcher implements IDispatcher
 
     public function sendTask($ins, $pattern, $channel, $data)
     {
-        echo 123;
+
     }
 
 }

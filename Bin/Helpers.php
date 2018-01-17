@@ -32,7 +32,7 @@ if (!function_exists('getConf')) {
     function getConf(string $key = '', $default = '')
     {
         $conf = getDi('conf');
-        if (is_null($key)) {
+        if (empty($key)) {
             return $conf;
         }
         return $conf->get($key, $default);

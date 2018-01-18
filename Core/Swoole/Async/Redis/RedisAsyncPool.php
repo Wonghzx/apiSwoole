@@ -27,14 +27,10 @@ class RedisAsyncPool extends AsyncPool
         return self::$instance;
     }
 
-
-    public function __call($name, $arguments)
+    public function __construct()
     {
-        $callback = array_pop($arguments);
-        $data = [
-            'name' => $name,
-            'arguments' => $arguments
-        ];
+        $this->reconnect();
+        var_dump($this->redisPool);
     }
 
     public function reconnect($client = null)
@@ -50,7 +46,7 @@ class RedisAsyncPool extends AsyncPool
 
 
     /**
-     * connectCallback  [$callback: 连接成功后回调的函数]
+     * connectCallback  [连接成功后回调的函数]
      * @param $client
      * @param $result
      */
@@ -66,7 +62,7 @@ class RedisAsyncPool extends AsyncPool
             $client->auth($redisPassword, function (\swoole_redis $client, $result) {
                 if (!$result) {
                     $errMsg = $client->errMsg;
-//                    unset($client);
+                    unset($client);
                     Trigger::exception($errMsg);
                 }
                 //认证通过
@@ -78,12 +74,12 @@ class RedisAsyncPool extends AsyncPool
                             Trigger::exception($client->errMsg);
                         }
                         $client->isClose = false;
-                        $this->pushToPool($client);
+                        $this->redisPool = $client;
                     });
 
                 } else {
                     $client->isClose = false;
-                    $this->pushToPool($client);
+                    $this->redisPool = $client;
                 }
             });
         } else {
@@ -94,19 +90,20 @@ class RedisAsyncPool extends AsyncPool
                         Trigger::exception($client->errMsg);
                     }
                     $client->isClose = false;
-                    $this->pushToPool($client);
+                    $this->redisPool = $client;
                 });
             } else {
                 $client->isClose = false;
-                $this->pushToPool($client);
+                $this->redisPool = $client;
             }
         }
+
     }
 
 
     public function onMessage(\swoole_redis $redis, array $message)
     {
-
+        print_r($message);
     }
 
 
@@ -120,13 +117,10 @@ class RedisAsyncPool extends AsyncPool
         $client->close();
     }
 
-    public function execute($data)
-    {
-        // TODO: Implement execute() method.
-    }
 
     public function abc()
     {
-        print_r($this->pool);
+
     }
+
 }

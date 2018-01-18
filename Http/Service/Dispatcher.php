@@ -11,6 +11,7 @@ namespace Http\Service;
 use Core\Component\Error\Trigger;
 use Core\Swoole\Async\Redis\RedisAsyncPool;
 use Core\Swoole\Async\Redis\RedisClient;
+use Core\Swoole\Async\Redis\RedisRoute;
 use Core\Swoole\AsyncTaskManager;
 
 class Dispatcher implements IDispatcher
@@ -38,7 +39,13 @@ class Dispatcher implements IDispatcher
             Trigger::exception($exception);
 
         } finally {
-
+//            $redis = new \Redis();
+//            $redis->connect('127.0.0.1', '6379');
+//            $redis->auth('123456');
+//            $redis->subscribe(['test'], function ($client, $result, $data) use ($server, $fd) {
+//                if (!empty($data)) {
+//                }
+//            });
             $server->send($fd, 'xxxxx');
         }
     }
@@ -84,8 +91,7 @@ class Dispatcher implements IDispatcher
         if ($jobType == 'Worker') {
             if ($workerId === 0) {
                 $redis = RedisAsyncPool::getInstance();
-                $redis->reconnect();
-                $redis->abc();
+
 //                $redis->execute(['get'], function ($client, $result) {
 //
 //                });

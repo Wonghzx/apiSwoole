@@ -10,7 +10,5 @@ namespace Core\Swoole\Async;
 
 interface IAsyncPool
 {
-    public function execute($data);
 
-    public function prepareOne();
 }

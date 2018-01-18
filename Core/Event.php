@@ -8,13 +8,10 @@
 
 namespace Core;
 
-
-use Core\Swoole\Async\Redis\RedisClient;
+use Core\Swoole\Async\Redis\PubSubRedis;
 use Core\Swoole\HttpServer\Storage\Request;
 use Core\Swoole\HttpServer\Storage\Response;
 use Illuminate\Database\Capsule\Manager AS Capsule;
-
-//use Illuminate\Database\Capsule\Manager AS Capsule;
 
 class Event extends \Core\AbstractInterface\AbstractEvent
 {
@@ -42,7 +39,6 @@ class Event extends \Core\AbstractInterface\AbstractEvent
     public function initializeEd()
     {
 //        ShareMemory::getInstance()->clear();
-//        include_once ROOT . '/vendor/autoload.php';
         // TODO: Implement initializeEd() method.
 
         $dbConf = getConf('database');

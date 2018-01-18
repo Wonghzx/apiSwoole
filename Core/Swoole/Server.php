@@ -11,6 +11,7 @@ namespace Core\Swoole;
 
 use Core\AbstractInterface\AbstractAsyncTask;
 use Core\Component\SuperClosure;
+use Core\Swoole\Async\Redis\PubSubRedis;
 use Noodlehaus\Exception;
 
 class Server
@@ -131,7 +132,7 @@ class Server
      */
     public function onStart($server)
     {
-
+//        print_r($server);
     }
 
 

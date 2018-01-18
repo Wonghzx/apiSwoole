@@ -9,28 +9,27 @@
 namespace Core\Swoole\Async\Redis;
 
 use Core\Component\Error\Trigger;
-use Core\Swoole\Async\AsyncPool;
 
-class RedisAsyncPool extends AsyncPool
+class PubSubRedis
 {
-    private $client;
-
     private static $instance;
+
+    private $client;
 
     public $redisPool;
 
     static public function getInstance()
     {
         if (!isset(self::$instance)) {
-            self::$instance = new static();
+            self::$instance = new PubSubRedis();
         }
         return self::$instance;
     }
 
+//
     public function __construct()
     {
         $this->reconnect();
-        var_dump($this->redisPool);
     }
 
     public function reconnect($client = null)
@@ -39,9 +38,12 @@ class RedisAsyncPool extends AsyncPool
             $this->client = new \swoole_redis();
         }
 
+        $host = getConf('redis.host', '127.0.0.1');
+        $port = getConf('redis.port', 6379);
+
         $this->client->on('message', [$this, 'onMessage']);
         $this->client->on('close', [$this, 'onClose']);
-        $this->client->connect('127.0.0.1', 6379, [$this, 'connectCallback']);
+        $this->client->connect($host, $port, [$this, 'connectCallback']);
     }
 
 
@@ -62,7 +64,7 @@ class RedisAsyncPool extends AsyncPool
             $client->auth($redisPassword, function (\swoole_redis $client, $result) {
                 if (!$result) {
                     $errMsg = $client->errMsg;
-                    unset($client);
+//                    unset($client);
                     Trigger::exception($errMsg);
                 }
                 //认证通过
@@ -75,6 +77,7 @@ class RedisAsyncPool extends AsyncPool
                         }
                         $client->isClose = false;
                         $this->redisPool = $client;
+                        $this->redisPool->psubscribe('*');
                     });
 
                 } else {
@@ -91,6 +94,7 @@ class RedisAsyncPool extends AsyncPool
                     }
                     $client->isClose = false;
                     $this->redisPool = $client;
+                    $this->redisPool->psubscribe('*');
                 });
             } else {
                 $client->isClose = false;
@@ -116,11 +120,4 @@ class RedisAsyncPool extends AsyncPool
     {
         $client->close();
     }
-
-
-    public function abc()
-    {
-
-    }
-
 }

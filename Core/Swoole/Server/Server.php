@@ -91,7 +91,6 @@ class Server
     public function onWorkerStart(Ser $server, int $workerId)
     {
         Event::getInstance()->onWorkerStart($server, $workerId);
-        Container::getDispatcherService()->doWorkerStart($server, $workerId);
     }
 
     /**

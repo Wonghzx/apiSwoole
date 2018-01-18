@@ -23,7 +23,7 @@ class Server
     protected static $instance;
 
 
-    static function getInstance()
+    public static function getInstance()
     {
         if (!isset(self::$instance)) {
             self::$instance = new static();

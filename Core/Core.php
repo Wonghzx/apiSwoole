@@ -16,7 +16,6 @@ use Core\Console\Console;
 use Core\Swoole\HttpServer\Storage\Request;
 use Core\Swoole\HttpServer\Storage\Response;
 use Dotenv\Dotenv;
-use Http\Service\Dispatcher;
 use Noodlehaus\Config;
 
 /**

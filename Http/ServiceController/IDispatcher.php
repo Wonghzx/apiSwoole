@@ -6,7 +6,7 @@
  * Time: 14:50
  */
 
-namespace Http\Service;
+namespace Http\ServiceController;
 
 /**
  * Interface DispatcherInterface

@@ -6,7 +6,7 @@
  * Time: 14:54
  */
 
-namespace Http\Service;
+namespace Http\ServiceController;
 
 use Core\Component\Error\Trigger;
 use Core\Swoole\Async\Redis\PubSubRedis;

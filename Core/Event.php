@@ -9,6 +9,7 @@
 namespace Core;
 
 use Core\Swoole\Async\Redis\PubSubRedis;
+use Core\Swoole\Crontab\Crontab;
 use Core\Swoole\HttpServer\Storage\Request;
 use Core\Swoole\HttpServer\Storage\Response;
 use Illuminate\Database\Capsule\Manager AS Capsule;
@@ -57,6 +58,25 @@ class Event extends \Core\AbstractInterface\AbstractEvent
          * 启动Eloquent
          */
         $capsule->bootEloquent();
+
+        $this->initCrontab();
+
+    }
+
+    /**
+     * initCrontab  [初始化crontab]
+     * @copyright Copyright (c)
+     */
+    private function initCrontab()
+    {
+
+        $crontab = (int)getConf('common.crontab');
+
+        if ($crontab) {
+            Crontab::getInstance()->init();
+        }
+
+
     }
 
 

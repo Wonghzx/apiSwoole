@@ -6,7 +6,7 @@
  * Time: 18:03
  */
 
-namespace Http\Service;
+namespace Http\ServiceController;
 
 
 class DataStream

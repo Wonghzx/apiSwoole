@@ -10,9 +10,6 @@ namespace Core\Swoole\Server;
 
 use Core\Component\Bean\Container;
 use Core\Event;
-use Core\Swoole\Async\Redis\RedisClient;
-use Core\Swoole\AsyncTaskManager;
-use Core\Swoole\Process\MainProcess;
 use Swoole\Server AS Ser;
 
 class Server

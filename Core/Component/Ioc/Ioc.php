@@ -66,40 +66,22 @@ class Ioc
         //遍历所有的方法
         foreach ($methods As $method) {
             //获取注释
-            array_push($doc, $method->getDocComment());
+//            array_push($doc, $method->getDocComment());
             $info = DocParser::getInstance()->analysis($method->getDocComment());
-            print_r($info);
             //解析方法中注释
             $call[] = [
                 'class' => $method->class,
                 'method' => $method->name,
-//                'meta' => $info
+                'meta' => $info
             ];
         }
+//        print_r($call);
+
 //        $this->selectAnalysis($doc);
 
-//        print_r($call);
+//        print_r($methods);
     }
 
-    private function selectAnalysis(array $prams)
-    {
-//        if (!is_array($prams)) {
-//            return false;
-//        }
-//        static $data;
-//        if (!empty($prams)) {
-//
-//            $data = $prams;
-//        }
-//        print_r($data);
-//        $info = [];
-//        $info[] = DocParser::getInstance()->analysis($data[self::$i]);
-//        if (self::$i >= count($prams)) {
-//            return $info;
-//        }
-//        self::$i++;
-//        $this->selectAnalysis($data);
-    }
 
 
 }

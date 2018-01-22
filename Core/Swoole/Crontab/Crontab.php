@@ -49,8 +49,9 @@ class Crontab
         $a = '\Http\Tasks\TestCrontab';
         $as = Ioc::getInstance($a);
         $ax = $as->create();
-        $x = $ax->getDocComment();
-        $a = DocParser::getInstance()->analysis($x);
+        $x = $as->parseMethodsDoc();
+//        $a = DocParser::getInstance()->analysis($x);
+
 
 
         return true;

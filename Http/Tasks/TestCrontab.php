@@ -17,11 +17,20 @@ class TestCrontab
 
     /**
      * test  [description]
-     * @copyright Copyright (c)
-     * @author Wongzx <842687571@qq.com>
+     * @return int id
      */
     public function test()
     {
 
     }
+
+    /**
+     * tests  [description]
+     * @return int id
+     */
+    public function tests()
+    {
+
+    }
+
 }

@@ -108,7 +108,7 @@ class Core
         $autoload->addNamespace('Core', 'Core');
 
 
-        $autoload->requireFile('/Bin/Helpers.php');
+//        $autoload->requireFile('/Bin/Helpers.php');
 
         return $this;
 

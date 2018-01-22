@@ -16,17 +16,24 @@ class Test extends AbstractViewController
 {
     public function taskManager()
     {
+        $oldSessionData = [];
+        if (isset($_SESSION)) {
+            session_start();
+            $oldSessionData = $_SESSION;
+        }
+            print_r($oldSessionData);
+//        $this->response()->assign();
 
-        /**
-         * 测试异步添加任务
-         */
+            /**
+             * 测试异步添加任务
+             */
 
-        AsyncTaskManager::getInstance()->addTask(function () {
-            $address = 'email@address';
-            $content = "mail body";
-            echo $address . "\n";
-            echo $content . "\n";
-        });
+//        AsyncTaskManager::getInstance()->addTask(function () {
+//            $address = 'email@address';
+//            $content = "mail body";
+//            echo $address . "\n";
+//            echo $content . "\n";
+//        });
 
 
     }

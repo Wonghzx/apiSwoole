@@ -9,7 +9,6 @@
 namespace Core\Swoole\HttpServer\Storage;
 
 use Core\Component\IO\Stream;
-use Core\Swoole\Session\Cookie;
 
 
 class Response extends Status
@@ -105,7 +104,6 @@ class Response extends Status
     }
 
 
-
     /**
      * write  [json格式数据输出]
      * @param $obj
@@ -175,23 +173,23 @@ class Response extends Status
         }
     }
 
-    public function setCookies($name, $value = '', $expire = 0, $path = '/', $domain = '', $secure = false, $httponly = false)
+    public function setCookies($key, $value = '', $expire = 0, $path = '/', $domain = '')
     {
-        if (!$this->isEndResponse()) {
-            $cookie = new Cookie();
-            $cookie->setKey($name);
-            $cookie->setValue($value);
-            $cookie->setExpire($expire);
-            $cookie->setPath($path);
-            $cookie->setDomain($domain);
-            $cookie->setSecure($secure);
-            $cookie->setHttponly($httponly);
-            $this->withAddedCookie($cookie);
-            return true;
-        } else {
-            trigger_error("response has end");
-            return false;
-        }
+//        if (!$this->isEndResponse()) {
+//            $cookie = new Cookie();
+//            $cookie->setKey($name);
+//            $cookie->setValue($value);
+//            $cookie->setExpire($expire);
+//            $cookie->setPath($path);
+//            $cookie->setDomain($domain);
+//            $cookie->setSecure($secure);
+//            $cookie->setHttponly($httponly);
+//            $this->withAddedCookie($cookie);
+//            return true;
+//        } else {
+//            trigger_error("response has end");
+//            return false;
+//        }
     }
 
     /**

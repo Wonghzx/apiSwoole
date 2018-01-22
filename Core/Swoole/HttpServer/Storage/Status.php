@@ -131,9 +131,8 @@ class Status implements ResponseInterface
 
     public function withAttribute($name, $value)
     {
-        $clone = clone $this;
-        $clone->attributes[$name] = $value;
-        return $clone;
+        $this->attributes[$name] = $value;
+        return $this;
     }
 
 

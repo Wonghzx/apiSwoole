@@ -8,7 +8,9 @@
 
 namespace Core\Swoole\HttpServer\Storage;
 
+use Core\Component\Curl\Cookie;
 use Core\Component\IO\Stream;
+use Core\Component\Session\Session;
 
 
 class Response extends Status
@@ -55,7 +57,7 @@ class Response extends Status
     {
 
         if ($this->isEndResponse == self::STATUS_NOT_END) {
-//            Session::getInstance()->close();
+            Session::getInstance()->close();
             $this->isEndResponse = self::STATUS_LOGICAL_END;
         }
         if ($realEnd === true && $this->isEndResponse !== self::STATUS_REAL_END) {
@@ -173,23 +175,26 @@ class Response extends Status
         }
     }
 
-    public function setCookies($key, $value = '', $expire = 0, $path = '/', $domain = '')
+    public function setCookies($name, $value = null, $expire = 0, $path = '/', $domain = '', $secure = false, $httponly = false)
     {
-//        if (!$this->isEndResponse()) {
-//            $cookie = new Cookie();
-//            $cookie->setKey($name);
-//            $cookie->setValue($value);
-//            $cookie->setExpire($expire);
-//            $cookie->setPath($path);
-//            $cookie->setDomain($domain);
-//            $cookie->setSecure($secure);
-//            $cookie->setHttponly($httponly);
-//            $this->withAddedCookie($cookie);
-//            return true;
-//        } else {
-//            trigger_error("response has end");
-//            return false;
-//        }
+        if (!$this->isEndResponse()) {
+            $cookie = new Cookie();
+
+            $cookie_life = empty($expire) ? getConf('session.life') : $expire;
+
+            $cookie->setName($name);
+            $cookie->setValue($value);
+            $cookie->setExpire(time() + $cookie_life);
+            $cookie->setPath($path);
+            $cookie->setDomain($domain);
+            $cookie->setSecure($secure);
+            $cookie->setHttponly($httponly);
+            $this->withAddedCookie($cookie);
+            return true;
+        } else {
+            trigger_error("response has end");
+            return false;
+        }
     }
 
     /**

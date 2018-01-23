@@ -55,7 +55,6 @@ class Core
          */
         Container::getInstance()->offsetSet('conf', Config::load(ROOT . '/Conf'));
         $this->loadConf = getDi('conf');
-
         /**
          * 初始化
          */
@@ -79,7 +78,8 @@ class Core
             die("create Temp Directory:{$tempDir} fail");
         } else {
             //创建默认Session存储目录
-            $path = $tempDir . "/Session";
+            $path = $tempDir . $this->loadConf->get('session.cache_dir');
+            getConf()->set('session.session_save_path', $path);
             File::createDir($path);
         }
 

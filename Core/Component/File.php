@@ -284,6 +284,7 @@ class File
     }
 
     /**
+     *
      * @param $dirPath
      * @param string $filterType 'file'|'dir'
      * @return bool|array

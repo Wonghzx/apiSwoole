@@ -231,6 +231,12 @@ class Stream
         $this->close();
     }
 
+    /**
+     * getStreamResource  [获取文件流]
+     * @copyright Copyright (c)
+     * @author Wongzx <842687571@qq.com>
+     * @return bool|resource
+     */
     function getStreamResource()
     {
         return $this->stream;

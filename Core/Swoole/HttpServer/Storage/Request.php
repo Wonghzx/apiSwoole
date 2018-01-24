@@ -141,6 +141,12 @@ class Request extends Psr7Request implements ServerRequestInterface
         if (is_array($value['tmp_name'])) {
             return self::normalizeNestedFileSpec($value);
         }
+        if (move_uploaded_file($value['tmp_name'],ROOT.'/Runtime/UploadFiles/'.$value['name'])) {
+            echo 123;
+        } else {
+            echo 456;
+        }
+        \Core\Component\UploadFile::getInstance($value['name']);
 
         return new UploadFile($value['tmp_name'], (int)$value['size'], (int)$value['error'], $value['name'], $value['type']);
     }

@@ -163,12 +163,16 @@ class Launcher
     }
 
 
+    /**
+     * intRouterInstance  [description]
+     * @copyright Copyright (c)
+     * @author Wongzx <842687571@qq.com>
+     */
     private function intRouterInstance()
     {
         try {
             /*
-             * if exit Router class in App directory
-             * 类报告了一个类的有关信息。
+             * 一个类的有关信息。
              */
             $ref = new \ReflectionClass("Http\\Router");
             $router = $ref->newInstance();

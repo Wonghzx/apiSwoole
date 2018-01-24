@@ -212,3 +212,14 @@ if (!function_exists('curlGets')) {
         return $return;
     }
 }
+
+if (!function_exists('upload')) {
+    function upload($savePath, $callable, $parameters = [], $customUpload = false, $createNewFileName = true)
+    {
+        $savePath = getConf('setting.upload_tmp_dir');
+        if (!file_exists($savePath)) {
+            mkdir($savePath, 0700, true);
+        }
+    }
+
+}

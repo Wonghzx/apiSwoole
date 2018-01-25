@@ -67,7 +67,11 @@ class Core
         return $this;
     }
 
-
+    /**
+     * sysDirectoryInit  [description]
+     * @copyright Copyright (c)
+     * @author Wongzx <842687571@qq.com>
+     */
     private function sysDirectoryInit()
     {
         //创建Runtime目录
@@ -84,7 +88,7 @@ class Core
         }
 
         $logDir = $tempDir . $this->loadConf->get('common.runtime_logs');
-
+        getConf()->set('common.logs', $logDir);
         if (!File::createDir($logDir)) {
             die("create log Directory:{$logDir} fail");
         }

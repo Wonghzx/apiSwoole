@@ -52,6 +52,7 @@ class Router extends AbstractRouter
                 'action' => [
                     "GET@taskManager",
                     "GET@testTimer",
+                    "POST@testUploadFile",
                 ]
             ]
 

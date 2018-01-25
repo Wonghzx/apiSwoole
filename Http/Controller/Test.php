@@ -9,6 +9,7 @@
 namespace Http\Controller;
 
 use Core\AbstractInterface\AbstractViewController;
+use Core\Component\Session\SessionFacade;
 use Core\Swoole\AsyncTaskManager;
 use Core\Swoole\Timer\Timer;
 
@@ -16,26 +17,16 @@ class Test extends AbstractViewController
 {
     public function taskManager()
     {
-        $oldSessionData = [];
-        if (isset($_SESSION)) {
-            session_start();
-            $oldSessionData = $_SESSION;
-        }
-            print_r($oldSessionData);
-//        $this->response()->assign();
-
-            /**
-             * 测试异步添加任务
-             */
-
+        /**
+         * 测试异步添加任务
+         */
+        $this->view('Index/index');
 //        AsyncTaskManager::getInstance()->addTask(function () {
 //            $address = 'email@address';
 //            $content = "mail body";
 //            echo $address . "\n";
 //            echo $content . "\n";
 //        });
-
-
     }
 
 
@@ -65,6 +56,18 @@ class Test extends AbstractViewController
 
             echo '---------------- \\n';
         });
+
+    }
+
+
+    public function testUploadFile()
+    {
+        $info = $this->request()->getUploadedFiles();
+
+        if (!empty($info)) {
+            $this->response()->write($info['myfile']);
+        }
+
 
     }
 }

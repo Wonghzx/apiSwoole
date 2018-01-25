@@ -10,6 +10,7 @@ namespace Core\Swoole\HttpServer\Storage;
 
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Message\UploadedFileInterface;
+use Core\Component\UploadFile;
 
 class Request extends Psr7Request implements ServerRequestInterface
 {
@@ -92,6 +93,7 @@ class Request extends Psr7Request implements ServerRequestInterface
         $postBody = $request->post ?? []; //HTTP POST参数，格式为数组。
         $files = $request->files ?? [];
 
+//        print_r(self::normalizeFiles($files));
         $this->withCookieParams($cookie)
             ->withQueryParams($getQuery)
             ->withParsedBody($postBody)
@@ -141,14 +143,16 @@ class Request extends Psr7Request implements ServerRequestInterface
         if (is_array($value['tmp_name'])) {
             return self::normalizeNestedFileSpec($value);
         }
-        if (move_uploaded_file($value['tmp_name'],ROOT.'/Runtime/UploadFiles/'.$value['name'])) {
-            echo 123;
-        } else {
-            echo 456;
-        }
-        \Core\Component\UploadFile::getInstance($value['name']);
 
-        return new UploadFile($value['tmp_name'], (int)$value['size'], (int)$value['error'], $value['name'], $value['type']);
+        return UploadFile::getInstance($value['tmp_name'])
+            ->setUploadInfo($value)
+            ->move(getConf('setting.upload_tmp_dir'));
+//        return new UploadFile(
+//            $value['tmp_name'],
+//            (int)$value['size'],
+//            (int)$value['error'],
+//            $value['name'],
+//            $value['type']);
     }
 
 

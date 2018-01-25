@@ -8,8 +8,7 @@
  <script src="http://code.jquery.com/jquery-latest.js"></script>
 </head>
 <body>
-	<p n:foreach="$user AS $item">{$item['user_name']}</p>
-	{$page|noescape}
+
 	 选择文件:<input type="file" id="file1" /><br />
         <input type="button" id="upload" value="上传" />
         <img src="wait.gif" style="display:none" id="imgWait" />   
@@ -21,7 +20,7 @@
                 var formData = new FormData();
                 formData.append("myfile", document.getElementById("file1").files[0]);   
                 $.ajax({
-                    url: "upload.ashx",
+                    url: "/Test/testUploadFile",
                     type: "POST",
                     data: formData,
                     /**
@@ -34,8 +33,8 @@
                     */
                     processData: false,
                     success: function (data) {
-                    	console.log(data)
-                        if (data.status == "true") {
+                        console.log(data.data)
+                        if (data.msg == "success") {
                             alert("上传成功！");
                         }
                         if (data.status == "error") {

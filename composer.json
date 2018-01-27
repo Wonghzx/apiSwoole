@@ -1,0 +1,47 @@
+{
+  "name": "apiswoole/apiswoole",
+  "description": "PHP 常驻内存型PHP框架 ",
+  "license": "MIT",
+  "keywords": [
+    "message queue swoole Api"
+  ],
+  "version": "1.0.0",
+  "authors": [
+    {
+      "name": "Wongzx",
+      "email": "wonghzx@gmail.com"
+    }
+  ],
+  "require": {
+    "php": ">=5.5.0",
+    "jasongrimes/paginator": "^1.0",
+    "vlucas/phpdotenv": "^2.4",
+    "hassankhan/config": "^0.11.2",
+    "illuminate/database": "^5.5",
+    "nikic/fast-route": "^1.2",
+    "latte/latte": "^2.4",
+    "psr/http-message": "^1.0",
+    "jeremeamia/SuperClosure": "^2.3",
+    "pimple/pimple": "^3.2"
+  },
+  "autoload": {
+    "files": [
+      "Bin/Helpers.php"
+    ],
+    "psr-4": {
+      "Conf\\": "Conf",
+      "Http\\": "Http"
+    }
+  },
+  "scripts": {
+    "post-root-package-install": [
+      "@php -r \"file_exists('.env') || copy('.env.example', '.env');\""
+    ]
+  },
+  "repositories": {
+    "packagist": {
+      "type": "composer",
+      "url": "https://packagist.phpcomposer.com"
+    }
+  }
+}

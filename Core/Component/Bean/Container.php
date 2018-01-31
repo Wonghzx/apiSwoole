@@ -8,7 +8,7 @@
 
 namespace Core\Component\Bean;
 
-use Http\Service\Dispatcher;
+use Http\ServiceController\Dispatcher;
 use Pimple\Container AS con;
 
 class Container

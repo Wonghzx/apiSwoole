@@ -23,6 +23,7 @@
                     url: "/Test/testUploadFile",
                     type: "POST",
                     data: formData,
+                    dataType: 'json',
                     /**
                     *必须false才会自动加上正确的Content-Type
                     */
@@ -33,9 +34,9 @@
                     */
                     processData: false,
                     success: function (data) {
-                        console.log(data.data)
                         if (data.msg == "success") {
                             alert("上传成功！");
+                            location.reload()
                         }
                         if (data.status == "error") {
                             alert(data.msg);

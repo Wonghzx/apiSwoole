@@ -31,6 +31,8 @@ class Dispatcher implements IDispatcher
 
         try {
 
+
+
 //            DataStream::getInstance($data);
         } catch (\Exception $exception) {
 
@@ -53,7 +55,6 @@ class Dispatcher implements IDispatcher
     {
         // TODO: Implement doConnect() method.
         list($server, $fd, $reactorId) = $params;
-        PubSubRedis::getInstance();
     }
 
     /**

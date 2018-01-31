@@ -10,6 +10,7 @@ namespace Core\Swoole\Server;
 
 use Core\Component\Bean\Container;
 use Core\Event;
+use Core\Swoole\Async\Redis\PubSubRedis;
 use Swoole\Server AS Ser;
 
 class Server

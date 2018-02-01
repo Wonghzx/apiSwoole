@@ -105,7 +105,7 @@ class Event extends \Core\AbstractInterface\AbstractEvent
          */
         if (function_exists('inotify_init')) {
             if ($workerId == 0) {
-                if (getConf('common.reload')) {
+                if ((bool)getConf('common.reload')) {
                     /* Reload 监视文件是否改变实现代码重载入 */
                     $list = recursionDirFiles(ROOT . "/Http");
                     // 为所有目录和文件添加inotify监视
@@ -121,7 +121,7 @@ class Event extends \Core\AbstractInterface\AbstractEvent
                         }
                     });
                 }
-                if (getConf('common.redisChannel')) {
+                if ((bool)getConf('common.redisChannel')) {
                     PubSubRedis::getInstance();
                 }
             }

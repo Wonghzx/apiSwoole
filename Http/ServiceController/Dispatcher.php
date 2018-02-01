@@ -10,6 +10,7 @@ namespace Http\ServiceController;
 
 use Core\Component\Error\Trigger;
 use Core\Swoole\Async\Redis\PubSubRedis;
+use Core\Swoole\Async\Redis\RedisConnect;
 use Core\Swoole\AsyncTaskManager;
 
 class Dispatcher implements IDispatcher
@@ -32,15 +33,14 @@ class Dispatcher implements IDispatcher
         try {
 
 
-
 //            DataStream::getInstance($data);
         } catch (\Exception $exception) {
 
             Trigger::exception($exception);
 
         } finally {
-
-            $server->send($fd, 'xxxxx');
+            $a = RedisConnect::getInstance()->handler()->publish('test', serialize($data));
+            $server->send($fd, 'asd');
         }
     }
 

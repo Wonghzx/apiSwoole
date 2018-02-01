@@ -105,19 +105,25 @@ class Event extends \Core\AbstractInterface\AbstractEvent
          */
         if (function_exists('inotify_init')) {
             if ($workerId == 0) {
-                $list = recursionDirFiles(ROOT . "/Http");
-                // 为所有目录和文件添加inotify监视
-                $notify = inotify_init();
-                foreach ($list as $item) {
-                    inotify_add_watch($notify, $item, IN_CREATE | IN_DELETE | IN_MODIFY);
-                }
-                // 加入EventLoop
-                swoole_event_add($notify, function () use ($notify, $server) {
-                    $events = inotify_read($notify);
-                    if (!empty($events)) {
-                        $server->reload();
+                if (getConf('common.reload')) {
+                    /* Reload 监视文件是否改变实现代码重载入 */
+                    $list = recursionDirFiles(ROOT . "/Http");
+                    // 为所有目录和文件添加inotify监视
+                    $notify = inotify_init();
+                    foreach ($list as $item) {
+                        inotify_add_watch($notify, $item, IN_CREATE | IN_DELETE | IN_MODIFY);
                     }
-                });
+                    // 加入EventLoop
+                    swoole_event_add($notify, function () use ($notify, $server) {
+                        $events = inotify_read($notify);
+                        if (!empty($events)) {
+                            $server->reload();
+                        }
+                    });
+                }
+                if (getConf('common.redisChannel')) {
+                    PubSubRedis::getInstance();
+                }
             }
         }
     }

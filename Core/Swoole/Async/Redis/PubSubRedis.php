@@ -107,7 +107,7 @@ class PubSubRedis
 
     public function onMessage(\swoole_redis $redis, array $message)
     {
-        print_r($message);
+//        print_r($message);
     }
 
 

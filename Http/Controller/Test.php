@@ -33,9 +33,6 @@ class Test extends AbstractViewController
     }
 
 
-
-
-
     public function testTimer()
     {
         $t = date('Y-m-d H:i:s');
@@ -73,6 +70,14 @@ class Test extends AbstractViewController
         if (!empty($info)) {
             $this->response()->write($info['myfile']);
         }
+
+    }
+
+
+    /* 测试邮件 */
+    public function testMail()
+    {
+
 
     }
 

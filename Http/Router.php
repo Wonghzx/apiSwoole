@@ -53,6 +53,7 @@ class Router extends AbstractRouter
                     "GET@taskManager",
                     "GET@testTimer",
                     "POST@testUploadFile",
+                    "GET@testMail",
                 ]
             ]
 

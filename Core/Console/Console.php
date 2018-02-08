@@ -234,7 +234,12 @@ class Console
 
 
         self::$pid = file_get_contents($pidFile);
-        posix_kill(self::$pid, SIGUSR1);
+//        posix_kill(self::$pid, SIGUSR1);
+        if (!swoole_process::kill(self::$pid, 0)) {
+            echo "pid :{" . self::$pid . "} not exist \n";
+            return false;
+        }
+        swoole_process::kill(self::$pid ,SIGUSR1);
         echo "send server reload command at " . date("y-m-d h:i:s") . "\n";
     }
 

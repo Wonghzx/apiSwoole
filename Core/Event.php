@@ -103,8 +103,8 @@ class Event extends \Core\AbstractInterface\AbstractEvent
          * 使用Reload机制实现代码重载入 ，确定 已经 PHP inotify 扩展
          *
          */
-        if (function_exists('inotify_init')) {
-            if ($workerId == 0) {
+        if ($workerId == 0) {
+            if (function_exists('inotify_init')) {
                 if ((bool)getConf('common.reload')) {
                     /* Reload 监视文件是否改变实现代码重载入 */
                     $list = recursionDirFiles(ROOT . "/Http");
@@ -121,9 +121,9 @@ class Event extends \Core\AbstractInterface\AbstractEvent
                         }
                     });
                 }
-                if ((bool)getConf('common.redisChannel')) {
-                    PubSubRedis::getInstance();
-                }
+            }
+            if ((bool)getConf('common.redisChannel')) {
+                PubSubRedis::getInstance();
             }
         }
     }
